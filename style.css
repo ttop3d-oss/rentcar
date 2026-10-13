@@ -339,3 +339,66 @@ main{padding:20px 64px 0}.hero{height:625px;border-radius:22px;background:#5938d
     padding-left: 15px;
   }
 }
+```css
+/* Шапка сайту на телефоні */
+@media (max-width: 600px) {
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 14px 8px;
+    padding: 16px 12px;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 12px;
+    line-height: 1.4;
+    min-width: 0;
+  }
+
+  .help {
+    display: flex !important;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    margin: 0;
+    gap: 6px;
+    align-items: center;
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .phone-round {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .help small {
+    display: none;
+  }
+
+  .help b,
+  .help b a {
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .header nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px 16px;
+    width: 100%;
+    margin: 0;
+  }
+
+  .header nav a {
+    font-size: 11px;
+  }
+}
+```
