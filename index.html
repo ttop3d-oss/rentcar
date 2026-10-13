@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>Оренда авто Львів — Головна</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 <style>
 /* Стиль для червоної кнопки недоступного автомобіля */
@@ -21,7 +17,7 @@
     background: #c62828;
 }
 
-/* Виправлення для карток і фото на головній */
+/* Заповнення фотографій без полів */
 .car-card img {
     width: 100%;
     height: 170px;
@@ -31,13 +27,11 @@
 }
 </style>
 </head>
-
 <body>
 
 <div class="site">
 
 <header class="header">
-
     <a class="logo" href="index.html">
         <span class="car-logo">🚖</span>
         <span>Оренда авто Львів</span>
@@ -50,67 +44,50 @@
 
     <div class="help">
         <div class="phone-round">📞</div>
-
         <div>
             <small>Потрібна допомога?</small>
             <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
         </div>
     </div>
-
 </header>
 
-
 <main>
-
     <section class="hero">
-
         <div class="hero-pattern"></div>
-
         <div class="hero-text">
             <h1>Швидка оренда авто<br>у Львові</h1>
             <p>Обирайте найкращі автомобілі за доступними цінами.<br>Швидке оформлення та подача в будь-яку точку міста.</p>
             <a class="orange-btn" href="cars.html">Переглянути автопарк</a>
         </div>
-
         <a class="hero-book" href="cars.html">Обрати автомобіль та забронювати</a>
-
         <img class="hero-car" src="assets/bmw.webp" alt="BMW оренда авто Львів">
-
     </section>
 
-
     <section class="advantages">
-
         <div>
             <div class="adv-icon">⚡</div>
             <h3>Швидко</h3>
             <p>Оформлення оренди займе усього кілька хвилин вашого часу.</p>
         </div>
-
         <div>
             <div class="adv-icon pin">📍</div>
             <h3>Зручно</h3>
             <p>Подача автомобіля у зручне для вас місце по місту Львову.</p>
         </div>
-
         <div>
             <div class="adv-icon">🛡️</div>
             <h3>Надійно</h3>
             <p>Усі автомобілі застраховані та проходять регулярний техогляд.</p>
         </div>
-
     </section>
 
-
     <section class="choose">
-
         <div class="section-title">
             <h2>Популярні автомобілі</h2>
             <a href="cars.html">Всі автомобілі <span>→</span></a>
         </div>
 
         <div class="home-cars">
-
             <!-- Volkswagen Jetta (Недоступний) -->
             <article class="car-card">
                 <img src="assets/jetta.webp" alt="Volkswagen Jetta">
@@ -130,8 +107,7 @@
                 <a class="rent disabled" href="jetta.html">Автомобіль недоступний</a>
             </article>
 
-
-            <!-- BMW (Доступний) -->
+            <!-- BMW F10 528i (Доступний) -->
             <article class="car-card">
                 <img src="assets/bmw.webp" alt="BMW F10 528i">
                 <div class="car-row">
@@ -150,8 +126,7 @@
                 <a class="rent" href="bmw.html">Взяти в оренду</a>
             </article>
 
-
-            <!-- Audi (Доступний) -->
+            <!-- Audi A6 C6 (Доступний) -->
             <article class="car-card">
                 <img src="assets/audi.webp" alt="Audi A6 C6">
                 <div class="car-row">
@@ -169,45 +144,31 @@
                 </div>
                 <a class="rent" href="audi.html">Взяти в оренду</a>
             </article>
-
         </div>
-
     </section>
-
 </main>
 
-
 <footer id="contact" class="footer">
-
     <div class="footer-main">
-
         <div class="footer-company">
             <a class="logo" href="index.html">
                 <span class="car-logo">🚖</span>
                 <span>Оренда авто</span>
             </a>
-            <p>
-                Комфортні і не дорогі авто<br>
-                у Львові і Львівській<br>
-                області.
-            </p>
+            <p>Комфортні і не дорогі авто<br>у Львові і Львівській<br>області.</p>
         </div>
-
         <div class="contact">
             <h4><i>●</i> Адреса</h4>
             <a>Львів, вул. Городоцька, 26</a>
         </div>
-
         <div class="contact">
             <h4><i>●</i> Пошта</h4>
             <a>demyanchik@gmail.com</a>
         </div>
-
         <div class="contact">
             <h4><i>●</i> Телефон</h4>
             <a href="tel:+380667221089">+380(66)722-1089</a>
         </div>
-
     </div>
 
     <div class="footer-links">
@@ -217,7 +178,6 @@
             <a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a>
             <a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a>
         </div>
-
         <div>
             <b>Автомобілі</b>
             <a href="cars.html">Седан</a>
@@ -230,10 +190,8 @@
     <div class="copyright">
         © Дрочак Дем’ян 2026. Львів
     </div>
-
 </footer>
 
 </div>
-
 </body>
 </html>
