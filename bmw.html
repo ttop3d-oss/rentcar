@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-/* Додаткові стилі для модального вікна та чітких фото */
 .page {
     max-width: 1366px;
     margin: auto;
@@ -43,24 +42,26 @@ main {
     margin-top: 5px;
 }
 .car-photo {
-    height: 280px;
+    width: 100%;
+    height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-    background: #fafafa;
+    background: transparent;
     border-radius: 12px;
     cursor: pointer;
     overflow: hidden;
 }
 .car-photo img {
-    max-width: 100%;
-    max-height: 260px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
     transition: transform 0.3s ease;
 }
 .car-photo:hover img {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 .thumbs {
     display: flex;
@@ -79,6 +80,7 @@ main {
 }
 .thumb:hover {
     border-color: #5938df;
+    transform: scale(1.05);
 }
 .thumb img {
     width: 100%;
@@ -139,12 +141,11 @@ input {
     display: block;
 }
 
-/* Модальне вікно для збільшення фото */
 .image-modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -173,6 +174,7 @@ input {
 @media(max-width: 750px) {
     main { padding: 20px 16px; }
     .detail { grid-template-columns: 1fr; gap: 30px; }
+    .car-photo { height: 230px; }
 }
 </style>
 </head>
@@ -205,21 +207,19 @@ input {
     <div class="price">800 Грн <span class="meta">/доба</span></div>
     <div class="meta">Седан</div>
     
-    <!-- Головне фото (натискання відкриває в модалці) -->
     <div class="car-photo" onclick="openModal(document.getElementById('mainImage').src)">
-        <img id="mainImage" src="assets/bmw.webp" alt="BMW F10 528i">
+        <img id="mainImage" src="assets/bmw.png" alt="BMW F10 528i">
     </div>
 
-    <!-- Нижні мініатюри (вкажіть тут ваші реальні фото нижче) -->
     <div class="thumbs">
         <div class="thumb" onclick="openModal('assets/bmw.png')">
-            <img src="assets/bmw2.webp" alt="BMW фото 1">
+            <img src="assets/bmw.png" alt="BMW фото 1">
         </div>
-        <div class="thumb" onclick="openModal('assets/bmw.png')">
-            <img src="assets/bmw3.webp" alt="BMW фото 2">
+        <div class="thumb" onclick="openModal('assets/bmw_interior.png')">
+            <img src="assets/bmw_interior.png" alt="BMW фото 2">
         </div>
-        <div class="thumb" onclick="openModal('assets/bmw.png')">
-            <img src="assets/bmw4.webp" alt="BMW фото 3">
+        <div class="thumb" onclick="openModal('assets/bmw_back.png')">
+            <img src="assets/bmw_back.png" alt="BMW фото 3">
         </div>
     </div>
 </section>
@@ -252,7 +252,7 @@ input {
 <footer class="footer">
   <div class="footer-main">
     <div class="footer-company">
-        <a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a>
+        <a class="logo" href="index.html"><span class="car-logo">🏎️</span><span>Оренда авто</span></a>
         <p>Комфортні і не дорогі авто<br>у Львові і Львівській<br>області.</p>
     </div>
     <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
@@ -279,7 +279,6 @@ input {
 
 </div>
 
-<!-- Модальне вікно для повноекранного перегляду фото -->
 <div id="imageModal" class="image-modal" onclick="closeModal()">
     <button class="close-modal">&times;</button>
     <img id="modalImage" src="" alt="Повноекранне фото">
@@ -310,7 +309,6 @@ function send(){
     document.getElementById('ok').classList.add('show');
 }
 
-// Функції для відкриття та закриття модального вікна з фото
 function openModal(src) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
