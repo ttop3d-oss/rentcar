@@ -25,6 +25,31 @@
     background: transparent !important;
     border-radius: 8px;
 }
+
+/* Налаштування для фонового розмитого зображення на всю праву частину */
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg-blur {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 55%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(8px); /* Сила розмиття фону */
+    opacity: 0.45;     /* Прозорість, щоб гармонійно зливалося з фіолетовим фоном */
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Підіймаємо текст і кнопки вище за фонову картинку */
+.hero-text, .orange-btn, .hero-book {
+    position: relative;
+    z-index: 2;
+}
 </style>
 </head>
 <body>
@@ -54,12 +79,15 @@
 <main>
     <section class="hero">
         <div class="hero-pattern"></div>
+        
+        <!-- Розмите фонове зображення на всю праву сторону -->
+        <img class="hero-bg-blur" src="assets/hero-car.png" alt="Фон оренда авто">
+
         <div class="hero-text">
             <h1>Швидка оренда авто<br>у Львові</h1>
             <p>Обирайте найкращі автомобілі за доступними цінами.<br>Швидке оформлення та подача в будь-яку точку міста.</p>
-            <a class="orange-btn" href="cars.html">Обрати автомобіль та забронювати</a>
         </div>
-        <img class="hero-car" src="assets/hero-car.png" alt="Оренда авто Львів">
+        <a class="hero-book" href="cars.html">Обрати автомобіль та забронювати</a>
     </section>
 
     <section class="advantages">
