@@ -20,6 +20,15 @@
 .rent.disabled:hover {
     background: #c62828;
 }
+
+/* Виправлення для карток і фото в каталозі */
+.car-card img, .full-card img {
+    width: 100%;
+    height: 185px;
+    object-fit: cover !important; /* розтягує фото на всю ширину без полів */
+    background: transparent !important;
+    border-radius: 8px;
+}
 </style>
 </head>
 
@@ -230,7 +239,7 @@
                             class="rent"
                             href="${car.page}"
                         >
-                             Взяти в оренду 
+                            Взяти в оренду 
                         </a>
                         `
 
@@ -241,7 +250,7 @@
                             class="rent disabled"
                             href="${car.page}"
                         >
-                             Автомобіль недоступний 
+                            Автомобіль недоступний 
                         </a>
                         `
                     }
