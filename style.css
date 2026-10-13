@@ -1,4 +1,4 @@
-/* ===== ОСНОВНІ СТИЛІ (ПК за замовчуванням) ===== */
+/* ===== ОСНОВНІ СТИЛІ ===== */
 * {
   box-sizing: border-box;
 }
@@ -22,7 +22,7 @@ body {
   min-height: 100vh;
 }
 
-/* ШАПКА ДЛЯ ПК */
+/* ===== ШАПКА (HEADER) ===== */
 .header {
   height: 88px;
   padding: 0 64px;
@@ -61,10 +61,13 @@ body {
   color: #111;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s;
 }
 
+.header nav a:hover,
 .header nav a.active {
   font-weight: 700;
+  color: #5937df;
 }
 
 .help {
@@ -144,24 +147,35 @@ main {
   color: #f4f4f4;
 }
 
-.orange-btn, .hero-book {
+/* ===== АНІМАЦІЇ ТА СТИЛІ ВСІХ КНОПОК ===== */
+.orange-btn, .hero-book, .rent, .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ffa20f;
   color: #fff;
   text-decoration: none;
   border-radius: 7px;
-  font-size: 11px;
   font-weight: 700;
   box-sizing: border-box;
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
 
+/* Збільшення та плавна анімація при наведенні для всіх кнопок */
+.orange-btn:hover, .hero-book:hover, .rent:hover, .btn:hover {
+  transform: scale(1.03);
+  filter: brightness(0.9);
+}
+
+/* Помаранчеві кнопки */
+.orange-btn, .hero-book {
+  background: #ffa20f;
+  font-size: 11px;
+}
 .orange-btn {
   height: 37px;
   padding: 0 19px;
 }
-
 .hero-book {
   position: absolute;
   z-index: 4;
@@ -169,6 +183,25 @@ main {
   right: 96px;
   width: 300px;
   height: 38px;
+}
+
+/* Стандартна синя кнопка оренди */
+.rent {
+  height: 38px;
+  background: #5938df;
+  font-size: 10px;
+  margin-top: 17px;
+  border: none;
+}
+
+/* Червона кнопка для недоступних авто з анімацією */
+.rent.disabled {
+  background: #e53935;
+}
+.rent.disabled:hover {
+  background: #c62828;
+  transform: scale(1.03);
+  filter: none; /* щоб колір залишався насиченим червоним при затемненні через filter */
 }
 
 .hero-car {
@@ -302,20 +335,6 @@ main {
   white-space: nowrap;
   color: #555;
   font-size: 9px;
-}
-
-.rent {
-  display: flex;
-  height: 38px;
-  align-items: center;
-  justify-content: center;
-  background: #5938df;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 7px;
-  font-size: 10px;
-  font-weight: 700;
-  margin-top: 17px;
 }
 
 /* ===== ФУТЕР ===== */
@@ -483,7 +502,7 @@ main {
   }
 }
 
-/* ===== МОБІЛЬНА АДАПТАЦІЯ (ТІЛЬКИ для телефонів до 600px) ===== */
+/* ===== МОБІЛЬНА АДАПТАЦІЯ (до 600px) ===== */
 @media (max-width: 600px) {
   * {
     box-sizing: border-box;
@@ -500,7 +519,6 @@ main {
     overflow: hidden;
   }
 
-  /* На телефоні: логотип зліва, телефон у правому верхньому куті */
   .header {
     height: auto;
     padding: 14px 16px;
@@ -515,10 +533,8 @@ main {
     font-size: 13px;
     white-space: normal;
     order: 1;
-    margin-left: 0;
   }
 
-  /* Скидаємо відступи десктопного меню і ховаємо його звідти */
   .header nav {
     order: 3;
     width: 100%;
@@ -536,7 +552,6 @@ main {
     padding: 2px 0;
   }
 
-  /* Піднімаємо блок з телефоном у правий верхній кут */
   .help {
     display: flex;
     width: auto;
@@ -561,7 +576,6 @@ main {
     font-size: 10px;
   }
 
-  /* Головний екран */
   main {
     padding: 12px 12px 0;
   }
@@ -635,7 +649,6 @@ main {
     margin: 18px auto 0;
   }
 
-  /* Переваги */
   .advantages {
     height: auto;
     grid-template-columns: 1fr;
@@ -647,7 +660,6 @@ main {
     font-size: 12px;
   }
 
-  /* Картки автомобілів */
   .choose {
     padding: 0 4px 30px;
   }
@@ -727,7 +739,6 @@ main {
     margin-bottom: 25px;
   }
 
-  /* Футер */
   .footer {
     padding: 28px 18px;
   }
