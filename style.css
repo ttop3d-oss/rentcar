@@ -1,4 +1,4 @@
-/* ===== ОСНОВНІ СТИЛІ ===== */
+/* ===== ОСНОВНІ СТИЛІ (ПК за замовчуванням) ===== */
 * {
   box-sizing: border-box;
 }
@@ -22,7 +22,7 @@ body {
   min-height: 100vh;
 }
 
-/* ===== ШАПКА (HEADER) ===== */
+/* ШАПКА ДЛЯ ПК */
 .header {
   height: 88px;
   padding: 0 64px;
@@ -483,7 +483,7 @@ main {
   }
 }
 
-/* ===== МОБІЛЬНА АДАПТАЦІЯ (до 600px) ===== */
+/* ===== МОБІЛЬНА АДАПТАЦІЯ (ТІЛЬКИ для телефонів до 600px) ===== */
 @media (max-width: 600px) {
   * {
     box-sizing: border-box;
@@ -500,7 +500,7 @@ main {
     overflow: hidden;
   }
 
-  /* Шапка: Логоліп зліва, Телефон праворуч у верхньому куті */
+  /* На телефоні: логотип зліва, телефон у правому верхньому куті */
   .header {
     height: auto;
     padding: 14px 16px;
@@ -514,16 +514,36 @@ main {
   .logo {
     font-size: 13px;
     white-space: normal;
-    order: 1; /* Логотип перший зліва */
+    order: 1;
+    margin-left: 0;
   }
 
+  /* Скидаємо відступи десктопного меню і ховаємо його звідти */
+  .header nav {
+    order: 3;
+    width: 100%;
+    margin: 4px 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px 16px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+
+  .header nav a {
+    font-size: 11px;
+    padding: 2px 0;
+  }
+
+  /* Піднімаємо блок з телефоном у правий верхній кут */
   .help {
     display: flex;
     width: auto;
     margin: 0;
     justify-content: flex-end;
     gap: 6px;
-    order: 2; /* Телефон у правому верхньому куті */
+    order: 2;
   }
 
   .phone-round {
@@ -539,23 +559,6 @@ main {
 
   .help b {
     font-size: 10px;
-  }
-
-  .header nav {
-    order: 3; /* Меню йде на другий рядок нижче */
-    width: 100%;
-    margin: 4px 0 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 10px 16px;
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-  }
-
-  .header nav a {
-    font-size: 11px;
-    padding: 2px 0;
   }
 
   /* Головний екран */
