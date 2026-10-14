@@ -14,14 +14,13 @@ body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
 }
-/* Адаптація хедера сайту для адмінки */
 .header {
     background: #fff;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     margin-bottom: 20px;
 }
 .admin-wrapper {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto 40px;
     background: #fff;
     padding: 30px;
@@ -37,61 +36,91 @@ h1, h2 {
 .login-box.active, .panel-box.active {
     display: block;
 }
-input {
-    width: 100%;
-    padding: 12px;
+.input-group {
+    position: relative;
     margin: 10px 0 20px;
+}
+.input-group input {
+    margin: 0;
+}
+.toggle-pass {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
+    background: none;
+    border: none;
+}
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 6px 0 12px;
     border: 1px solid #ddd;
     border-radius: 7px;
-    font-size: 14px;
+    font-size: 13px;
+    font-family: inherit;
+    box-sizing: border-box;
 }
 .btn {
     background: #5938df;
     color: #fff;
     border: none;
-    padding: 12px 20px;
+    padding: 10px 18px;
     border-radius: 7px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
     text-decoration: none;
     display: inline-block;
+    font-size: 13px;
 }
 .btn:hover {
     filter: brightness(0.9);
 }
-.car-row-admin {
+.btn-danger {
+    background: #e53935;
+}
+.btn-success {
+    background: #2e7d32;
+}
+.car-card-admin {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.car-card-admin h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
-.car-info {
+.grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+.checkbox-label {
     display: flex;
     align-items: center;
-    gap: 15px;
-}
-.car-info img {
-    width: 70px;
-    height: 45px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
+    gap: 8px;
+    font-weight: 600;
     font-size: 12px;
-    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0;
 }
-.status-free {
-    background: #e8f5e9;
-    color: #2e7d32;
-}
-.status-busy {
-    background: #ffebee;
-    color: #c62828;
+.checkbox-label input {
+    width: auto;
+    margin: 0;
 }
 .msg {
     margin-top: 15px;
@@ -110,11 +139,9 @@ input {
 </head>
 <body>
 
-<!-- Стандартна шапка сайту для зручного переходу -->
 <header class="header">
-    <a class="logo" href="index.html">
-        <span class="car-logo">🚖</span>
-        <span>Оренда авто Львів</span>
+    <a href="index.html" class="logo">
+        <span class="car-logo">🚖</span> Оренда авто Львів
     </a>
     <nav>
         <a href="index.html">Головна</a>
@@ -135,8 +162,11 @@ input {
         <div class="top-actions">
             <h2>Вхід в Адмін-панель</h2>
         </div>
-        <p>Введіть пароль адміністратора для керування автопарком:</p>
-        <input type="password" id="passwordInput" placeholder="Пароль">
+        <p>Введіть пароль адміністратора:</p>
+        <div class="input-group">
+            <input type="password" id="passwordInput" placeholder="Пароль (demyan2026)" onkeydown="if(event.key === 'Enter') checkLogin()">
+            <button type="button" class="toggle-pass" onclick="togglePasswordVisibility()">👁️</button>
+        </div>
         <button class="btn" onclick="checkLogin()">Увійти</button>
         <div id="loginError" class="msg" style="color: #e53935;"></div>
     </div>
@@ -144,24 +174,40 @@ input {
     <!-- БЛОК КЕРУВАННЯ АВТО -->
     <div id="panelBox" class="panel-box">
         <div class="top-actions">
-            <h2>Керування автомобілями</h2>
-            <button class="btn" style="background: #e53935; font-size: 12px; padding: 8px 14px;" onclick="logout()">Вийти з адмінки</button>
+            <h2>Керування автопарком та знижками</h2>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-success" onclick="addNewCar()">+ Додати автомобіль</button>
+                <button class="btn btn-danger" onclick="logout()">Вийти</button>
+            </div>
         </div>
-        <p>Змінюйте статус автомобілів у реальному часі. Зміни миттєво відобразяться на сайті.</p>
+        <p>Керуйте назвами, цінами, фотографіями, статусами та знижками у реальному часі.</p>
         
         <div id="carsListContainer" style="margin-top: 20px;">
             Завантаження списку...
         </div>
-        <div id="statusMsg" class="msg" style="color: #2e7d32;"></div>
+        
+        <div style="margin-top: 30px; text-align: right;">
+            <button class="btn" style="padding: 14px 28px; font-size: 15px;" onclick="saveAllChanges()">Зберегти всі зміни в хмару</button>
+        </div>
+        <div id="statusMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
     </div>
 </div>
 
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const ADMIN_PASSWORD = 'demyangames777';
+const ADMIN_PASSWORD = 'demyan2026';
 
 let currentCarsData = [];
+
+function togglePasswordVisibility() {
+    const passInput = document.getElementById('passwordInput');
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+    } else {
+        passInput.type = 'password';
+    }
+}
 
 function checkLogin() {
     const pass = document.getElementById('passwordInput').value;
@@ -186,7 +232,7 @@ async function fetchAdminCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        currentCarsData = data.record.cars;
+        currentCarsData = data.record.cars || [];
         renderAdminCars();
     } catch (e) {
         document.getElementById('carsListContainer').innerText = 'Помилка завантаження даних з хмари.';
@@ -196,31 +242,121 @@ async function fetchAdminCars() {
 function renderAdminCars() {
     const container = document.getElementById('carsListContainer');
     container.innerHTML = currentCarsData.map((car, index) => `
-        <div class="car-row-admin">
-            <div class="car-info">
-                <img src="${car.image}" alt="${car.name}">
+        <div class="car-card-admin">
+            <h3>
+                <span>Авто #${index + 1}: ${car.name || 'Нове авто'}</span>
+                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 11px;" onclick="removeCar(${index})">Видалити авто</button>
+            </h3>
+            
+            <div class="grid-2">
                 <div>
-                    <strong>${car.name}</strong><br>
-                    <small>${car.price} | ${car.type}</small>
+                    <label>Назва автомобіля</label>
+                    <input type="text" id="name_${index}" value="${car.name || ''}" oninput="updateCarData(${index}, 'name', this.value)">
+                </div>
+                <div>
+                    <label>Тип транспорту</label>
+                    <select id="type_${index}" onchange="updateCarData(${index}, 'type', this.value)">
+                        <option value="Седан" ${car.type === 'Седан' ? 'selected' : ''}>Седан</option>
+                        <option value="Універсал" ${car.type === 'Універсал' ? 'selected' : ''}>Універсал</option>
+                        <option value="Хетчбек" ${car.type === 'Хетчбек' ? 'selected' : ''}>Хетчбек</option>
+                        <option value="Кросовер" ${car.type === 'Кросовер' ? 'selected' : ''}>Кросовер</option>
+                        <option value="Джип" ${car.type === 'Джип' ? 'selected' : ''}>Джип</option>
+                    </select>
                 </div>
             </div>
-            <div>
-                <span class="status-badge ${car.available ? 'status-free' : 'status-busy'}">
-                    ${car.available ? 'Вільний' : 'Заброньований'}
-                </span>
+
+            <div class="grid-3">
+                <div>
+                    <label>Ціна (наприклад: 800 Грн)</label>
+                    <input type="text" id="price_${index}" value="${car.price || ''}" oninput="updateCarData(${index}, 'price', this.value)">
+                </div>
+                <div>
+                    <label>Коробка передач</label>
+                    <input type="text" id="gearbox_${index}" value="${car.gearbox || 'Автомат'}" oninput="updateCarData(${index}, 'gearbox', this.value)">
+                </div>
+                <div>
+                    <label>Паливо</label>
+                    <input type="text" id="fuel_${index}" value="${car.fuel || 'Бензин'}" oninput="updateCarData(${index}, 'fuel', this.value)">
+                </div>
             </div>
-            <div>
-                <button class="btn" style="padding: 8px 14px; font-size: 11px; background: ${car.available ? '#e53935' : '#2e7d32'};" onclick="toggleStatus(${index})">
-                    ${car.available ? 'Зробити недоступним' : 'Зробити вільним'}
-                </button>
+
+            <div class="grid-2">
+                <div>
+                    <label>Головне фото (шлях, напр. assets/bmw.webp)</label>
+                    <input type="text" id="image_${index}" value="${car.image || ''}" oninput="updateCarData(${index}, 'image', this.value)">
+                </div>
+                <div>
+                    <label>Сторінка авто (напр. bmw.html)</label>
+                    <input type="text" id="page_${index}" value="${car.page || ''}" oninput="updateCarData(${index}, 'page', this.value)">
+                </div>
+            </div>
+
+            <hr style="border:0; border-top:1px solid #ddd; margin: 15px 0;">
+
+            <div class="grid-3">
+                <div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" ${car.available ? 'checked' : ''} onchange="updateCarData(${index}, 'available', this.checked)">
+                        Автомобіль ВІЛЬНИЙ (доступний)
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="toggleDiscount(${index}, this.checked)">
+                        Увімкнути акційну знижку 🔥
+                    </label>
+                </div>
+                <div>
+                    <label>Стара ціна (перекреслена)</label>
+                    <input type="text" value="${car.oldPrice || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="oldPrice_${index}" oninput="updateCarData(${index}, 'oldPrice', this.value)" placeholder="напр. 1000 Грн">
+                </div>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <label>Текст відліку / термін дії знижки (напр. «Акція діє до неділі!» або таймер)</label>
+                <input type="text" value="${car.discountText || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="discountText_${index}" oninput="updateCarData(${index}, 'discountText', this.value)" placeholder="Введіть текст акції">
             </div>
         </div>
     `).join('');
 }
 
-async function toggleStatus(index) {
-    currentCarsData[index].available = !currentCarsData[index].available;
-    document.getElementById('statusMsg').innerText = 'Зберігаємо зміни в хмару...';
+function updateCarData(index, field, value) {
+    currentCarsData[index][field] = value;
+}
+
+function toggleDiscount(index, isChecked) {
+    currentCarsData[index].hasDiscount = isChecked;
+    document.getElementById(`oldPrice_${index}`).disabled = !isChecked;
+    document.getElementById(`discountText_${index}`).disabled = !isChecked;
+}
+
+function addNewCar() {
+    currentCarsData.push({
+        id: 'car_' + Date.now(),
+        name: 'Новий автомобіль',
+        type: 'Седан',
+        price: '800 Грн',
+        gearbox: 'Автомат',
+        fuel: 'Бензин',
+        image: 'assets/car.webp',
+        page: 'car.html',
+        available: true,
+        hasDiscount: false,
+        oldPrice: '',
+        discountText: ''
+    });
+    renderAdminCars();
+}
+
+function removeCar(index) {
+    if (confirm('Ви впевнені, що хочете видалити цей автомобіль?')) {
+        currentCarsData.splice(index, 1);
+        renderAdminCars();
+    }
+}
+
+async function saveAllChanges() {
+    document.getElementById('statusMsg').innerText = 'Зберігаємо всі зміни в хмару...';
 
     try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
@@ -233,9 +369,8 @@ async function toggleStatus(index) {
         });
 
         if (response.ok) {
-            document.getElementById('statusMsg').innerText = 'Успішно оновлено!';
-            renderAdminCars();
-            setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 3000);
+            document.getElementById('statusMsg').innerText = 'Успішно збережено в хмару!';
+            setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 4000);
         } else {
             document.getElementById('statusMsg').innerText = 'Помилка збереження.';
         }
