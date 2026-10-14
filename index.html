@@ -95,9 +95,8 @@ async function loadHomeCars() {
         }
 
         container.innerHTML = popularCars.map(car => {
-            // Точний пошук індексу або id для надійного переходу на car.html?id=...
             const carIndex = cars.indexOf(car);
-            const carUrl = `car.html?id=${car.id || carIndex}`;
+            const carUrl = car.page || `car.html?id=${car.id || carIndex}`;
             
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
