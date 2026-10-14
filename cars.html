@@ -38,7 +38,7 @@
         <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і не дорогі авто<br>у Львові і Львівській області.</p></div>
         <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
         <div class="contact"><h4><i>●</i> Пошта</h4><a>demyanchik@gmail.com</a></div>
-        <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380(66)722-1089</a></div>
+        <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380 66 722 10 89</a></div>
     </div>
     <div class="footer-links">
         <div><b>Наші соціальні мережі</b><a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a><a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a><a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a></div>
@@ -58,16 +58,18 @@ async function loadCatalogCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        const cars = (data.record.cars || []).filter(c => c.available !== false);
+        const cars = data.record.cars || [];
+        const availableCars = cars.filter(c => c.available !== false);
         
         const container = document.getElementById('catalogContainer');
-        if (cars.length === 0) {
+        if (availableCars.length === 0) {
             container.innerHTML = '<div class="loading-catalog">Наразі немає доступних автомобілів.</div>';
             return;
         }
 
-        container.innerHTML = cars.map(car => {
-            const carUrl = car.page || `car.html?id=${car.id}`;
+        container.innerHTML = availableCars.map(car => {
+            const carIndex = cars.indexOf(car);
+            const carUrl = `car.html?id=${car.id || carIndex}`;
             
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
