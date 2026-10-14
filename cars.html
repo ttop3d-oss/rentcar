@@ -69,7 +69,7 @@ async function loadCatalogCars() {
 
         container.innerHTML = availableCars.map(car => {
             const carIndex = cars.indexOf(car);
-            const carUrl = `car.html?id=${car.id || carIndex}`;
+            const carUrl = car.page || `car.html?id=${car.id || carIndex}`;
             
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
