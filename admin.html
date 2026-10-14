@@ -14,13 +14,10 @@ body { background: #f4f4f4; font-family: 'Montserrat', sans-serif; margin: 0; }
 .admin-wrapper { max-width: 1000px; margin: 0 auto 40px; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; }
 .login-box, .panel-box { display: none; }
 .login-box.active, .panel-box.active { display: block; }
-
-/* Правильне позиціонування поля вводу пароля з іконкою та розкладкою */
 .input-group { position: relative; margin: 10px 0 20px; }
 .input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; }
 .toggle-pass { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 16px; z-index: 5; padding: 5px; }
 .lang-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; background: #e0e0e0; padding: 3px 6px; border-radius: 4px; color: #333; z-index: 5; }
-
 input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
 .btn { background: #5938df; color: #fff; border: none; padding: 10px 18px; border-radius: 7px; font-weight: bold; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 13px; }
 .btn:hover { filter: brightness(0.9); }
@@ -91,7 +88,6 @@ const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
 
 let currentCarsData = [];
 
-// Визначення поточної розкладки клавіатури
 function detectLayout(e) {
     const val = e.target.value;
     const badge = document.getElementById('langBadge');
@@ -199,6 +195,8 @@ function renderAdminCars() {
                     <select onchange="updateField(${index}, 'gearbox', this.value)">
                         <option value="Автомат" ${car.gearbox === 'Автомат' ? 'selected' : ''}>Автомат</option>
                         <option value="Механіка" ${car.gearbox === 'Механіка' ? 'selected' : ''}>Механіка</option>
+                        <option value="Робот" ${car.gearbox === 'Робот' ? 'selected' : ''}>Робот</option>
+                        <option value="Типтронік" ${car.gearbox === 'Типтронік' ? 'selected' : ''}>Типтронік</option>
                     </select>
                 </div>
                 <div>
@@ -206,6 +204,8 @@ function renderAdminCars() {
                     <select onchange="updateField(${index}, 'fuel', this.value)">
                         <option value="Бензин" ${car.fuel === 'Бензин' ? 'selected' : ''}>Бензин</option>
                         <option value="Дизель" ${car.fuel === 'Дизель' ? 'selected' : ''}>Дизель</option>
+                        <option value="Газ/Бензин" ${car.fuel === 'Газ/Бензин' ? 'selected' : ''}>Газ/Бензин</option>
+                        <option value="Газ" ${car.fuel === 'Газ' ? 'selected' : ''}>Газ</option>
                         <option value="Електро" ${car.fuel === 'Електро' ? 'selected' : ''}>Електро</option>
                         <option value="Гібрид" ${car.fuel === 'Гібрид' ? 'selected' : ''}>Гібрид</option>
                     </select>
