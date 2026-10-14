@@ -44,8 +44,8 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
         <div class="top-actions"><h2>Вхід в Адмін-панель</h2></div>
         <p>Введіть пароль адміністратора:</p>
         <div class="input-group">
-            <input type="password" id="passwordInput" placeholder="Пароль" onkeydown="if(event.key === 'Enter') checkLogin()">
-            <button type="button" class="toggle-pass" onclick="togglePass()">👁</button>
+            <input type="password" id="passwordInput" placeholder="Пароль (demyan2026)" onkeydown="if(event.key === 'Enter') checkLogin()">
+            <button type="button" class="toggle-pass" onclick="togglePass()">👁️</button>
         </div>
         <button class="btn" onclick="checkLogin()">Увійти</button>
         <div id="loginError" class="msg" style="color: #e53935;"></div>
@@ -72,7 +72,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const ADMIN_PASSWORD = 'rentcarsite';
+const ADMIN_PASSWORD = 'demyan2026';
 
 let currentCarsData = [];
 
@@ -172,7 +172,7 @@ function renderAdminCars() {
             <div class="grid-3">
                 <div>
                     <label class="checkbox-label">
-                        <input type="checkbox" ${car.available ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)">
+                        <input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)">
                         Опубліковано / Вільне
                     </label>
                 </div>
@@ -208,30 +208,62 @@ function updateField(index, field, val) {
     currentCarsData[index][field] = val;
 }
 
+// Функція автоматичного стискання фото перед завантаженням
+function resizeAndConvert(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 1000;
+            const MAX_HEIGHT = 700;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            } else {
+                if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            callback(dataUrl);
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 function uploadMainPhoto(e, index) {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            currentCarsData[index].image = evt.target.result;
+        resizeAndConvert(file, function(compressedBase64) {
+            currentCarsData[index].image = compressedBase64;
             renderAdminCars();
-        };
-        reader.readAsDataURL(file);
+        });
     }
 }
 
 function uploadExtraPhotos(e, index) {
     const files = Array.from(e.target.files).slice(0, 3);
-    currentCarsData[index].extraImages = [];
+    if (!currentCarsData[index].extraImages) {
+        currentCarsData[index].extraImages = [];
+    }
+    
     let loadedCount = 0;
     files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            currentCarsData[index].extraImages.push(evt.target.result);
+        resizeAndConvert(file, function(compressedBase64) {
+            currentCarsData[index].extraImages.push(compressedBase64);
             loadedCount++;
-            if (loadedCount === files.length) renderAdminCars();
-        };
-        reader.readAsDataURL(file);
+            if (loadedCount === files.length) {
+                renderAdminCars();
+            }
+        });
     });
 }
 
@@ -280,6 +312,8 @@ async function saveAllChanges() {
         if (response.ok) {
             document.getElementById('statusMsg').innerText = 'Успішно збережено!';
             setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 3000);
+        } else {
+            document.getElementById('statusMsg').innerText = 'Помилка збереження.';
         }
     } catch (e) {
         document.getElementById('statusMsg').innerText = 'Помилка мережі.';
