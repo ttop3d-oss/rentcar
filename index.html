@@ -34,7 +34,6 @@
 <main>
     <section class="hero">
         <div class="hero-pattern"></div>
-        <!-- Заставка з розширенням .png як ви просили -->
         <img class="hero-bg-blur" src="assets/hero-car.png" alt="Фон оренда авто">
 
         <div class="hero-text">
@@ -96,9 +95,15 @@ async function loadHomeCars() {
 
         container.innerHTML = popularCars.map(car => {
             const carUrl = car.page || `car.html?id=${car.id}`;
+            
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
-                priceDisplay = `<span style="text-decoration: line-through; color: #999; font-size: 12px; margin-right: 5px;">${car.oldPrice}</span><b style="color: #e53935;">${car.price}</b>`;
+                priceDisplay = `
+                    <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span style="text-decoration: line-through; color: #999; font-size: 11px;">${car.oldPrice}</span>
+                        <b style="color: #e53935; font-size: 14px;">${car.price}</b>
+                    </div>
+                `;
             }
 
             return `
