@@ -114,7 +114,6 @@ const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
 
-// Якщо людина зайшла просто на car.html без параметру id, відправляємо її в каталог
 if (!carId) {
     window.location.href = 'cars.html';
 }
@@ -140,7 +139,6 @@ async function loadCarDetails() {
         document.getElementById('carType').innerText = `Тип кузова: ${car.type}`;
         document.getElementById('carSpecs').innerText = `⚙️ ${car.gearbox || 'Автомат'} | ⛽ ${car.fuel || 'Бензин'}`;
 
-        // Відображення ціни та акційної знижки
         let priceHtml = '';
         if (car.hasDiscount && car.oldPrice) {
             priceHtml = `
@@ -157,7 +155,6 @@ async function loadCarDetails() {
         }
         document.getElementById('carPriceContainer').innerHTML = priceHtml;
 
-        // Перевірка чи авто доступне / вільне
         if (car.available !== false) {
             document.getElementById('bookingSection').style.display = 'grid';
         } else {
@@ -166,7 +163,6 @@ async function loadCarDetails() {
             return;
         }
 
-        // Фотографії (головна + додаткові)
         galleryImages = [car.image || 'assets/car.webp'];
         if (car.extraImages && Array.isArray(car.extraImages)) {
             galleryImages.push(...car.extraImages);
