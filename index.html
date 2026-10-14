@@ -55,9 +55,8 @@
 <div class="site">
 
 <header class="header">
-    <a class="logo" href="index.html">
-        <span class="car-logo">🚖</span>
-        <span>Оренда авто Львів</span>
+    <a href="index.html" class="logo">
+        <span class="car-logo">🚖</span> Оренда авто Львів
     </a>
 
     <nav>
@@ -172,7 +171,6 @@ async function loadHomeCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        // Виводимо перші 3 популярні авто (Jetta, BMW, Audi)
         const cars = data.record.cars.slice(0, 3);
         
         const container = document.getElementById('homeCarsContainer');
