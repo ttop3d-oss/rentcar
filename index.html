@@ -9,98 +9,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-.rent.disabled {
-    background: #e53935;
-}
-.rent.disabled:hover {
-    background: #c62828;
-}
-.car-card img {
-    width: 100%;
-    height: 170px;
-    object-fit: cover !important;
-    background: transparent !important;
-    border-radius: 8px;
-}
-.hero {
-    position: relative;
-    overflow: hidden;
-}
-.hero-bg-blur {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 55%;
-    height: 100%;
-    object-fit: cover;
-    filter: blur(8px);
-    opacity: 0.45;
-    z-index: 1;
-    pointer-events: none;
-}
-.hero-text {
-    position: relative;
-    z-index: 2;
-}
-.loading-home {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 20px;
-    color: #666;
-}
-
-/* Стиль для прокрутки популярних авто без обмежень (як галерея) */
-.home-cars {
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: #5938df #eee;
-}
-.home-cars::-webkit-scrollbar {
-    height: 8px;
-}
-.home-cars::-webkit-scrollbar-thumb {
-    background: #5938df;
-    border-radius: 4px;
-}
-.home-cars .car-card {
-    min-width: 300px;
-    max-width: 320px;
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-}
+.rent.disabled { background: #e53935; }
+.rent.disabled:hover { background: #c62828; }
+.car-card img { width: 100%; height: 170px; object-fit: cover !important; background: transparent !important; border-radius: 8px; }
+.hero { position: relative; overflow: hidden; }
+.hero-bg-blur { position: absolute; top: 0; right: 0; width: 55%; height: 100%; object-fit: cover; filter: blur(8px); opacity: 0.45; z-index: 1; pointer-events: none; }
+.hero-text { position: relative; z-index: 2; }
+.loading-home { grid-column: 1 / -1; text-align: center; padding: 20px; color: #666; }
+.home-cars { display: flex; gap: 25px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: #5938df #eee; }
+.home-cars::-webkit-scrollbar { height: 8px; }
+.home-cars::-webkit-scrollbar-thumb { background: #5938df; border-radius: 4px; }
+.home-cars .car-card { min-width: 300px; max-width: 320px; flex: 0 0 auto; scroll-snap-align: start; }
 </style>
 </head>
 <body>
 
 <div class="site">
-
 <header class="header">
-    <a href="index.html" class="logo">
-        <span class="car-logo">🚖</span> Оренда авто Львів
-    </a>
-
-    <nav>
-        <a class="active" href="index.html">Головна</a>
-        <a href="cars.html">Автомобілі</a>
-    </nav>
-
-    <div class="help">
-        <div class="phone-round">📞</div>
-        <div>
-            <small>Потрібна допомога?</small>
-            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
-        </div>
-    </div>
+    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
+    <nav><a class="active" href="index.html">Головна</a><a href="cars.html">Автомобілі</a></nav>
+    <div class="help"><div class="phone-round">📞</div><div><small>Потрібна допомога?</small><b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b></div></div>
 </header>
 
 <main>
     <section class="hero">
         <div class="hero-pattern"></div>
-        <img class="hero-bg-blur" src="assets/hero-car.webp" alt="Фон оренда авто">
+        <!-- Заставка з розширенням .png як ви просили -->
+        <img class="hero-bg-blur" src="assets/hero-car.png" alt="Фон оренда авто">
 
         <div class="hero-text">
             <h1>Швидка оренда авто<br>у Львові</h1>
@@ -110,21 +45,9 @@
     </section>
 
     <section class="advantages">
-        <div>
-            <div class="adv-icon">⚡</div>
-            <h3>Швидко</h3>
-            <p>Оформлення оренди займе усього кілька хвилин вашого часу.</p>
-        </div>
-        <div>
-            <div class="adv-icon pin">📍</div>
-            <h3>Зручно</h3>
-            <p>Подача автомобіля у зручне для вас місце по місту Львову.</p>
-        </div>
-        <div>
-            <div class="adv-icon">🛡️</div>
-            <h3>Надійно</h3>
-            <p>Усі автомобілі застраховані та проходять регулярний техогляд.</p>
-        </div>
+        <div><div class="adv-icon">⚡</div><h3>Швидко</h3><p>Оформлення оренди займе усього кілька хвилин вашого часу.</p></div>
+        <div><div class="adv-icon pin">📍</div><h3>Зручно</h3><p>Подача автомобіля у зручне для вас місце по місту Львову.</p></div>
+        <div><div class="adv-icon">🛡️</div><h3>Надійно</h3><p>Усі автомобілі застраховані та проходять регулярний техогляд.</p></div>
     </section>
 
     <section class="choose">
@@ -132,8 +55,6 @@
             <h2>Популярні автомобілі</h2>
             <a href="cars.html">Всі автомобілі <span>→</span></a>
         </div>
-
-        <!-- Горизонтальний скрол популярних авто без обмежень з акціями -->
         <div class="home-cars" id="homeCarsContainer">
             <div class="loading-home">Завантаження автомобілів...</div>
         </div>
@@ -142,48 +63,17 @@
 
 <footer id="contact" class="footer">
     <div class="footer-main">
-        <div class="footer-company">
-            <a class="logo" href="index.html">
-                <span class="car-logo">🚖</span>
-                <span>Оренда авто</span>
-            </a>
-            <p>Комфортні і не дорогі авто<br>у Львові і Львівській<br>області.</p>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Адреса</h4>
-            <a>Львів, вул. Городоцька, 26</a>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Пошта</h4>
-            <a>demyanchik@gmail.com</a>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Телефон</h4>
-            <a href="tel:+380667221089">+380(66)722-1089</a>
-        </div>
+        <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і не дорогі авто<br>у Львові і Львівській області.</p></div>
+        <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
+        <div class="contact"><h4><i>●</i> Пошта</h4><a>demyanchik@gmail.com</a></div>
+        <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380(66)722-1089</a></div>
     </div>
-
     <div class="footer-links">
-        <div>
-            <b>Наші соціальні мережі</b>
-            <a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a>
-            <a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a>
-            <a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a>
-        </div>
-        <div>
-            <b>Автомобілі</b>
-            <a href="cars.html">Седан</a>
-            <a href="cars.html">Універсал</a>
-            <a href="cars.html">Хетчбек</a>
-            <a href="cars.html">Джип</a>
-        </div>
+        <div><b>Наші соціальні мережі</b><a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a><a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a><a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a></div>
+        <div><b>Автомобілі</b><a href="cars.html">Седан</a><a href="cars.html">Універсал</a><a href="cars.html">Хетчбек</a><a href="cars.html">Джип</a></div>
     </div>
-
-    <div class="copyright">
-        © Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a>
-    </div>
+    <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
 </footer>
-
 </div>
 
 <script>
@@ -196,12 +86,9 @@ async function loadHomeCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        
-        // Виводимо всі популярні та вільні авто без обмеження в 3 штуки з можливістю прокрутки
         const popularCars = (data.record.cars || []).filter(c => c.available !== false && c.isPopular);
         
         const container = document.getElementById('homeCarsContainer');
-        
         if (popularCars.length === 0) {
             container.innerHTML = '<div class="loading-home">Немає популярних автомобілів. Позначте їх в адмін-панелі ⭐</div>';
             return;
@@ -209,32 +96,17 @@ async function loadHomeCars() {
 
         container.innerHTML = popularCars.map(car => {
             const carUrl = car.page || `car.html?id=${car.id}`;
-            
-            // Форматування ціни зі знижкою якщо вона є
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
-                priceDisplay = `
-                    <span style="text-decoration: line-through; color: #999; font-size: 12px; margin-right: 5px;">${car.oldPrice}</span>
-                    <b style="color: #e53935;">${car.price}</b>
-                `;
+                priceDisplay = `<span style="text-decoration: line-through; color: #999; font-size: 12px; margin-right: 5px;">${car.oldPrice}</span><b style="color: #e53935;">${car.price}</b>`;
             }
 
             return `
                 <article class="car-card">
                     <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
-                    <div class="car-row">
-                        <strong>${car.name}</strong>
-                        ${priceDisplay}
-                    </div>
-                    <div class="sub">
-                        <span>${car.type}</span>
-                        <span>доба</span>
-                    </div>
-                    <div class="specs">
-                        <span>♙ ${car.gearbox || 'Автомат'}</span>
-                        <span>⛽ ${car.fuel || 'Бензин'}</span>
-                        <span>❄ Кондиціонер</span>
-                    </div>
+                    <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
+                    <div class="sub"><span>${car.type}</span><span>доба</span></div>
+                    <div class="specs"><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span><span>❄ Кондиціонер</span></div>
                     <a class="rent" href="${carUrl}">Взяти в оренду</a>
                 </article>
             `;
@@ -243,7 +115,6 @@ async function loadHomeCars() {
         document.getElementById('homeCarsContainer').innerHTML = '<div class="loading-home">Не вдалося завантажити авто.</div>';
     }
 }
-
 loadHomeCars();
 </script>
 </body>
