@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Адмін-панель — Оренда авто Львів</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+    background: #f4f4f4;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+.admin-wrapper {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+h1, h2 {
+    color: #111;
+}
+.login-box, .panel-box {
+    display: none;
+}
+.login-box.active, .panel-box.active {
+    display: block;
+}
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 14px;
+}
+.btn {
+    background: #5938df;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn:hover {
+    filter: brightness(0.9);
+}
+.car-row-admin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    gap: 15px;
+}
+.car-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.car-info img {
+    width: 70px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.status-free {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+.status-busy {
+    background: #ffebee;
+    color: #c62828;
+}
+.msg {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<div class="admin-wrapper">
+    <!-- БЛОК АВТОРИЗАЦІЇ -->
+    <div id="loginBox" class="login-box active">
+        <h2>Вхід в Адмін-панель</h2>
+        <p>Введіть пароль адміністратора для керування автопарком:</p>
+        <input type="password" id="passwordInput" placeholder="Пароль (за замовчуванням: demyan2026)">
+        <button class="btn" onclick="checkLogin()">Увійти</button>
+        <div id="loginError" class="msg" style="color: #e53935;"></div>
+    </div>
+
+    <!-- БЛОК КЕРУВАННЯ АВТО -->
+    <div id="panelBox" class="panel-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Керування автомобілями</h2>
+            <button class="btn" style="background: #e53935;" onclick="logout()">Вийти</button>
+        </div>
+        <p>Змінюйте статус автомобілів у реальному часі. Зміни миттєво відобразяться на сайті.</p>
+        
+        <div id="carsListContainer" style="margin-top: 20px;">
+            Завантаження списку...
+        </div>
+        <div id="statusMsg" class="msg" style="color: #2e7d32;"></div>
+    </div>
+</div>
+
+<script>
+const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+const ADMIN_PASSWORD = 'demyan2026'; // Можете змінити пароль тут за бажанням
+
+let currentCarsData = [];
+
+function checkLogin() {
+    const pass = document.getElementById('passwordInput').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('loginBox').classList.remove('active');
+        document.getElementById('panelBox').classList.add('active');
+        fetchAdminCars();
+    } else {
+        document.getElementById('loginError').innerText = 'Невірний пароль!';
+    }
+}
+
+function logout() {
+    document.getElementById('panelBox').classList.remove('active');
+    document.getElementById('loginBox').classList.add('active');
+    document.getElementById('passwordInput').value = '';
+}
+
+async function fetchAdminCars() {
+    try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        const data = await response.json();
+        currentCarsData = data.record.cars;
+        renderAdminCars();
+    } catch (e) {
+        document.getElementById('carsListContainer').innerText = 'Помилка завантаження даних з хмари.';
+    }
+}
+
+function renderAdminCars() {
+    const container = document.getElementById('carsListContainer');
+    container.innerHTML = currentCarsData.map((car, index) => `
+        <div class="car-row-admin">
+            <div class="car-info">
+                <img src="${car.image}" alt="${car.name}">
+                <div>
+                    <strong>${car.name}</strong><br>
+                    <small>${car.price} | ${car.type}</small>
+                </div>
+            </div>
+            <div>
+                <span class="status-badge ${car.available ? 'status-free' : 'status-busy'}">
+                    ${car.available ? 'Вільний' : 'Заброньований'}
+                </span>
+            </div>
+            <div>
+                <button class="btn" style="padding: 8px 14px; font-size: 11px; background: ${car.available ? '#e53935' : '#2e7d32'};" onclick="toggleStatus(${index})">
+                    ${car.available ? 'Зробити недоступним' : 'Зробити вільним'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function toggleStatus(index) {
+    // Змінюємо статус у масиві
+    currentCarsData[index].available = !currentCarsData[index].available;
+    
+    document.getElementById('statusMsg').innerText = 'Зберігаємо зміни в хмару...';
+
+    try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify({ cars: currentCarsData })
+        });
+
+        if (response.ok) {
+            document.getElementById('statusMsg').innerText = 'Успішно оновлено!';
+            renderAdminCars();
+            setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 3000);
+        } else {
+            document.getElementById('statusMsg').innerText = 'Помилка збереження.';
+        }
+    } catch (e) {
+        document.getElementById('statusMsg').innerText = 'Помилка мережі.';
+    }
+}
+</script>
+</body>
+</html>
