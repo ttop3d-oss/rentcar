@@ -11,6 +11,12 @@
 <style>
 .car-card img { width: 100%; height: 170px; object-fit: cover !important; background: transparent !important; border-radius: 8px; }
 .loading-catalog { grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 15px; }
+
+/* Стилі для кнопок фільтрації */
+.filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+.filter-btn { background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s; font-family: inherit; color: #444; }
+.filter-btn:hover { background: #e0e0e0; }
+.filter-btn.active { background: #5938df; color: #fff; }
 </style>
 </head>
 <body>
@@ -27,8 +33,19 @@
         <div class="section-title">
             <h2>Наш автопарк</h2>
         </div>
+
+        <!-- Кнопки фільтрації -->
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-btn active" onclick="filterCars('Усі', this)">Всі</button>
+            <button class="filter-btn" onclick="filterCars('Седан', this)">Седан</button>
+            <button class="filter-btn" onclick="filterCars('Універсал', this)">Універсал</button>
+            <button class="filter-btn" onclick="filterCars('Хетчбек', this)">Хетчбек</button>
+            <button class="filter-btn" onclick="filterCars('Кросовер', this)">Кросовер</button>
+            <button class="filter-btn" onclick="filterCars('Джип', this)">Джип</button>
+        </div>
+
         <div class="home-cars" id="catalogContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; overflow: visible;">
-            <div class="loading-catalog">Завантаження каталог авто...</div>
+            <div class="loading-catalog">Завантаження каталогу авто...</div>
         </div>
     </section>
 </main>
@@ -52,49 +69,75 @@
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 
+let allCarsData = [];
+
 async function loadCatalogCars() {
     try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        const cars = data.record.cars || [];
-        const availableCars = cars.filter(c => c.available !== false);
+        allCarsData = data.record.cars || [];
         
-        const container = document.getElementById('catalogContainer');
-        if (availableCars.length === 0) {
-            container.innerHTML = '<div class="loading-catalog">Наразі немає доступних автомобілів.</div>';
-            return;
-        }
-
-        container.innerHTML = availableCars.map(car => {
-            const carId = car.id || ('car_' + Math.random().toString(36).substr(2, 9));
-            const carUrl = `car.html?id=${carId}`;
-            
-            let priceDisplay = `<b>${car.price}</b>`;
-            if (car.hasDiscount && car.oldPrice) {
-                priceDisplay = `
-                    <div style="display: flex; align-items: baseline; gap: 6px;">
-                        <span style="text-decoration: line-through; color: #999; font-size: 11px;">${car.oldPrice}</span>
-                        <b style="color: #e53935; font-size: 14px;">${car.price}</b>
-                    </div>
-                `;
-            }
-
-            return `
-                <article class="car-card">
-                    <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
-                    <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
-                    <div class="sub"><span>${car.type}</span><span>доба</span></div>
-                    <div class="specs"><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span><span>❄ Кондиціонер</span></div>
-                    <a class="rent" href="${carUrl}">Взяти в оренду</a>
-                </article>
-            `;
-        }).join('');
+        renderCarsList(allCarsData);
     } catch (e) {
         document.getElementById('catalogContainer').innerHTML = '<div class="loading-catalog">Не вдалося завантажити каталог.</div>';
     }
 }
+
+function renderCarsList(carsArray) {
+    const availableCars = carsArray.filter(c => c.available !== false);
+    const container = document.getElementById('catalogContainer');
+    
+    if (availableCars.length === 0) {
+        container.innerHTML = '<div class="loading-catalog">У цьому розділі наразі немає автомобілів.</div>';
+        return;
+    }
+
+    container.innerHTML = availableCars.map(car => {
+        const carId = car.id || ('car_' + Math.random().toString(36).substr(2, 9));
+        const carUrl = `car.html?id=${carId}`;
+        
+        let priceDisplay = `<b>${car.price}</b>`;
+        if (car.hasDiscount && car.oldPrice) {
+            priceDisplay = `
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="text-decoration: line-through; color: #999; font-size: 11px;">${car.oldPrice}</span>
+                    <b style="color: #e53935; font-size: 14px;">${car.price}</b>
+                </div>
+            `;
+        }
+
+        const yearText = car.year ? `${car.year}р.` : '';
+        const bookedBadge = car.isBooked ? '<div style="color: #e53935; font-size: 11px; font-weight: bold; margin-bottom: 5px;">📌 ЗАБРОНЬОВАНО</div>' : '';
+
+        return `
+            <article class="car-card">
+                <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
+                ${bookedBadge}
+                <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
+                <div class="sub"><span>${car.type}</span><span>доба</span></div>
+                <div class="specs"><span>📅 ${yearText}</span><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span></div>
+                <a class="rent" href="${carUrl}">Взяти в оренду</a>
+            </article>
+        `;
+    }).join('');
+}
+
+// Функція фільтрації за типом кузова
+function filterCars(category, btnElement) {
+    // Зміна активної кнопки
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    if (category === 'Усі') {
+        renderCarsList(allCarsData);
+    } else {
+        const filtered = allCarsData.filter(c => c.type === category);
+        renderCarsList(filtered);
+    }
+}
+
 loadCatalogCars();
 </script>
 </body>
