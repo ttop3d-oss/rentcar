@@ -85,10 +85,10 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 </div>
 
 <div id="unavailableSection" class="unavailable">
-    <h1 id="unavailTitle">АВТОМОБІЛЬ НЕ ДОСТУПНИЙ</h1>
+    <h1 id="unavailTitle">АВТОМОБІЛЬ НЕ ЗНАЙДЕНО</h1>
     <div class="silhouette"><div></div></div>
-    <p id="unavailText">Цей автомобіль зараз недоступний для оренди.</p>
-    <a href="cars.html" class="back-btn">Вернутись до вибору автомобілів</a>
+    <p id="unavailText">Будь ласка, оберіть автомобіль із каталогу.</p>
+    <a href="cars.html" class="back-btn">Перейти до каталогу</a>
 </div>
 </main>
 
@@ -117,6 +117,11 @@ const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
 
+// Якщо ID взагалі не передано в посиланні — одразу направляємо в каталог
+if (!carId) {
+    window.location.href = 'cars.html';
+}
+
 let galleryImages = [];
 let currentIndex = 0;
 
@@ -128,24 +133,10 @@ async function loadCarDetails() {
         const data = await response.json();
         const cars = data.record.cars || [];
 
-        // АБСОЛЮТНО УНІВЕРСАЛЬНИЙ ПОШУК АВТО
-        let car = null;
-        if (carId) {
-            // 1. Шукаємо за точним id
-            car = cars.find(c => c.id === carId);
-            // 2. Якщо не знайшли, можливо id це індекс (0, 1, 2...)
-            if (!car && !isNaN(carId) && cars[parseInt(carId)]) {
-                car = cars[parseInt(carId)];
-            }
-            // 3. Якщо не знайшли, шукаємо за назвою в посиланні
-            if (!car) {
-                car = cars.find(c => c.page && c.page.toLowerCase().includes(carId.toLowerCase()));
-            }
-        }
-        
-        // Якщо все одно немає параметра id — просто покажемо перше авто замість помилки
-        if (!car && cars.length > 0) {
-            car = cars[0];
+        // Шукаємо автомобіль СУВОРО за переданим id або його позицією (індексом) в базі
+        let car = cars.find(c => c.id === carId);
+        if (!car && !isNaN(carId) && cars[parseInt(carId)]) {
+            car = cars[parseInt(carId)];
         }
 
         if (!car) {
@@ -158,7 +149,6 @@ async function loadCarDetails() {
         document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
         document.getElementById('carSpecs').innerText = `⚙️ ${car.gearbox || 'Автомат'} | ⛽ ${car.fuel || 'Бензин'}`;
 
-        // ВІДОБРАЖЕННЯ ЗНИЖКИ ТА ТАЙМЕРА
         let priceHtml = '';
         if (car.hasDiscount && car.oldPrice) {
             priceHtml = `
@@ -167,7 +157,7 @@ async function loadCarDetails() {
                     <span class="current-price">${car.price}</span>
                     <span class="meta">/доба</span>
                 </div>
-                <div id="countdown" style="color: #e53935; font-size: 12px; margin-top: 4px; font-weight: bold;">🔥 Акційна пропозиція діє!</div>
+                <div id="countdown" style="color: #e53935; font-size: 12px; margin-top: 4px; font-weight: bold;"></div>
             `;
             if (car.discountEnd) {
                 startTimer(car.discountEnd);
@@ -182,7 +172,6 @@ async function loadCarDetails() {
         }
         document.getElementById('carPriceContainer').innerHTML = priceHtml;
 
-        // ПЕРЕВІРКА ДОСТУПНОСТІ
         if (car.available !== false) {
             document.getElementById('bookingSection').style.display = 'grid';
         } else {
@@ -191,7 +180,6 @@ async function loadCarDetails() {
             return;
         }
 
-        // ГАЛЕРЕЯ ФОТОГРАФІЙ
         galleryImages = [car.image || 'assets/car.webp'];
         if (car.extraImages && Array.isArray(car.extraImages)) {
             galleryImages.push(...car.extraImages.filter(img => img));
@@ -213,7 +201,7 @@ async function loadCarDetails() {
 
 function startTimer(endTimeStr) {
     const endDate = new Date(endTimeStr).getTime();
-    if (isNaN(endDate)) return; // Якщо дата введена некоректно, просто не запускаємо таймер
+    if (isNaN(endDate)) return;
     
     setInterval(() => {
         const now = new Date().getTime();
