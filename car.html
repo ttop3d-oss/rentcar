@@ -60,6 +60,7 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
     <h1 id="carName">Завантаження...</h1>
     <div class="price" id="carPriceContainer"></div>
     <div class="meta" id="carType">Седан</div>
+    <div class="meta" id="carSpecs" style="margin-top: 8px; font-weight: 600; color: #444;"></div>
     
     <div class="car-photo" onclick="openModal(0)">
         <img id="mainImage" src="" alt="Авто">
@@ -113,6 +114,11 @@ const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
 
+// Якщо людина зайшла просто на car.html без параметру id, відправляємо її в каталог
+if (!carId) {
+    window.location.href = 'cars.html';
+}
+
 let galleryImages = [];
 let currentIndex = 0;
 
@@ -131,12 +137,17 @@ async function loadCarDetails() {
 
         document.getElementById('pageTitle').innerText = `${car.name} — Оренда авто Львів`;
         document.getElementById('carName').innerText = car.name;
-        document.getElementById('carType').innerText = car.type;
+        document.getElementById('carType').innerText = `Тип кузова: ${car.type}`;
+        document.getElementById('carSpecs').innerText = `⚙️ ${car.gearbox || 'Автомат'} | ⛽ ${car.fuel || 'Бензин'}`;
 
-        // Ціна та знижка
+        // Відображення ціни та акційної знижки
         let priceHtml = '';
         if (car.hasDiscount && car.oldPrice) {
-            priceHtml = `<span style="text-decoration: line-through; color: #999; font-size: 14px; margin-right: 8px;">${car.oldPrice}</span><span style="color: #e53935; font-size: 22px; font-weight: 800;">${car.price}</span> <span class="meta">/доба</span>`;
+            priceHtml = `
+                <span style="text-decoration: line-through; color: #999; font-size: 14px; margin-right: 8px;">${car.oldPrice}</span>
+                <span style="color: #e53935; font-size: 22px; font-weight: 800;">${car.price}</span> 
+                <span class="meta">/доба</span>
+            `;
             if (car.discountEnd) {
                 priceHtml += `<div id="countdown" style="color: #e53935; font-size: 11px; margin-top: 5px; font-weight: bold;"></div>`;
                 startTimer(car.discountEnd);
@@ -146,7 +157,8 @@ async function loadCarDetails() {
         }
         document.getElementById('carPriceContainer').innerHTML = priceHtml;
 
-        if (car.available) {
+        // Перевірка чи авто доступне / вільне
+        if (car.available !== false) {
             document.getElementById('bookingSection').style.display = 'grid';
         } else {
             document.getElementById('unavailTitle').innerText = `${car.name.toUpperCase()} НЕ ДОСТУПНИЙ`;
@@ -154,8 +166,8 @@ async function loadCarDetails() {
             return;
         }
 
-        // Фотографії (головна + додаткові до 3 шт)
-        galleryImages = [car.image];
+        // Фотографії (головна + додаткові)
+        galleryImages = [car.image || 'assets/car.webp'];
         if (car.extraImages && Array.isArray(car.extraImages)) {
             galleryImages.push(...car.extraImages);
         }
@@ -170,7 +182,7 @@ async function loadCarDetails() {
         `).join('');
 
     } catch (e) {
-        document.getElementById('bookingSection').style.display = 'grid'; // захист від білого екрана
+        document.getElementById('unavailableSection').style.display = 'block';
     }
 }
 
@@ -179,13 +191,19 @@ function startTimer(endTimeStr) {
     setInterval(() => {
         const now = new Date().getTime();
         const distance = endDate - now;
-        if (distance < 0) return;
+        if (distance < 0) {
+            const timerElem = document.getElementById('countdown');
+            if (timerElem) timerElem.innerHTML = "Акцію завершено";
+            return;
+        }
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
         const timerElem = document.getElementById('countdown');
-        if (timerElem) timerElem.innerHTML = `🔥 До кінця акції: ${days}д ${hours}г ${minutes}хв ${seconds}с`;
+        if (timerElem) {
+            timerElem.innerHTML = `🔥 До кінця акції: ${days}д ${hours}г ${minutes}хв ${seconds}с`;
+        }
     }, 1000);
 }
 
