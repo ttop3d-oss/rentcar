@@ -171,7 +171,7 @@ async function loadHomeCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        const cars = data.record.cars.slice(0, 3);
+        const cars = data.record.cars.filter(c => c.available && c.isPopular).slice(0, 3);
         
         const container = document.getElementById('homeCarsContainer');
         container.innerHTML = cars.map(car => `
