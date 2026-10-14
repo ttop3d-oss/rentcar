@@ -58,7 +58,6 @@ async function loadCatalogCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        // Виводимо всі опубліковані авто
         const cars = (data.record.cars || []).filter(c => c.available !== false);
         
         const container = document.getElementById('catalogContainer');
@@ -69,9 +68,15 @@ async function loadCatalogCars() {
 
         container.innerHTML = cars.map(car => {
             const carUrl = car.page || `car.html?id=${car.id}`;
+            
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
-                priceDisplay = `<span style="text-decoration: line-through; color: #999; font-size: 12px; margin-right: 5px;">${car.oldPrice}</span><b style="color: #e53935;">${car.price}</b>`;
+                priceDisplay = `
+                    <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span style="text-decoration: line-through; color: #999; font-size: 11px;">${car.oldPrice}</span>
+                        <b style="color: #e53935; font-size: 14px;">${car.price}</b>
+                    </div>
+                `;
             }
 
             return `
