@@ -27,7 +27,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 .checkbox-label { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 12px; cursor: pointer; margin: 10px 0; }
 .checkbox-label input { width: auto; margin: 0; }
-.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #ccc; }
+.preview-img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; margin-right: 5px; }
 .msg { margin-top: 15px; font-weight: bold; font-size: 13px; }
 .top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
 </style>
@@ -53,7 +53,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 
     <div id="panelBox" class="panel-box">
         <div class="top-actions">
-            <h2>Керування каталогом, фото та акціями</h2>
+            <h2>Керування каталогом та фото</h2>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-success" onclick="addNewCar()">+ Додати авто</button>
                 <button class="btn btn-danger" onclick="logout()">Вийти</button>
@@ -150,21 +150,21 @@ function renderAdminCars() {
                 </div>
             </div>
 
-            <div class="grid-2" style="background:#fff; padding:10px; border-radius:6px; margin:10px 0; border:1px solid #eee;">
+            <div class="grid-2" style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
                 <div>
-                    <label><b>Головне фото (основне)</b></label>
-                    <input type="file" accept="image/*" onchange="uploadMainPhoto(event, ${index})">
+                    <label><b>Головне фото (з комп'ютера / телефона)</b></label>
+                    <input type="file" accept="image/*" onchange="uploadMain(event, ${index})">
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex; align-items:center;">
                     <img src="${car.image || 'assets/car.webp'}" class="preview-img">
-                    <small>Основне фото</small>
+                    <small>Головне фото</small>
                 </div>
             </div>
 
-            <div style="background:#fff; padding:10px; border-radius:6px; margin:10px 0; border:1px solid #eee;">
-                <label><b>Додаткові фото (до 3 штук знизу)</b></label>
-                <input type="file" accept="image/*" multiple onchange="uploadExtraPhotos(event, ${index})">
-                <div style="display:flex; gap:10px; margin-top:8px;" id="extraPrev_${index}">
+            <div style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
+                <label><b>Додаткові фото (до 3 штук)</b></label>
+                <input type="file" accept="image/*" multiple onchange="uploadExtra(event, ${index})">
+                <div style="display:flex; gap:5px; margin-top:5px;">
                     ${(car.extraImages || []).map(img => `<img src="${img}" class="preview-img">`).join('')}
                 </div>
             </div>
@@ -179,24 +179,24 @@ function renderAdminCars() {
                 <div>
                     <label class="checkbox-label">
                         <input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)">
-                        Показувати в популярних на головній ⭐
+                        Показувати в популярних ⭐
                     </label>
                 </div>
                 <div>
                     <label class="checkbox-label">
                         <input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="toggleDiscount(${index}, this.checked)">
-                        Увімкнути акційну знижку 🔥
+                        Увімкнути знижку 🔥
                     </label>
                 </div>
             </div>
 
             <div class="grid-2">
                 <div>
-                    <label>Стара ціна (перекреслена)</label>
+                    <label>Стара ціна</label>
                     <input type="text" value="${car.oldPrice || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="old_${index}" oninput="updateField(${index}, 'oldPrice', this.value)">
                 </div>
                 <div>
-                    <label>Кінець акції (таймер)</label>
+                    <label>Кінець знижки (таймер)</label>
                     <input type="datetime-local" value="${car.discountEnd || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="end_${index}" onchange="updateField(${index}, 'discountEnd', this.value)">
                 </div>
             </div>
@@ -208,22 +208,21 @@ function updateField(index, field, val) {
     currentCarsData[index][field] = val;
 }
 
-// Функція автоматичного стискання фото перед завантаженням
-function resizeAndConvert(file, callback) {
+// Розумне стискання до мініатюри, щоб файл миттєво летів у хмару без помилок
+function compressImage(file, callback) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 1000;
-            const MAX_HEIGHT = 700;
+            const MAX_SIZE = 700; // зменшуємо до оптимальної ширини/висоти
             let width = img.width;
             let height = img.height;
 
             if (width > height) {
-                if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
             } else {
-                if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
             }
 
             canvas.width = width;
@@ -231,38 +230,34 @@ function resizeAndConvert(file, callback) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-            callback(dataUrl);
+            // Формат JPEG із якістю 0.6 (непогана якість, але надзвичайно мала вага)
+            callback(canvas.toDataURL('image/jpeg', 0.6));
         };
         img.src = e.target.result;
     };
     reader.readAsDataURL(file);
 }
 
-function uploadMainPhoto(e, index) {
+function uploadMain(e, index) {
     const file = e.target.files[0];
     if (file) {
-        resizeAndConvert(file, function(compressedBase64) {
-            currentCarsData[index].image = compressedBase64;
+        compressImage(file, function(result) {
+            currentCarsData[index].image = result;
             renderAdminCars();
         });
     }
 }
 
-function uploadExtraPhotos(e, index) {
+function uploadExtra(e, index) {
     const files = Array.from(e.target.files).slice(0, 3);
-    if (!currentCarsData[index].extraImages) {
-        currentCarsData[index].extraImages = [];
-    }
+    if (!currentCarsData[index].extraImages) currentCarsData[index].extraImages = [];
     
-    let loadedCount = 0;
+    let loaded = 0;
     files.forEach(file => {
-        resizeAndConvert(file, function(compressedBase64) {
-            currentCarsData[index].extraImages.push(compressedBase64);
-            loadedCount++;
-            if (loadedCount === files.length) {
-                renderAdminCars();
-            }
+        compressImage(file, function(result) {
+            currentCarsData[index].extraImages.push(result);
+            loaded++;
+            if (loaded === files.length) renderAdminCars();
         });
     });
 }
@@ -310,10 +305,10 @@ async function saveAllChanges() {
             body: JSON.stringify({ cars: currentCarsData })
         });
         if (response.ok) {
-            document.getElementById('statusMsg').innerText = 'Успішно збережено!';
+            document.getElementById('statusMsg').innerText = 'Успішно збережено в хмару!';
             setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 3000);
         } else {
-            document.getElementById('statusMsg').innerText = 'Помилка збереження.';
+            document.getElementById('statusMsg').innerText = 'Помилка збереження (перевищено ліміт розміру).';
         }
     } catch (e) {
         document.getElementById('statusMsg').innerText = 'Помилка мережі.';
