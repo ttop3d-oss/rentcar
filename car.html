@@ -128,13 +128,24 @@ async function loadCarDetails() {
         const data = await response.json();
         const cars = data.record.cars || [];
 
-        // Шукаємо авто: спочатку за точним id, якщо немає — за індексом (наприклад id=0, 1, 2) або частиною назви
-        let car = cars.find(c => c.id === carId);
-        if (!car && !isNaN(carId)) {
-            car = cars[parseInt(carId)];
+        // АБСОЛЮТНО УНІВЕРСАЛЬНИЙ ПОШУК АВТО
+        let car = null;
+        if (carId) {
+            // 1. Шукаємо за точним id
+            car = cars.find(c => c.id === carId);
+            // 2. Якщо не знайшли, можливо id це індекс (0, 1, 2...)
+            if (!car && !isNaN(carId) && cars[parseInt(carId)]) {
+                car = cars[parseInt(carId)];
+            }
+            // 3. Якщо не знайшли, шукаємо за назвою в посиланні
+            if (!car) {
+                car = cars.find(c => c.page && c.page.toLowerCase().includes(carId.toLowerCase()));
+            }
         }
-        if (!car && carId) {
-            car = cars.find(c => c.page && c.page.includes(carId));
+        
+        // Якщо все одно немає параметра id — просто покажемо перше авто замість помилки
+        if (!car && cars.length > 0) {
+            car = cars[0];
         }
 
         if (!car) {
@@ -144,9 +155,10 @@ async function loadCarDetails() {
 
         document.getElementById('pageTitle').innerText = `${car.name} — Оренда авто Львів`;
         document.getElementById('carName').innerText = car.name;
-        document.getElementById('carType').innerText = `Тип кузова: ${car.type}`;
+        document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
         document.getElementById('carSpecs').innerText = `⚙️ ${car.gearbox || 'Автомат'} | ⛽ ${car.fuel || 'Бензин'}`;
 
+        // ВІДОБРАЖЕННЯ ЗНИЖКИ ТА ТАЙМЕРА
         let priceHtml = '';
         if (car.hasDiscount && car.oldPrice) {
             priceHtml = `
@@ -155,7 +167,7 @@ async function loadCarDetails() {
                     <span class="current-price">${car.price}</span>
                     <span class="meta">/доба</span>
                 </div>
-                <div id="countdown" style="color: #e53935; font-size: 12px; margin-top: 4px; font-weight: bold;"></div>
+                <div id="countdown" style="color: #e53935; font-size: 12px; margin-top: 4px; font-weight: bold;">🔥 Акційна пропозиція діє!</div>
             `;
             if (car.discountEnd) {
                 startTimer(car.discountEnd);
@@ -163,13 +175,14 @@ async function loadCarDetails() {
         } else {
             priceHtml = `
                 <div class="price-box">
-                    <span class="standard-price">${car.price}</span>
+                    <span class="standard-price">${car.price || '800 Грн'}</span>
                     <span class="meta">/доба</span>
                 </div>
             `;
         }
         document.getElementById('carPriceContainer').innerHTML = priceHtml;
 
+        // ПЕРЕВІРКА ДОСТУПНОСТІ
         if (car.available !== false) {
             document.getElementById('bookingSection').style.display = 'grid';
         } else {
@@ -178,9 +191,10 @@ async function loadCarDetails() {
             return;
         }
 
+        // ГАЛЕРЕЯ ФОТОГРАФІЙ
         galleryImages = [car.image || 'assets/car.webp'];
         if (car.extraImages && Array.isArray(car.extraImages)) {
-            galleryImages.push(...car.extraImages);
+            galleryImages.push(...car.extraImages.filter(img => img));
         }
 
         document.getElementById('mainImage').src = galleryImages[0];
@@ -199,6 +213,8 @@ async function loadCarDetails() {
 
 function startTimer(endTimeStr) {
     const endDate = new Date(endTimeStr).getTime();
+    if (isNaN(endDate)) return; // Якщо дата введена некоректно, просто не запускаємо таймер
+    
     setInterval(() => {
         const now = new Date().getTime();
         const distance = endDate - now;
