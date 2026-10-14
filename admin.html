@@ -25,9 +25,13 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 .car-card-admin h3 { margin-top: 0; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 .checkbox-label { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 12px; cursor: pointer; margin: 10px 0; }
 .checkbox-label input { width: auto; margin: 0; }
-.preview-img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; margin-right: 5px; }
+.preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
+.preview-wrap { position: relative; display: inline-block; }
+.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; }
+.del-photo-btn { position: absolute; top: -5px; right: -5px; background: #e53935; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .msg { margin-top: 15px; font-weight: bold; font-size: 13px; }
 .top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
 </style>
@@ -45,7 +49,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
         <p>Введіть пароль адміністратора:</p>
         <div class="input-group">
             <input type="password" id="passwordInput" placeholder="Пароль" onkeydown="if(event.key === 'Enter') checkLogin()">
-            <button type="button" class="toggle-pass" onclick="togglePass()">👁️</button>
+            <button type="button" class="toggle-pass" onclick="togglePass()">👁</button>
         </div>
         <button class="btn" onclick="checkLogin()">Увійти</button>
         <div id="loginError" class="msg" style="color: #e53935;"></div>
@@ -109,9 +113,24 @@ async function fetchAdminCars() {
     }
 }
 
+// Генерація років від 2000 до 2030 для випадаючого списку
+function getYearOptions(selectedYear) {
+    let options = '';
+    for (let y = 2030; y >= 2000; y--) {
+        const sel = (selectedYear == y) ? 'selected' : '';
+        options += `<option value="${y}" ${sel}>${y}</option>`;
+    }
+    return options;
+}
+
 function renderAdminCars() {
     const container = document.getElementById('carsListContainer');
-    container.innerHTML = currentCarsData.map((car, index) => `
+    container.innerHTML = currentCarsData.map((car, index) => {
+        // Очищаємо ціну від слова "Грн" для зручного введення лише цифр
+        const rawPrice = (car.price || '').replace(/[^0-9]/g, '');
+        const rawOldPrice = (car.oldPrice || '').replace(/[^0-9]/g, '');
+
+        return `
         <div class="car-card-admin">
             <h3>
                 <span>Авто #${index + 1}: ${car.name || 'Без назви'}</span>
@@ -135,37 +154,58 @@ function renderAdminCars() {
                 </div>
             </div>
 
-            <div class="grid-3">
+            <div class="grid-4">
                 <div>
-                    <label>Ціна (напр. 800 Грн)</label>
-                    <input type="text" value="${car.price || ''}" oninput="updateField(${index}, 'price', this.value)">
+                    <label>Ціна (тільки цифри, Грн)</label>
+                    <input type="number" value="${rawPrice}" oninput="updatePrice(${index}, this.value)">
                 </div>
                 <div>
-                    <label>Коробка</label>
-                    <input type="text" value="${car.gearbox || 'Автомат'}" oninput="updateField(${index}, 'gearbox', this.value)">
+                    <label>Рік випуску</label>
+                    <select onchange="updateField(${index}, 'year', this.value)">
+                        ${getYearOptions(car.year || 2021)}
+                    </select>
                 </div>
                 <div>
-                    <label>Паливо</label>
-                    <input type="text" value="${car.fuel || 'Бензин'}" oninput="updateField(${index}, 'fuel', this.value)">
+                    <label>Коробка передач</label>
+                    <select onchange="updateField(${index}, 'gearbox', this.value)">
+                        <option value="Автомат" ${car.gearbox === 'Автомат' ? 'selected' : ''}>Автомат</option>
+                        <option value="Механіка" ${car.gearbox === 'Механіка' ? 'selected' : ''}>Механіка</option>
+                         <option value="Автомат" ${car.gearbox === 'Типтронік' ? 'selected' : ''}>Типтронік</option>
+                          <option value="Автомат" ${car.gearbox === 'Робот' ? 'selected' : ''}>Робот</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Тип палива</label>
+                    <select onchange="updateField(${index}, 'fuel', this.value)">
+                        <option value="Бензин" ${car.fuel === 'Бензин' ? 'selected' : ''}>Бензин</option>
+                        <option value="Дизель" ${car.fuel === 'Дизель' ? 'selected' : ''}>Дизель</option>
+                        <option value="Електро" ${car.fuel === 'Електро' ? 'selected' : ''}>Електро</option>
+                        <option value="Гібрид" ${car.fuel === 'Гібрид' ? 'selected' : ''}>Гібрид</option>
+                    </select>
                 </div>
             </div>
 
             <div class="grid-2" style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
                 <div>
-                    <label><b>Головне фото (з комп'ютера / телефона)</b></label>
+                    <label><b>Головне фото</b></label>
                     <input type="file" accept="image/*" onchange="uploadMain(event, ${index})">
                 </div>
-                <div style="display:flex; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px;">
                     <img src="${car.image || 'assets/car.webp'}" class="preview-img">
-                    <small>Головне фото</small>
+                    <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="removeMainImage(${index})">Здалити фото</button>
                 </div>
             </div>
 
             <div style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
                 <label><b>Додаткові фото (до 3 штук)</b></label>
                 <input type="file" accept="image/*" multiple onchange="uploadExtra(event, ${index})">
-                <div style="display:flex; gap:5px; margin-top:5px;">
-                    ${(car.extraImages || []).map(img => `<img src="${img}" class="preview-img">`).join('')}
+                <div class="preview-container">
+                    ${(car.extraImages || []).map((img, imgIdx) => `
+                        <div class="preview-wrap">
+                            <img src="${img}" class="preview-img">
+                            <button class="del-photo-btn" onclick="removeExtraImage(${index},${imgIdx})" title="Видалити фото">✕</button>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
 
@@ -173,27 +213,33 @@ function renderAdminCars() {
                 <div>
                     <label class="checkbox-label">
                         <input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)">
-                        Опубліковано / Вільне
+                        Опубліковано (видно в каталозі)
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-label" style="color: #e53935;">
+                        <input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked', this.checked)">
+                        📌 Заброньовано
                     </label>
                 </div>
                 <div>
                     <label class="checkbox-label">
                         <input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)">
-                        Показувати в популярних ⭐
+                        Популярне на головній ⭐
                     </label>
                 </div>
+            </div>
+
+            <div class="grid-3" style="margin-top: 10px;">
                 <div>
                     <label class="checkbox-label">
                         <input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="toggleDiscount(${index}, this.checked)">
                         Увімкнути знижку 🔥
                     </label>
                 </div>
-            </div>
-
-            <div class="grid-2">
                 <div>
-                    <label>Стара ціна</label>
-                    <input type="text" value="${car.oldPrice || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="old_${index}" oninput="updateField(${index}, 'oldPrice', this.value)">
+                    <label>Стара ціна (тільки цифри)</label>
+                    <input type="number" value="${rawOldPrice}" ${!car.hasDiscount ? 'disabled' : ''} id="old_${index}" oninput="updateOldPrice(${index}, this.value)">
                 </div>
                 <div>
                     <label>Кінець знижки (таймер)</label>
@@ -201,11 +247,30 @@ function renderAdminCars() {
                 </div>
             </div>
         </div>
-    `).join('');
+    `;}).join('');
 }
 
 function updateField(index, field, val) {
     currentCarsData[index][field] = val;
+}
+
+// Автоматичне додавання слова "Грн" до суми
+function updatePrice(index, val) {
+    currentCarsData[index].price = val ? val + ' Грн' : '';
+}
+
+function updateOldPrice(index, val) {
+    currentCarsData[index].oldPrice = val ? val + ' Грн' : '';
+}
+
+function removeMainImage(index) {
+    currentCarsData[index].image = 'assets/car.webp';
+    renderAdminCars();
+}
+
+function removeExtraImage(carIndex, imgIndex) {
+    currentCarsData[carIndex].extraImages.splice(imgIndex, 1);
+    renderAdminCars();
 }
 
 function compressImage(file, callback) {
@@ -214,7 +279,7 @@ function compressImage(file, callback) {
         const img = new Image();
         img.onload = function() {
             const canvas = document.createElement('canvas');
-            const MAX_SIZE = 700;
+            const MAX_SIZE = 500;
             let width = img.width;
             let height = img.height;
 
@@ -229,7 +294,7 @@ function compressImage(file, callback) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            callback(canvas.toDataURL('image/jpeg', 0.6));
+            callback(canvas.toDataURL('image/jpeg', 0.45));
         };
         img.src = e.target.result;
     };
@@ -272,19 +337,26 @@ function addNewCar() {
         id: newId,
         name: 'Новий автомобіль',
         type: 'Седан',
+        year: '2023',
         price: '900 Грн',
         gearbox: 'Автомат',
         fuel: 'Бензин',
         image: 'assets/car.webp',
         extraImages: [],
-        page: `car.html?id=${newId}`, // Автоматичне унікальне посилання для універсальної сторінки
+        page: `car.html?id=${newId}`,
         available: true,
+        isBooked: false,
         isPopular: true,
         hasDiscount: false,
         oldPrice: '',
         discountEnd: ''
     });
     renderAdminCars();
+    
+    const statusBox = document.getElementById('statusMsg');
+    statusBox.style.color = '#2e7d32';
+    statusBox.innerText = '✅ Успішно створено новий автомобіль! Натисніть "Зберегти зміни в хмару".';
+    setTimeout(() => { statusBox.innerText = ''; }, 5000);
 }
 
 function removeCar(index) {
@@ -303,7 +375,7 @@ async function saveAllChanges() {
             body: JSON.stringify({ cars: currentCarsData })
         });
         if (response.ok) {
-            document.getElementById('statusMsg').innerText = 'Успішно збережено в хмару!';
+            document.getElementById('statusMsg').innerText = '✅ Успішно збережено в хмару!';
             setTimeout(() => { document.getElementById('statusMsg').innerText = ''; }, 3000);
         } else {
             document.getElementById('statusMsg').innerText = 'Помилка збереження (перевищено ліміт розміру).';
