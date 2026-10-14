@@ -3,147 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Автомобілі — Оренда авто Львів</title>
+<title>Каталог автомобілів — Оренда авто Львів</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-.rent.disabled {
-    background: #e53935;
-}
-.rent.disabled:hover {
-    background: #c62828;
-}
-.car-card img, .full-card img {
-    width: 100%;
-    height: 185px;
-    object-fit: cover !important;
-    background: transparent !important;
-    border-radius: 8px;
-}
-.loading {
-    text-align: center;
-    grid-column: 1 / -1;
-    padding: 40px;
-    font-size: 16px;
-    color: #666;
-}
+.car-card img { width: 100%; height: 170px; object-fit: cover !important; background: transparent !important; border-radius: 8px; }
+.loading-catalog { grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 15px; }
 </style>
 </head>
 <body>
 
-<div class="site cars-site">
+<div class="site">
 <header class="header">
-    <a class="logo" href="index.html">
-        <span class="car-logo">🚖</span>
-        <span>Оренда авто Львів</span>
-    </a>
-    <nav>
-        <a href="index.html">Головна</a>
-        <a class="active" href="cars.html">Автомобілі</a>
-    </nav>
-    <div class="help">
-        <div class="phone-round">📞</div>
-        <div>
-            <small>Потрібна допомога?</small>
-            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
-        </div>
-    </div>
+    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
+    <nav><a href="index.html">Головна</a><a class="active" href="cars.html">Автомобілі</a></nav>
+    <div class="help"><div class="phone-round">📞</div><div><small>Потрібна допомога?</small><b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b></div></div>
 </header>
 
-<main class="cars-main">
-    <h1>Вибрати автомобіль</h1>
-    <div class="all-cars" id="carsContainer">
-        <div class="loading">Завантаження автомобілів з бази...</div>
-    </div>
+<main>
+    <section class="choose" style="margin-top: 10px;">
+        <div class="section-title">
+            <h2>Наш автопарк</h2>
+        </div>
+        <div class="home-cars" id="catalogContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; overflow: visible;">
+            <div class="loading-catalog">Завантаження каталог авто...</div>
+        </div>
+    </section>
 </main>
 
-<footer id="contact" class="footer">
+<footer class="footer">
     <div class="footer-main">
-        <div class="footer-company">
-            <a class="logo" href="index.html">
-                <span class="car-logo">🚖</span>
-                <span>Оренда авто</span>
-            </a>
-            <p>Комфортні і не дорогі авто<br>у Львові і Львівській<br>області.</p>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Адреса</h4>
-            <a>Львів, вул. Городоцька, 26</a>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Пошта</h4>
-            <a>demyanchik@gmail.com</a>
-        </div>
-        <div class="contact">
-            <h4><i>●</i> Телефон</h4>
-            <a href="tel:+380667221089">+380(66)722-1089</a>
-        </div>
+        <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і не дорогі авто<br>у Львові і Львівській області.</p></div>
+        <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
+        <div class="contact"><h4><i>●</i> Пошта</h4><a>demyanchik@gmail.com</a></div>
+        <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380(66)722-1089</a></div>
     </div>
     <div class="footer-links">
-        <div>
-            <b>Наші соціальні мережі</b>
-            <a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a>
-            <a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a>
-            <a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a>
-        </div>
-        <div>
-            <b>Автомобілі</b>
-            <a href="cars.html">Седан</a>
-            <a href="cars.html">Універсал</a>
-            <a href="cars.html">Хетчбек</a>
-            <a href="cars.html">Джип</a>
-        </div>
+        <div><b>Наші соціальні мережі</b><a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a><a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a><a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a></div>
+        <div><b>Автомобілі</b><a href="cars.html">Седан</a><a href="cars.html">Універсал</a><a href="cars.html">Хетчбек</a><a href="cars.html">Джип</a></div>
     </div>
-   <div class="copyright">
-      © Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a>
-  </div>
+    <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
 </footer>
 </div>
 
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 
-async function loadCars() {
+async function loadCatalogCars() {
     try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-            headers: {
-                'X-Master-Key': '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO'
-            }
+            headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-  const cars = data.record.cars.filter(c => c.available);
+        // Виводимо всі опубліковані авто
+        const cars = (data.record.cars || []).filter(c => c.available !== false);
         
-        const container = document.getElementById('carsContainer');
-        container.innerHTML = cars.map(car => `
-            <article class="car-card full-card">
-                <img src="${car.image}" alt="${car.name}">
-                <div class="car-row">
-                    <strong>${car.name}</strong>
-                    <b>${car.price}</b>
-                </div>
-                <div class="sub">
-                    <span>${car.type}</span>
-                    <span>доба</span>
-                </div>
-                <div class="specs">
-                    <span>♙ ${car.gearbox}</span>
-                    <span>⛽ ${car.fuel}</span>
-                    <span>❄ Кондиціонер</span>
-                </div>
-                ${car.available
-                    ? `<a class="rent" href="${car.page}">Взяти в оренду</a>`
-                    : `<a class="rent disabled" href="${car.page}">Автомобіль недоступний</a>`
-                }
-            </article>
-        `).join('');
-    } catch (error) {
-        document.getElementById('carsContainer').innerHTML = '<div class="loading" style="color:red;">Помилка завантаження даних. Спробуйте пізніше.</div>';
+        const container = document.getElementById('catalogContainer');
+        if (cars.length === 0) {
+            container.innerHTML = '<div class="loading-catalog">Наразі немає доступних автомобілів.</div>';
+            return;
+        }
+
+        container.innerHTML = cars.map(car => {
+            const carUrl = car.page || `car.html?id=${car.id}`;
+            let priceDisplay = `<b>${car.price}</b>`;
+            if (car.hasDiscount && car.oldPrice) {
+                priceDisplay = `<span style="text-decoration: line-through; color: #999; font-size: 12px; margin-right: 5px;">${car.oldPrice}</span><b style="color: #e53935;">${car.price}</b>`;
+            }
+
+            return `
+                <article class="car-card">
+                    <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
+                    <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
+                    <div class="sub"><span>${car.type}</span><span>доба</span></div>
+                    <div class="specs"><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span><span>❄ Кондиціонер</span></div>
+                    <a class="rent" href="${carUrl}">Взяти в оренду</a>
+                </article>
+            `;
+        }).join('');
+    } catch (e) {
+        document.getElementById('catalogContainer').innerHTML = '<div class="loading-catalog">Не вдалося завантажити каталог.</div>';
     }
 }
-
-loadCars();
+loadCatalogCars();
 </script>
 </body>
 </html>
