@@ -94,7 +94,6 @@ async function loadHomeCars() {
         }
 
         container.innerHTML = popularCars.map(car => {
-            // Залізобетонне формування посилання на основі реального унікального ID або індексу
             const carId = car.id || ('car_' + Math.random().toString(36).substr(2, 9));
             const carUrl = `car.html?id=${carId}`;
             
@@ -108,12 +107,16 @@ async function loadHomeCars() {
                 `;
             }
 
+            const yearText = car.year ? `${car.year}р.` : '';
+            const bookedBadge = car.isBooked ? '<div style="color: #e53935; font-size: 11px; font-weight: bold; margin-bottom: 5px;">📌 ЗАБРОНЬОВАНО</div>' : '';
+
             return `
                 <article class="car-card">
                     <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
+                    ${bookedBadge}
                     <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
                     <div class="sub"><span>${car.type}</span><span>доба</span></div>
-                    <div class="specs"><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span><span>❄ Кондиціонер</span></div>
+                    <div class="specs"><span>📅 ${yearText}</span><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span></div>
                     <a class="rent" href="${carUrl}">Взяти в оренду</a>
                 </article>
             `;
