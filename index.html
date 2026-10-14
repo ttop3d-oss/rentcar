@@ -9,15 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-/* Стиль для червоної кнопки недоступного автомобіля */
 .rent.disabled {
     background: #e53935;
 }
 .rent.disabled:hover {
     background: #c62828;
 }
-
-/* Заповнення фотографій карток без полів */
 .car-card img {
     width: 100%;
     height: 170px;
@@ -25,13 +22,10 @@
     background: transparent !important;
     border-radius: 8px;
 }
-
-/* Налаштування для фонового розмитого зображення на всю праву частину */
 .hero {
     position: relative;
     overflow: hidden;
 }
-
 .hero-bg-blur {
     position: absolute;
     top: 0;
@@ -39,16 +33,20 @@
     width: 55%;
     height: 100%;
     object-fit: cover;
-    filter: blur(8px); /* Сила розмиття фону */
-    opacity: 0.45;     /* Прозорість фону */
+    filter: blur(8px);
+    opacity: 0.45;
     z-index: 1;
     pointer-events: none;
 }
-
-/* Текстовий блок поверх фону */
 .hero-text {
     position: relative;
     z-index: 2;
+}
+.loading-home {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+    color: #666;
 }
 </style>
 </head>
@@ -79,9 +77,7 @@
 <main>
     <section class="hero">
         <div class="hero-pattern"></div>
-        
-        <!-- Розмите фонове зображення на праву сторону -->
-        <img class="hero-bg-blur" src="assets/hero-car.png" alt="Фон оренда авто">
+        <img class="hero-bg-blur" src="assets/hero-car.webp" alt="Фон оренда авто">
 
         <div class="hero-text">
             <h1>Швидка оренда авто<br>у Львові</h1>
@@ -114,63 +110,8 @@
             <a href="cars.html">Всі автомобілі <span>→</span></a>
         </div>
 
-        <div class="home-cars">
-            <!-- Volkswagen Jetta (Недоступний) -->
-            <article class="car-card">
-                <img src="assets/jetta.webp" alt="Volkswagen Jetta">
-                <div class="car-row">
-                    <strong>Volkswagen Jetta</strong>
-                    <b>1000 Грн</b>
-                </div>
-                <div class="sub">
-                    <span>Седан</span>
-                    <span>доба</span>
-                </div>
-                <div class="specs">
-                    <span>♙ Автомат</span>
-                    <span>⛽ Бензин</span>
-                    <span>❄ Кондиціонер</span>
-                </div>
-                <a class="rent disabled" href="jetta.html">Автомобіль недоступний</a>
-            </article>
-
-            <!-- BMW F10 528i (Доступний) -->
-            <article class="car-card">
-                <img src="assets/bmw.webp" alt="BMW F10 528i">
-                <div class="car-row">
-                    <strong>BMW F10 528i</strong>
-                    <b>800 Грн</b>
-                </div>
-                <div class="sub">
-                    <span>Седан</span>
-                    <span>доба</span>
-                </div>
-                <div class="specs">
-                    <span>♙ Автомат</span>
-                    <span>⛽ Дизель</span>
-                    <span>❄ Кондиціонер</span>
-                </div>
-                <a class="rent" href="bmw.html">Взяти в оренду</a>
-            </article>
-
-            <!-- Audi A6 C6 (Доступний) -->
-            <article class="car-card">
-                <img src="assets/audi.webp" alt="Audi A6 C6">
-                <div class="car-row">
-                    <strong>Audi A6 C6</strong>
-                    <b>700 Грн</b>
-                </div>
-                <div class="sub">
-                    <span>Універсал</span>
-                    <span>доба</span>
-                </div>
-                <div class="specs">
-                    <span>♙ Автомат</span>
-                    <span>⛽ Дизель</span>
-                    <span>❄ Кондиціонер</span>
-                </div>
-                <a class="rent" href="audi.html">Взяти в оренду</a>
-            </article>
+        <div class="home-cars" id="homeCarsContainer">
+            <div class="loading-home">Завантаження автомобілів...</div>
         </div>
     </section>
 </main>
@@ -214,11 +155,55 @@
         </div>
     </div>
 
-  <div class="copyright">
-    © Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;">⚙️</a>
-</div>
+    <div class="copyright">
+        © Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a>
+    </div>
 </footer>
 
 </div>
+
+<script>
+const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+
+async function loadHomeCars() {
+    try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        const data = await response.json();
+        // Виводимо перші 3 популярні авто (Jetta, BMW, Audi)
+        const cars = data.record.cars.slice(0, 3);
+        
+        const container = document.getElementById('homeCarsContainer');
+        container.innerHTML = cars.map(car => `
+            <article class="car-card">
+                <img src="${car.image}" alt="${car.name}">
+                <div class="car-row">
+                    <strong>${car.name}</strong>
+                    <b>${car.price}</b>
+                </div>
+                <div class="sub">
+                    <span>${car.type}</span>
+                    <span>доба</span>
+                </div>
+                <div class="specs">
+                    <span>♙ ${car.gearbox}</span>
+                    <span>⛽ ${car.fuel}</span>
+                    <span>❄ Кондиціонер</span>
+                </div>
+                ${car.available
+                    ? `<a class="rent" href="${car.page}">Взяти в оренду</a>`
+                    : `<a class="rent disabled" href="${car.page}">Автомобіль недоступний</a>`
+                }
+            </article>
+        `).join('');
+    } catch (e) {
+        document.getElementById('homeCarsContainer').innerHTML = '<div class="loading-home">Не вдалося завантажити авто.</div>';
+    }
+}
+
+loadHomeCars();
+</script>
 </body>
 </html>
