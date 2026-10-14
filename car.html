@@ -109,6 +109,10 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 
+// Інтегрований Telegram-бот
+const TELEGRAM_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4';
+const TELEGRAM_CHAT_ID = '1215279290';
+
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
 
@@ -141,7 +145,6 @@ async function loadCarDetails() {
         document.getElementById('carName').innerText = car.name;
         document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
         
-        // Виведення характеристик разом з роком випуску
         const carYear = car.year ? `📅 ${car.year} р.` : '';
         document.getElementById('carSpecs').innerHTML = `${carYear} &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}`;
 
@@ -252,13 +255,50 @@ function changeImage(dir) {
     document.getElementById('modalImage').src = galleryImages[currentIndex];
 }
 
-function send(){
-    const n = document.getElementById('name').value.trim();
-    const p = document.getElementById('phone').value.trim();
+async function send() {
+    const name = document.getElementById('name').value.trim();
+    const surname = document.getElementById('surname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const days = parseInt(document.getElementById('days').value);
-    if(!n || !p){ alert("Заповніть ім'я та телефон."); return; }
-    if(days > 30 || days < 1){ alert("Термін оренди від 1 до 30 днів."); return; }
-    document.getElementById('ok').classList.add('show');
+    const carName = document.getElementById('carName').innerText;
+
+    if (!name || !phone) {
+        alert("Заповніть ім'я та номер телефону.");
+        return;
+    }
+    if (days > 30 || days < 1) {
+        alert("Термін оренди від 1 до 30 днів.");
+        return;
+    }
+
+    const text = `🚖 <b>НОВА ЗАЯВКА НА ОРЕНДУ!</b>\n\n` +
+                 `🚗 <b>Авто:</b> ${carName}\n` +
+                 `👤 <b>Клієнт:</b> ${name} ${surname}\n` +
+                 `📞 <b>Телефон:</b> ${phone}\n` +
+                 `📅 <b>Термін:</b> ${days} днів`;
+
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: text,
+                parse_mode: 'HTML'
+            })
+        });
+
+        if (response.ok) {
+            document.getElementById('ok').classList.add('show');
+            document.getElementById('name').value = '';
+            document.getElementById('surname').value = '';
+            document.getElementById('phone').value = '';
+        } else {
+            alert('Помилка надсилання заявки.');
+        }
+    } catch (e) {
+        alert('Помилка мережі.');
+    }
 }
 </script>
 </body>
