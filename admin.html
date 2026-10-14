@@ -44,7 +44,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
         <div class="top-actions"><h2>Вхід в Адмін-панель</h2></div>
         <p>Введіть пароль адміністратора:</p>
         <div class="input-group">
-            <input type="password" id="passwordInput" placeholder="Пароль (demyan2026)" onkeydown="if(event.key === 'Enter') checkLogin()">
+            <input type="password" id="passwordInput" placeholder="Пароль" onkeydown="if(event.key === 'Enter') checkLogin()">
             <button type="button" class="toggle-pass" onclick="togglePass()">👁️</button>
         </div>
         <button class="btn" onclick="checkLogin()">Увійти</button>
@@ -72,7 +72,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const ADMIN_PASSWORD = 'demyan2026';
+const ADMIN_PASSWORD = 'rentcarsite';
 
 let currentCarsData = [];
 
