@@ -85,7 +85,8 @@ async function loadHomeCars() {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await response.json();
-        const popularCars = (data.record.cars || []).filter(c => c.available !== false && c.isPopular);
+        const cars = data.record.cars || [];
+        const popularCars = cars.filter(c => c.available !== false && c.isPopular);
         
         const container = document.getElementById('homeCarsContainer');
         if (popularCars.length === 0) {
@@ -94,7 +95,9 @@ async function loadHomeCars() {
         }
 
         container.innerHTML = popularCars.map(car => {
-            const carUrl = car.page || `car.html?id=${car.id}`;
+            // Точний пошук індексу або id для надійного переходу на car.html?id=...
+            const carIndex = cars.indexOf(car);
+            const carUrl = `car.html?id=${car.id || carIndex}`;
             
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
