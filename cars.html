@@ -113,7 +113,7 @@ async function loadCars() {
             }
         });
         const data = await response.json();
-        const cars = data.record.cars;
+  const cars = data.record.cars.filter(c => c.available);
         
         const container = document.getElementById('carsContainer');
         container.innerHTML = cars.map(car => `
