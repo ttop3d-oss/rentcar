@@ -35,7 +35,6 @@
     <section class="hero">
         <div class="hero-pattern"></div>
         <img class="hero-bg-blur" src="assets/hero-car.png" alt="Фон оренда авто">
-
         <div class="hero-text">
             <h1>Швидка оренда авто<br>у Львові</h1>
             <p>Обирайте найкращі автомобілі за доступними цінами.<br>Швидке оформлення та подача в будь-яку точку міста.</p>
@@ -95,8 +94,9 @@ async function loadHomeCars() {
         }
 
         container.innerHTML = popularCars.map(car => {
-            const carIndex = cars.indexOf(car);
-            const carUrl = car.page || `car.html?id=${car.id || carIndex}`;
+            // Залізобетонне формування посилання на основі реального унікального ID або індексу
+            const carId = car.id || ('car_' + Math.random().toString(36).substr(2, 9));
+            const carUrl = `car.html?id=${carId}`;
             
             let priceDisplay = `<b>${car.price}</b>`;
             if (car.hasDiscount && car.oldPrice) {
