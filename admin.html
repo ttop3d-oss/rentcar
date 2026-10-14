@@ -72,7 +72,7 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const ADMIN_PASSWORD = 'rentcarsite';
+const ADMIN_PASSWORD = 'rentcar';
 
 let currentCarsData = [];
 
@@ -208,14 +208,13 @@ function updateField(index, field, val) {
     currentCarsData[index][field] = val;
 }
 
-// Розумне стискання до мініатюри, щоб файл миттєво летів у хмару без помилок
 function compressImage(file, callback) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
             const canvas = document.createElement('canvas');
-            const MAX_SIZE = 700; // зменшуємо до оптимальної ширини/висоти
+            const MAX_SIZE = 700;
             let width = img.width;
             let height = img.height;
 
@@ -230,7 +229,6 @@ function compressImage(file, callback) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            // Формат JPEG із якістю 0.6 (непогана якість, але надзвичайно мала вага)
             callback(canvas.toDataURL('image/jpeg', 0.6));
         };
         img.src = e.target.result;
@@ -279,9 +277,9 @@ function addNewCar() {
         fuel: 'Бензин',
         image: 'assets/car.webp',
         extraImages: [],
-        page: `car.html?id=${newId}`,
+        page: `car.html?id=${newId}`, // Автоматичне унікальне посилання для універсальної сторінки
         available: true,
-        isPopular: false,
+        isPopular: true,
         hasDiscount: false,
         oldPrice: '',
         discountEnd: ''
