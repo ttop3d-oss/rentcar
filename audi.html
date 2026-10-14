@@ -298,7 +298,7 @@ input {
         <img id="mainImage" src="assets/audi.webp" alt="Audi A6 C6">
     </div>
 
-    <!-- Нижні мініатюри -->
+    <!-- Нижні мініатюри (4 фото: основна + 3 додаткові) -->
     <div class="thumbs">
         <div class="thumb" onclick="openModal(0)">
             <img src="assets/audi.webp" alt="Audi фото 1">
@@ -308,6 +308,9 @@ input {
         </div>
         <div class="thumb" onclick="openModal(2)">
             <img src="assets/audi3.webp" alt="Audi фото 3">
+        </div>
+        <div class="thumb" onclick="openModal(3)">
+            <img src="assets/audi4.webp" alt="Audi фото 4">
         </div>
     </div>
 </section>
@@ -416,7 +419,7 @@ async function checkCarStatus() {
 
 checkCarStatus();
 
-// Список усіх фото Audi для галереї
+// Список усіх фото Audi для галереї (4 фото)
 const galleryImages = [
     'assets/audi.webp',
     'assets/audi2.webp',
