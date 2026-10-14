@@ -33,12 +33,14 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 .notice { font-size: 9px; color: #777; line-height: 1.4; margin-top: 10px; }
 .success { text-align: center; display: none; margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 7px; color: #2e7d32; }
 .success.show { display: block; }
-.unavailable { text-align: center; padding-top: 45px; max-width: 600px; margin: 0 auto; display: none; }
+.unavailable { text-align: center; padding-top: 20px; max-width: 600px; margin: 0 auto; display: none; }
 .unavailable h1 { font-size: 24px; color: #e53935; margin-bottom: 20px; font-weight: 800; }
-.silhouette { height: 220px; display: flex; align-items: center; justify-content: center; }
-.silhouette div { width: 240px; height: 80px; background: #ccc; border-radius: 50% 45% 20% 18%; position: relative; }
-.silhouette div:after { content: ""; position: absolute; width: 145px; height: 43px; background: #ccc; left: 50px; top: -27px; border-radius: 55% 55% 0 0; }
-.back-btn { display: inline-flex; align-items: center; justify-content: center; background: #5938df; color: #fff; text-decoration: none; border-radius: 7px; font-size: 12px; font-weight: 700; height: 42px; padding: 0 24px; margin-top: 25px; }
+.booked-banner { background: #fff3e0; border: 2px dashed #ff9800; padding: 25px; border-radius: 10px; text-align: center; }
+.booked-banner h2 { color: #e65100; margin-top: 0; font-size: 20px; }
+.silhouette { height: 180px; display: flex; align-items: center; justify-content: center; }
+.silhouette div { width: 240px; height: 80px; background: #ddd; border-radius: 50% 45% 20% 18%; position: relative; }
+.silhouette div:after { content: ""; position: absolute; width: 145px; height: 43px; background: #ddd; left: 50px; top: -27px; border-radius: 55% 55% 0 0; }
+.back-btn { display: inline-flex; align-items: center; justify-content: center; background: #5938df; color: #fff; text-decoration: none; border-radius: 7px; font-size: 12px; font-weight: 700; height: 42px; padding: 0 24px; margin-top: 20px; }
 .image-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
 .image-modal.show { display: flex; }
 .image-modal img { max-width: 85%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
@@ -72,15 +74,8 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
     <div class="thumbs" id="thumbsContainer"></div>
 </section>
 
-<section>
-    <div class="form-title">Ваші Контактні Дані</div>
-    <label>Ім'я</label><input id="name" placeholder="Ваше ім'я">
-    <label>Прізвище</label><input id="surname" placeholder="Прізвище">
-    <label>Номер Телефону</label><input id="phone" placeholder="+380...">
-    <label>Термін Оренди (днів, макс. 30)</label><input id="days" type="number" min="1" max="30" value="1">
-    <button class="btn" onclick="send()">Надіслати заявку</button>
-    <div class="notice">Натискаючи кнопку, ви погоджуєтесь на обробку даних для оформлення оренди.</div>
-    <div id="ok" class="success"><h3>Заявку прийнято!</h3><p>Ми зв'яжемося з вами найближчим часом.</p></div>
+<section id="rightSection">
+    <!-- Форма або статус бронювання -->
 </section>
 </div>
 
@@ -117,7 +112,6 @@ const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
 
-// Якщо ID взагалі не передано в посиланні — одразу направляємо в каталог
 if (!carId) {
     window.location.href = 'cars.html';
 }
@@ -133,7 +127,6 @@ async function loadCarDetails() {
         const data = await response.json();
         const cars = data.record.cars || [];
 
-        // Шукаємо автомобіль СУВОРО за переданим id або його позицією (індексом) в базі
         let car = cars.find(c => c.id === carId);
         if (!car && !isNaN(carId) && cars[parseInt(carId)]) {
             car = cars[parseInt(carId)];
@@ -147,7 +140,10 @@ async function loadCarDetails() {
         document.getElementById('pageTitle').innerText = `${car.name} — Оренда авто Львів`;
         document.getElementById('carName').innerText = car.name;
         document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
-        document.getElementById('carSpecs').innerText = `⚙️ ${car.gearbox || 'Автомат'} | ⛽ ${car.fuel || 'Бензин'}`;
+        
+        // Виведення характеристик разом з роком випуску
+        const carYear = car.year ? `📅 ${car.year} р.` : '';
+        document.getElementById('carSpecs').innerHTML = `${carYear} &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}`;
 
         let priceHtml = '';
         if (car.hasDiscount && car.oldPrice) {
@@ -172,13 +168,34 @@ async function loadCarDetails() {
         }
         document.getElementById('carPriceContainer').innerHTML = priceHtml;
 
-        if (car.available !== false) {
-            document.getElementById('bookingSection').style.display = 'grid';
-        } else {
+        const rightSection = document.getElementById('rightSection');
+
+        if (car.available === false) {
             document.getElementById('unavailTitle').innerText = `${car.name.toUpperCase()} НЕ ДОСТУПНИЙ`;
             document.getElementById('unavailableSection').style.display = 'block';
             return;
+        } else if (car.isBooked) {
+            rightSection.innerHTML = `
+                <div class="booked-banner">
+                    <h2>📌 АВТОМОБІЛЬ ЗАБРОНЬОВАНО</h2>
+                    <p>Наразі цей автомобіль уже заброньований іншим клієнтом і тимчасово недоступний для оформлення нових заявок.</p>
+                    <a href="cars.html" class="back-btn" style="margin-top: 10px;">Обрати інше авто</a>
+                </div>
+            `;
+        } else {
+            rightSection.innerHTML = `
+                <div class="form-title">Ваші Контактні Дані</div>
+                <label>Ім'я</label><input id="name" placeholder="Ваше ім'я">
+                <label>Прізвище</label><input id="surname" placeholder="Прізвище">
+                <label>Номер Телефону</label><input id="phone" placeholder="+380...">
+                <label>Термін Оренди (днів, макс. 30)</label><input id="days" type="number" min="1" max="30" value="1">
+                <button class="btn" onclick="send()">Надіслати заявку</button>
+                <div class="notice">Натискаючи кнопку, ви погоджуєтесь на обробку даних для оформлення оренди.</div>
+                <div id="ok" class="success"><h3>Заявку прийнято!</h3><p>Ми зв'яжемося з вами найближчим часом.</p></div>
+            `;
         }
+
+        document.getElementById('bookingSection').style.display = 'grid';
 
         galleryImages = [car.image || 'assets/car.webp'];
         if (car.extraImages && Array.isArray(car.extraImages)) {
