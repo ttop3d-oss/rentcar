@@ -141,6 +141,69 @@ input {
     display: block;
 }
 
+/* Стилі для недоступного авто */
+.unavailable {
+    text-align: center;
+    padding-top: 45px;
+    max-width: 600px;
+    margin: 0 auto;
+    display: none;
+}
+.unavailable h1 {
+    font-size: 24px;
+    color: #e53935;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+.silhouette {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.silhouette div {
+    width: 240px;
+    height: 80px;
+    background: #ccc;
+    border-radius: 50% 45% 20% 18%;
+    position: relative;
+}
+.silhouette div:after {
+    content: "";
+    position: absolute;
+    width: 145px;
+    height: 43px;
+    background: #ccc;
+    left: 50px;
+    top: -27px;
+    border-radius: 55% 55% 0 0;
+}
+.unavailable p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin: 8px 0;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #5938df;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    height: 42px;
+    padding: 0 24px;
+    margin-top: 25px;
+    transition: all 0.25s ease;
+}
+.back-btn:hover {
+    transform: scale(1.03);
+    filter: brightness(0.9);
+}
+
 /* Модальне вікно-галерея з листанням */
 .image-modal {
     display: none;
@@ -223,7 +286,8 @@ input {
 </header>
 
 <main>
-<div class="detail">
+<!-- Блок форми оренди (відображається, коли авто вільне) -->
+<div id="bookingSection" class="detail" style="display: none;">
 <section class="left">
     <h1>Audi A6 C6</h1>
     <div class="price">700 Грн <span class="meta">/доба</span></div>
@@ -234,16 +298,16 @@ input {
         <img id="mainImage" src="assets/audi.webp" alt="Audi A6 C6">
     </div>
 
-    <!-- Нижні мініатюри (змініть назви файлів за потреби на ваші додаткові фото Audi) -->
+    <!-- Нижні мініатюри -->
     <div class="thumbs">
         <div class="thumb" onclick="openModal(0)">
-            <img src="assets/audi2.webp" alt="Audi фото 1">
+            <img src="assets/audi.webp" alt="Audi фото 1">
         </div>
         <div class="thumb" onclick="openModal(1)">
-            <img src="assets/audi3.webp" alt="Audi фото 2">
+            <img src="assets/audi2.webp" alt="Audi фото 2">
         </div>
         <div class="thumb" onclick="openModal(2)">
-            <img src="assets/audi4.webp" alt="Audi фото 3">
+            <img src="assets/audi3.webp" alt="Audi фото 3">
         </div>
     </div>
 </section>
@@ -270,6 +334,15 @@ input {
         <p>Ми зв'яжемося з вами найближчим часом.</p>
     </div>
 </section>
+</div>
+
+<!-- Блок недоступності (відображається, якщо авто заброньоване в адмінці) -->
+<div id="unavailableSection" class="unavailable">
+    <h1>АВТОМОБІЛЬ НЕ ДОСТУПНИЙ</h1>
+    <div class="silhouette"><div></div></div>
+    <p>Audi A6 C6 зараз недоступний для оренди.</p>
+    <p>Автомобіль уже заброньований або перебуває в користуванні.</p>
+    <a href="cars.html" class="back-btn">Вернутись до вибору автомобілів</a>
 </div>
 </main>
 
@@ -298,7 +371,9 @@ input {
         <a href="cars.html">Джип</a>
     </div>
   </div>
-  <div class="copyright">© Дрочак Дем’ян 2026. Львів</div>
+  <div class="copyright">
+      © Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a>
+  </div>
 </footer>
 
 </div>
@@ -312,11 +387,40 @@ input {
 </div>
 
 <script>
+const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+const CAR_ID = 'audi';
+
+// Перевірка статусу авто в хмарі при завантаженні сторінки
+async function checkCarStatus() {
+    try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        const data = await response.json();
+        const car = data.record.cars.find(c => c.id === CAR_ID);
+
+        if (car) {
+            if (car.available) {
+                document.getElementById('bookingSection').style.display = 'grid';
+            } else {
+                document.getElementById('unavailableSection').style.display = 'block';
+            }
+        } else {
+            document.getElementById('bookingSection').style.display = 'grid';
+        }
+    } catch (e) {
+        document.getElementById('bookingSection').style.display = 'grid';
+    }
+}
+
+checkCarStatus();
+
 // Список усіх фото Audi для галереї
 const galleryImages = [
     'assets/audi.webp',
     'assets/audi2.webp',
- 'assets/audi3.webp',
+    'assets/audi3.webp',
     'assets/audi4.webp'
 ];
 
