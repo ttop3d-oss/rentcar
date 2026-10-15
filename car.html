@@ -155,9 +155,9 @@ nav a:hover { color: #5938df; }
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 
-// Telegram Bot настройки (замініть на власні значення, якщо використовуєте свій бот)
-const TG_BOT_TOKEN = '7629584711:AAE4fM54-Xf17M2G1E3dI54x8d2g3Hk4L9m'; 
-const TG_CHAT_ID = '567812349';
+// Ваші актуальні токен та Chat ID для Telegram-бота
+const TG_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4'; 
+const TG_CHAT_ID = '1215279290';
 
 let currentCar = null;
 let timerInterval = null;
@@ -353,7 +353,7 @@ async function submitBooking(e) {
     const dateStr = new Date().toLocaleString('uk-UA');
     const newReq = { car: currentCar.name, name, phone, days, date: dateStr };
 
-    // 1. Збереження в JSONBin
+    // 1. Збереження заявки у хмару (JSONBin)
     try {
         const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
@@ -369,10 +369,10 @@ async function submitBooking(e) {
             body: JSON.stringify(rec)
         });
     } catch(err) {
-        console.warn('Помилка збереження бази.');
+        console.warn('Помилка збереження в базу.');
     }
 
-    // 2. Відправка в Telegram
+    // 2. Відправка повідомлення в Telegram-бот
     try {
         const text = `🚗 *НОВА ЗАЯВКА НА ОРЕНДУ!*\n\n🚘 *Авто:* ${currentCar.name}\n👤 *Ім'я:* ${name}\n📞 *Тел:* ${phone}\n📅 *Днів:* ${days}\n⏱ *Час:* ${dateStr}`;
         await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
@@ -381,7 +381,7 @@ async function submitBooking(e) {
             body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'Markdown' })
         });
     } catch(err) {
-        console.warn('Помилка відправки TG.');
+        console.warn('Помилка відправки Telegram.');
     }
 
     alert('Дякуємо! Заявку успішно відправлено. Ми зателефонуємо вам найближчим часом.');
