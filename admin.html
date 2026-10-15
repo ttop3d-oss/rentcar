@@ -160,12 +160,12 @@ function togglePass() {
 
 function checkLogin() {
     const pass = document.getElementById('passwordInput').value.trim();
+    // Використовуємо актуальний пароль із завантажених налаштувань, за замовчуванням 'rentcar'
     const currentPass = globalData.settings?.adminPassword || 'rentcar';
     if (pass === currentPass) {
         document.getElementById('loginError').innerText = '';
         document.getElementById('loginBox').classList.remove('active');
         document.getElementById('panelBox').classList.add('active');
-        fetchAllData();
     } else {
         document.getElementById('loginError').innerText = 'Невірний пароль!';
     }
@@ -195,6 +195,9 @@ async function fetchAllData() {
         alert('Помилка завантаження даних з хмари.');
     }
 }
+
+// Завантажуємо актуальні налаштування/пароль одразу при відкритті сторінки входу
+fetchAllData();
 
 function updateStats() {
     const total = globalData.cars.length;
@@ -493,8 +496,12 @@ async function saveSettings() {
 async function changePassword() {
     const newPass = document.getElementById('newAdminPass').value.trim();
     if(!newPass) { alert('Введіть новий пароль!'); return; }
+    
+    // Записуємо новий пароль у структуру об'єкта налаштувань
+    if(!globalData.settings) globalData.settings = {};
     globalData.settings.adminPassword = newPass;
-    await saveAllChangesToCloud('Пароль адміністратора змінено!');
+    
+    await saveAllChangesToCloud('✅ Пароль адміністратора успішно змінено та збережено в хмару!');
     document.getElementById('newAdminPass').value = '';
 }
 
@@ -515,8 +522,8 @@ async function saveAllChangesToCloud(msgText) {
             body: JSON.stringify(globalData)
         });
         if(res.ok) {
-            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 3000); }
-            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 3000); }
+            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 4000); }
+            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 4000); }
         } else {
             alert('Помилка збереження.');
         }
