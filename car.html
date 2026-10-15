@@ -11,25 +11,22 @@
 <style>
 .page { max-width: 1366px; margin: auto; background: #fff; min-height: 100vh; }
 main { padding: 45px 64px 55px; }
-.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; max-width: 1000px; margin: auto; }
+.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; max-width: 1100px; margin: auto; }
 .left h1 { font-size: 25px; margin: 15px 0 5px; font-weight: 800; }
 .price-box { display: flex; align-items: baseline; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
-.old-price { text-decoration: line-through; color: #999; font-size: 15px; font-weight: 500; }
-.current-price { color: #e53935; font-size: 24px; font-weight: 800; }
 .standard-price { color: #5938df; font-size: 20px; font-weight: 800; }
-.meta { font-size: 11px; color: #777; margin-top: 5px; }
-.car-photo { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; margin-top: 20px; background: transparent; border-radius: 12px; cursor: pointer; overflow: hidden; }
+.meta { font-size: 13px; color: #555; margin-top: 6px; line-height: 1.6; }
+.car-photo { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; margin-top: 20px; background: #f4f4f4; border-radius: 12px; cursor: pointer; overflow: hidden; }
 .car-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease; }
 .car-photo:hover img { transform: scale(1.03); }
 .thumbs { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-.thumb { width: 75px; height: 55px; border-radius: 8px; background: #fafafa; border: 1px solid #ddd; overflow: hidden; cursor: pointer; transition: all 0.2s; }
-.thumb:hover { border-color: #5938df; transform: scale(1.05); }
+.thumb { width: 75px; height: 55px; border-radius: 8px; background: #fafafa; border: 1px solid #ddd; overflow: hidden; cursor: pointer; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
 .form-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; }
 label { font-size: 11px; display: block; margin: 10px 0 4px; font-weight: 600; }
 input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7px; font-family: inherit; box-sizing: border-box; }
-.btn { width: 100%; border: 0; border-radius: 7px; background: #5938df; color: #fff; padding: 12px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: all 0.25s ease; }
-.btn:hover { transform: scale(1.03); filter: brightness(0.9); }
+.btn { width: 100%; border: 0; border-radius: 7px; background: #5938df; color: #fff; padding: 12px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.25s; }
+.btn:hover { filter: brightness(0.9); }
 .notice { font-size: 9px; color: #777; line-height: 1.4; margin-top: 10px; }
 .success { text-align: center; display: none; margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 7px; color: #2e7d32; }
 .success.show { display: block; }
@@ -37,15 +34,14 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 .unavailable h1 { font-size: 24px; color: #e53935; margin-bottom: 20px; font-weight: 800; }
 .booked-banner { background: #fff3e0; border: 2px dashed #ff9800; padding: 25px; border-radius: 10px; text-align: center; }
 .booked-banner h2 { color: #e65100; margin-top: 0; font-size: 20px; }
-.silhouette { height: 180px; display: flex; align-items: center; justify-content: center; }
-.silhouette div { width: 240px; height: 80px; background: #ddd; border-radius: 50% 45% 20% 18%; position: relative; }
-.silhouette div:after { content: ""; position: absolute; width: 145px; height: 43px; background: #ddd; left: 50px; top: -27px; border-radius: 55% 55% 0 0; }
-.back-btn { display: inline-flex; align-items: center; justify-content: center; background: #5938df; color: #fff; text-decoration: none; border-radius: 7px; font-size: 12px; font-weight: 700; height: 42px; padding: 0 24px; margin-top: 20px; }
-.image-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+.tariffs-table { margin-top: 15px; background: #f9f9f9; border: 1px solid #eee; padding: 12px; border-radius: 8px; font-size: 12px; }
+.tariffs-table div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }
+.tariffs-table div:last-child { border-bottom: none; }
+.image-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
 .image-modal.show { display: flex; }
 .image-modal img { max-width: 85%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
 .close-modal { position: absolute; top: 20px; right: 30px; background: none; border: none; color: #fff; font-size: 35px; cursor: pointer; }
-.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.2); color: #fff; border: none; font-size: 30px; padding: 12px 18px; cursor: pointer; border-radius: 50%; }
+.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 30px; padding: 12px 18px; cursor: pointer; border-radius: 50%; }
 .modal-prev { left: 20px; }
 .modal-next { right: 20px; }
 @media(max-width: 750px) { main { padding: 20px 16px; } .detail { grid-template-columns: 1fr; gap: 30px; } }
@@ -55,7 +51,11 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 <div class="page site">
 <header class="header">
     <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <nav><a href="index.html">Головна</a><a href="cars.html">Автомобілі</a></nav>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="cars.html">Автомобілі</a>
+        <a href="about.html">Про нас</a>
+    </nav>
     <div class="help"><div class="phone-round">📞</div><div><small>Потрібна допомога?</small><b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b></div></div>
 </header>
 
@@ -64,9 +64,13 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 <section class="left">
     <h1 id="carName">Завантаження...</h1>
     <div id="carPriceContainer"></div>
-    <div class="meta" id="carType">Седан</div>
-    <div class="meta" id="carSpecs" style="margin-top: 8px; font-weight: 600; color: #444;"></div>
+    <div class="meta" id="carType"></div>
+    <div class="meta" id="carSpecs" style="font-weight: 600; color: #333;"></div>
+    <div class="meta" id="carExtraMeta"></div>
+    <div class="meta" id="carDescription" style="margin-top: 15px; color: #555; background:#fcfcfc; padding:10px; border-radius:6px; border:1px solid #f0f0f0;"></div>
     
+    <div id="tariffsBox" class="tariffs-table" style="display:none;"></div>
+
     <div class="car-photo" onclick="openModal(0)">
         <img id="mainImage" src="" alt="Авто">
     </div>
@@ -75,24 +79,22 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 </section>
 
 <section id="rightSection">
-    <!-- Форма або статус бронювання -->
 </section>
 </div>
 
 <div id="unavailableSection" class="unavailable">
     <h1 id="unavailTitle">АВТОМОБІЛЬ НЕ ЗНАЙДЕНО</h1>
-    <div class="silhouette"><div></div></div>
-    <p id="unavailText">Будь ласка, оберіть автомобіль із каталогу.</p>
-    <a href="cars.html" class="back-btn">Перейти до каталогу</a>
+    <p>Будь ласка, оберіть автомобіль із каталогу.</p>
+    <a href="cars.html" class="btn" style="display:inline-block; width:auto; padding: 10px 24px; margin-top:20px;">Перейти до каталогу</a>
 </div>
 </main>
 
 <footer class="footer">
   <div class="footer-main">
-    <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і не дорогі авто<br>у Львові і Львівській області.</p></div>
-    <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
-    <div class="contact"><h4><i>●</i> Пошта</h4><a>demyanchik@gmail.com</a></div>
-    <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380 66 722 10 89</a></div>
+    <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p></div>
+    <div class="contact"><h4>Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
+    <div class="contact"><h4>Пошта</h4><a>demyanchik@gmail.com</a></div>
+    <div class="contact"><h4>Телефон</h4><a href="tel:+380667221089">+380 66 722 10 89</a></div>
   </div>
   <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
 </footer>
@@ -108,81 +110,82 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-
-// Налаштування Telegram бота
 const TELEGRAM_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4';
 const TELEGRAM_CHAT_ID = '1215279290';
 
 const urlParams = new URLSearchParams(window.location.search);
 const carId = urlParams.get('id');
-
-if (!carId) {
-    window.location.href = 'cars.html';
-}
+if (!carId) window.location.href = 'cars.html';
 
 let galleryImages = [];
 let currentIndex = 0;
 
 async function loadCarDetails() {
     try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
-        const data = await response.json();
+        const data = await res.json();
         const cars = data.record.cars || [];
-
-        let car = cars.find(c => c.id === carId);
-        if (!car && !isNaN(carId) && cars[parseInt(carId)]) {
-            car = cars[parseInt(carId)];
-        }
+        const car = cars.find(c => c.id === carId);
 
         if (!car) {
             document.getElementById('unavailableSection').style.display = 'block';
             return;
         }
 
-        document.getElementById('pageTitle').innerText = `${car.name} — Оренда авто Львів`;
-        document.getElementById('carName').innerText = car.name;
+        // Відображаємо реальні дані з адмін-панелі
+        const displayName = car.name || 'Новий автомобіль';
+        document.getElementById('pageTitle').innerText = `${displayName} — Оренда авто Львів`;
+        document.getElementById('carName').innerText = displayName;
         document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
         
-        const carYear = car.year ? `📅 ${car.year} р.` : '';
-        document.getElementById('carSpecs').innerHTML = `${carYear} &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}`;
+        document.getElementById('carSpecs').innerHTML = `📅 ${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}`;
 
-        let priceHtml = '';
-        if (car.hasDiscount && car.oldPrice) {
-            priceHtml = `
-                <div class="price-box">
-                    <span class="old-price">${car.oldPrice}</span>
-                    <span class="current-price">${car.price}</span>
-                    <span class="meta">/доба</span>
-                </div>
-                <div id="countdown" style="color: #e53935; font-size: 12px; margin-top: 4px; font-weight: bold;"></div>
-            `;
-            if (car.discountEnd) {
-                startTimer(car.discountEnd);
-            }
+        let extraMetaHtml = '';
+        if(car.engine) extraMetaHtml += `🔹 Об'єм / Потужність: <b>${car.engine}</b><br>`;
+        if(car.consumption) extraMetaHtml += `⚡ Розхід: <b>${car.consumption}</b><br>`;
+        if(car.deposit) extraMetaHtml += `🛡 Залог: <b>${car.deposit}</b>`;
+        document.getElementById('carExtraMeta').innerHTML = extraMetaHtml;
+
+        const descElem = document.getElementById('carDescription');
+        if(car.description) {
+            descElem.innerText = car.description;
+            descElem.style.display = 'block';
         } else {
-            priceHtml = `
-                <div class="price-box">
-                    <span class="standard-price">${car.price || '800 Грн'}</span>
-                    <span class="meta">/доба</span>
-                </div>
+            descElem.style.display = 'none';
+        }
+
+        // Тарифи
+        if(car.price1_3 || car.price4_6 || car.price7_15 || car.price15_plus) {
+            let tariffsBox = document.getElementById('tariffsBox');
+            tariffsBox.style.display = 'block';
+            tariffsBox.innerHTML = `
+                <b style="display:block; margin-bottom:6px;">Тарифи оренди:</b>
+                ${car.price1_3 ? `<div><span>1–3 дні:</span> <b>${car.price1_3}</b></div>` : ''}
+                ${car.price4_6 ? `<div><span>4–6 днів:</span> <b>${car.price4_6}</b></div>` : ''}
+                ${car.price7_15 ? `<div><span>7–15 днів:</span> <b>${car.price7_15}</b></div>` : ''}
+                ${car.price15_plus ? `<div><span>15+ днів:</span> <b>${car.price15_plus}</b></div>` : ''}
             `;
         }
-        document.getElementById('carPriceContainer').innerHTML = priceHtml;
+
+        document.getElementById('carPriceContainer').innerHTML = `
+            <div class="price-box">
+                <span class="standard-price">${car.price || '800 Грн'}</span>
+                <span style="font-size:11px; color:#777;">/доба</span>
+            </div>
+        `;
 
         const rightSection = document.getElementById('rightSection');
-
         if (car.available === false) {
-            document.getElementById('unavailTitle').innerText = `${car.name.toUpperCase()} НЕ ДОСТУПНИЙ`;
             document.getElementById('unavailableSection').style.display = 'block';
             return;
         } else if (car.isBooked) {
             rightSection.innerHTML = `
                 <div class="booked-banner">
                     <h2>📌 АВТОМОБІЛЬ ЗАБРОНЬОВАНО</h2>
-                    <p>Наразі цей автомобіль уже заброньований іншим клієнтом і тимчасово недоступний для оформлення нових заявок.</p>
-                    <a href="cars.html" class="back-btn" style="margin-top: 10px;">Обрати інше авто</a>
+                    <p>Наразі цей автомобіль заброньований і тимчасово недоступний.</p>
+                    <a href="cars.html" class="btn" style="display:inline-block; width:auto; padding:10px 20px; margin-top:10px; text-decoration:none;">Обрати інше авто</a>
                 </div>
             `;
         } else {
@@ -193,29 +196,32 @@ async function loadCarDetails() {
                 <label>Номер Телефону</label>
                 <input id="phone" value="+380" maxlength="13" oninput="formatPhone(event)" placeholder="+380...">
                 <label>Термін Оренди (днів, макс. 30)</label><input id="days" type="number" min="1" max="30" value="1">
-                <button class="btn" onclick="send()">Надіслати заявку</button>
-                <div class="notice">Натискаючи кнопку, ви погоджуєтесь на обробку даних для оформлення оренди.</div>
+                <button class="btn" onclick="sendRequest()">Надіслати заявку</button>
+                <div class="notice">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</div>
                 <div id="ok" class="success"><h3>Заявку прийнято!</h3><p>Ми зв'яжемося з вами найближчим часом.</p></div>
             `;
         }
 
         document.getElementById('bookingSection').style.display = 'grid';
 
-        galleryImages = [car.image || 'assets/car.webp'];
-        if (car.extraImages && Array.isArray(car.extraImages)) {
-            galleryImages.push(...car.extraImages.filter(img => img));
+        // Формування галереї: головне фото першим, далі унікальні додаткові
+        galleryImages = [];
+        if(car.image) galleryImages.push(car.image);
+        if(car.extraImages && Array.isArray(car.extraImages)) {
+            car.extraImages.forEach(img => {
+                if(img && img !== car.image && !galleryImages.includes(img)) {
+                    galleryImages.push(img);
+                }
+            });
         }
+        if(!galleryImages.length) galleryImages.push('https://i.ibb.co/3m3z6v9/car.webp');
 
         document.getElementById('mainImage').src = galleryImages[0];
-
-        const thumbsContainer = document.getElementById('thumbsContainer');
-        thumbsContainer.innerHTML = galleryImages.map((imgSrc, idx) => `
-            <div class="thumb" onclick="openModal(${idx})">
-                <img src="${imgSrc}" alt="Фото ${idx + 1}">
-            </div>
+        document.getElementById('thumbsContainer').innerHTML = galleryImages.map((src, idx) => `
+            <div class="thumb" onclick="openModal(${idx})"><img src="${src}"></div>
         `).join('');
 
-    } catch (e) {
+    } catch(e) {
         document.getElementById('unavailableSection').style.display = 'block';
     }
 }
@@ -223,46 +229,14 @@ async function loadCarDetails() {
 function formatPhone(e) {
     let input = e.target;
     let val = input.value;
-
-    if (!val.startsWith("+380")) {
-        val = "+380";
-    }
-
+    if (!val.startsWith("+380")) val = "+380";
     let numbers = val.replace(/[^\d]/g, "").slice(3);
-    if (numbers.length > 9) {
-        numbers = numbers.slice(0, 9);
-    }
-
+    if (numbers.length > 9) numbers = numbers.slice(0, 9);
     input.value = "+380" + numbers;
 }
 
-function startTimer(endTimeStr) {
-    const endDate = new Date(endTimeStr).getTime();
-    if (isNaN(endDate)) return;
-    
-    setInterval(() => {
-        const now = new Date().getTime();
-        const distance = endDate - now;
-        const timerElem = document.getElementById('countdown');
-        if (!timerElem) return;
-
-        if (distance < 0) {
-            timerElem.innerHTML = "🔥 Акцію завершено";
-            return;
-        }
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        timerElem.innerHTML = `🔥 До кінця акції: ${days}д ${hours}г ${minutes}хв ${seconds}с`;
-    }, 1000);
-}
-
-loadCarDetails();
-
-function openModal(index) {
-    currentIndex = index;
+function openModal(idx) {
+    currentIndex = idx;
     document.getElementById('modalImage').src = galleryImages[currentIndex];
     document.getElementById('imageModal').classList.add('show');
 }
@@ -272,61 +246,54 @@ function changeImage(dir) {
     document.getElementById('modalImage').src = galleryImages[currentIndex];
 }
 
-async function send() {
-    const nameInput = document.getElementById('name');
-    const surnameInput = document.getElementById('surname');
-    const phoneInput = document.getElementById('phone');
-    const daysInput = document.getElementById('days');
-
-    const name = nameInput.value.trim();
-    const surname = surnameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const days = parseInt(daysInput.value);
+async function sendRequest() {
+    const name = document.getElementById('name').value.trim();
+    const surname = document.getElementById('surname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const days = parseInt(document.getElementById('days').value);
     const carName = document.getElementById('carName').innerText;
 
     if (!name || phone.length < 13) {
-        alert("Заповніть коректно ім'я та повний номер телефону (+380...).");
-        return;
-    }
-    if (days > 30 || days < 1) {
-        alert("Термін оренди від 1 до 30 днів.");
+        alert("Заповніть ім'я та повний номер телефону.");
         return;
     }
 
-    const text = `🚖 НОВА ЗАЯВКА НА ОРЕНДУ!\n\n` +
-                 `🚗 Авто: ${carName}\n` +
-                 `👤 Клієнт: ${name} ${surname}\n` +
-                 `📞 Телефон: ${phone}\n` +
-                 `📅 Термін: ${days} днів`;
+    const reqData = {
+        car: carName,
+        name: name,
+        surname: surname,
+        phone: phone,
+        days: days,
+        date: new Date().toLocaleString()
+    };
 
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const text = `🚖 НОВА ЗАЯВКА НА ОРЕНДУ!\n\n🚗 Авто: ${carName}\n👤 Клієнт: ${name} ${surname}\n📞 Телефон: ${phone}\n📅 Термін: ${days} днів`;
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ chat_id: TELEGRAM_CHAT_ID, text: text })
+    });
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                chat_id: TELEGRAM_CHAT_ID,
-                text: text
-            })
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
         });
+        const cloudData = await res.json();
+        let currentRecord = cloudData.record;
+        if(!currentRecord.requests) currentRecord.requests = [];
+        currentRecord.requests.unshift(reqData);
 
-        const resData = await response.json();
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+            body: JSON.stringify(currentRecord)
+        });
+    } catch(e) {}
 
-        if (resData.ok) {
-            document.getElementById('ok').classList.add('show');
-            nameInput.value = '';
-            surnameInput.value = '';
-            phoneInput.value = '+380';
-        } else {
-            alert('Помилка Telegram API: ' + (resData.description || 'Невідома помилка'));
-        }
-    } catch (e) {
-        alert('Помилка мережі при відправці в Telegram: ' + e.message);
-    }
+    document.getElementById('ok').classList.add('show');
 }
+
+loadCarDetails();
 </script>
 </body>
 </html>
