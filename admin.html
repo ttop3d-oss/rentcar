@@ -228,7 +228,7 @@ async function fetchAllData() {
         renderSettings();
         updateStats();
     } catch(e) {
-        console.warn('Автоматичне завантаження з хмари.');
+        console.warn('Помилка завантаження хмари.');
     }
 }
 
@@ -270,7 +270,7 @@ function renderAdminCars() {
         return `
         <div class="car-card-admin">
             <div class="car-header" onclick="toggleCollapse(${index})">
-                <span><b>#${index+1}</b> — ${car.name || 'Новий автомобіль'} (${car.type || 'Седан'}, ${car.year || '2023'})</span>
+                <span><b>#${index+1}</b> —${car.name || 'Новий автомобіль'} (${car.type \vert{}\vert{} 'Седан'}, ${car.year || '2023'})</span>
                 <div>
                     <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" type="button">${isExpanded ? 'Згорнути ▲' : 'Розгорнути ▼'}</button>
                     <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="event.stopPropagation(); removeCar(${index})">Видалити</button>
@@ -281,7 +281,7 @@ function renderAdminCars() {
                 <div class="grid-2">
                     <div>
                         <label>Назва автомобіля</label>
-                        <input type="text" value="${car.name || ''}" placeholder="Новий автомобіль" oninput="updateField(${index}, 'name', this.value)">
+                        <input type="text" value="${car.name \vert{}\vert{} ''}" placeholder="Новий автомобіль" oninput="updateField(${index}, 'name', this.value)">
                     </div>
                     <div>
                         <label>Тип кузова</label>
@@ -323,7 +323,7 @@ function renderAdminCars() {
                 <div class="grid-2" style="background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:12px;">
                     <div>
                         <label style="color:#e65100; font-weight:bold;">🔥 Знижка діє до (Дата та час):</label>
-                        <input type="datetime-local" value="${car.discountUntil || ''}" oninput="updateField(${index}, 'discountUntil', this.value)">
+                        <input type="datetime-local" value="${car.discountUntil \vert{}\vert{} ''}" oninput="updateField(${index}, 'discountUntil', this.value)">
                     </div>
                     <div style="display:flex; align-items:center; margin-top:15px;">
                         <label style="cursor:pointer; font-weight:bold; color:#e65100;">
@@ -346,30 +346,30 @@ function renderAdminCars() {
                     </div>
                     <div>
                         <label>Об'єм двигуна (л) / Потужність (kW)</label>
-                        <input type="text" value="${car.engine || ''}" placeholder="2.0 л або 150 kW" oninput="updateField(${index}, 'engine', this.value)">
+                        <input type="text" value="${car.engine \vert{}\vert{} ''}" placeholder="2.0 л або 150 kW" oninput="updateField(${index}, 'engine', this.value)">
                     </div>
                     <div>
                         <label>Розхід (л/100км або кВт·год)</label>
-                        <input type="text" value="${car.consumption || ''}" placeholder="7.5 л / 100км" oninput="updateField(${index}, 'consumption', this.value)">
+                        <input type="text" value="${car.consumption \vert{}\vert{} ''}" placeholder="7.5 л / 100км" oninput="updateField(${index}, 'consumption', this.value)">
                     </div>
                 </div>
 
                 <div class="grid-4">
                     <div>
                         <label>Залог (Грн)</label>
-                        <input type="text" value="${car.deposit || ''}" placeholder="5000 Грн" oninput="updateField(${index}, 'deposit', this.value)">
+                        <input type="text" value="${car.deposit \vert{}\vert{} ''}" placeholder="5000 Грн" oninput="updateField(${index}, 'deposit', this.value)">
                     </div>
                     <div>
                         <label>Ціна 1-3 дні</label>
-                        <input type="text" value="${car.price1_3 || ''}" placeholder="1000 Грн" oninput="updateField(${index}, 'price1_3', this.value)">
+                        <input type="text" value="${car.price1_3 \vert{}\vert{} ''}" placeholder="1000 Грн" oninput="updateField(${index}, 'price1_3', this.value)">
                     </div>
                     <div>
                         <label>Ціна 4-6 днів</label>
-                        <input type="text" value="${car.price4_6 || ''}" placeholder="950 Грн" oninput="updateField(${index}, 'price4_6', this.value)">
+                        <input type="text" value="${car.price4_6 \vert{}\vert{} ''}" placeholder="950 Грн" oninput="updateField(${index}, 'price4_6', this.value)">
                     </div>
                     <div>
                         <label>Ціна 7-15 днів</label>
-                        <input type="text" value="${car.price7_15 || ''}" placeholder="900 Грн" oninput="updateField(${index}, 'price7_15', this.value)">
+                        <input type="text" value="${car.price7_15 \vert{}\vert{} ''}" placeholder="900 Грн" oninput="updateField(${index}, 'price7_15', this.value)">
                     </div>
                 </div>
 
@@ -395,7 +395,7 @@ function renderAdminCars() {
                         ${(car.extraImages || []).map((img, imgIdx) => `
                             <div class="preview-wrap">
                                 <img src="${img}" class="preview-img">
-                                <button class="del-photo-btn" onclick="removeExtraImage(${index},${imgIdx})">✕</button>
+                                <button class="del-photo-btn" onclick="removeExtraImage(${index}, ${imgIdx})">✕</button>
                             </div>
                         `).join('')}
                     </div>
@@ -404,78 +404,14 @@ function renderAdminCars() {
                 <div class="grid-2">
                     <div>
                         <label>Позиція в каталозі (сортування)</label>
-                        <input type="number" value="${car.sortOrder || 0}" oninput="updateField(${index}, 'sortOrder', parseInt(this.value) || 0)">
+                        <input type="number" value="${car.sortOrder \vert{}\vert{} 0}" oninput="updateField(${index}, 'sortOrder', parseInt(this.value) || 0)">
                     </div>
                     <div>
                         <label>Позиція в популярних</label>
-                        <input type="number" value="${car.popularOrder || 0}" oninput="updateField(${index}, 'popularOrder', parseInt(this.value) || 0)">
+                        <input type="number" value="${car.popularOrder \vert{}\vert{} 0}" oninput="updateField(${index}, 'popularOrder', parseInt(this.value) || 0)">
                     </div>
                 </div>
 
                 <div class="grid-4" style="margin-top:10px; background:#fff8e1; padding:10px; border-radius:6px;">
                     <label><input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)"> Опубліковано</label>
-                    <label style="color:#e53935;"><input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked', this.checked)"> 📌 Заброньовано</label>
-                    <label><input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)"> Популярне ⭐</label>
-                    <label style="color:#e53935; font-weight:bold;"><input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="updateField(${index}, 'hasDiscount', this.checked)"> 🔥 Показувати знижку (червона ціна)</label>
-                </div>
-            </div>
-        </div>
-        `;
-    }).join('');
-}
-
-function toggleCollapse(index) {
-    globalData.cars[index]._isExpanded = !globalData.cars[index]._isExpanded;
-    renderAdminCars();
-}
-
-function updateField(index, field, val) { globalData.cars[index][field] = val; }
-function updatePrice(index, val) { globalData.cars[index].price = val ? val + ' Грн' : ''; }
-function updateDiscountPrice(index, val) { globalData.cars[index].discountPrice = val ? val + ' Грн' : ''; }
-
-async function uploadToImgBB(file) {
-    const fd = new FormData();
-    fd.append('image', file);
-    try {
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
-        const data = await res.json();
-        if(data.success) return data.data.url;
-    } catch(e) { alert('Помилка завантаження фото'); }
-    return null;
-}
-
-async function uploadMain(e, index) {
-    const file = e.target.files[0];
-    if(!file) return;
-    const url = await uploadToImgBB(file);
-    if(url) { globalData.cars[index].image = url; renderAdminCars(); }
-}
-
-async function uploadExtra(e, index) {
-    const files = Array.from(e.target.files).slice(0,3);
-    if(!files.length) return;
-    if(!globalData.cars[index].extraImages) globalData.cars[index].extraImages = [];
-    for(let f of files) {
-        const url = await uploadToImgBB(f);
-        if(url) globalData.cars[index].extraImages.push(url);
-    }
-    renderAdminCars();
-}
-
-function removeExtraImage(cIdx, imgIdx) {
-    globalData.cars[cIdx].extraImages.splice(imgIdx, 1);
-    renderAdminCars();
-}
-
-function removeCar(index) {
-    if(confirm('Видалити авто?')) {
-        globalData.cars.splice(index, 1);
-        renderAdminCars();
-        updateStats();
-    }
-}
-
-function addNewCar() {
-    const newId = 'car_' + Date.now();
-    // Нове авто додається на початок списку (зверху) та розгорнутим
-    globalData.cars
+                    <label style="color:#e53935;"><input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked',
