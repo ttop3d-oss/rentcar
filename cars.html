@@ -9,136 +9,189 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-.car-card img { width: 100%; height: 170px; object-fit: cover !important; background: transparent !important; border-radius: 8px; }
-.loading-catalog { grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 15px; }
+body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color: #333; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.logo { font-weight: 800; font-size: 20px; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
+.car-logo { font-size: 24px; }
+nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
+nav a:hover { color: #5938df; }
+.help { display: flex; align-items: center; gap: 10px; }
+.phone-round { background: #f0edff; color: #5938df; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.phone-link { color: #5938df; text-decoration: none; font-weight: bold; }
 
-/* Стилі для кнопок фільтрації */
-.filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
-.filter-btn { background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s; font-family: inherit; color: #444; }
-.filter-btn:hover { background: #e0e0e0; }
-.filter-btn.active { background: #5938df; color: #fff; }
+.catalog-container { max-width: 1300px; margin: 40px auto; padding: 0 20px; }
+.filters-panel { background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.filter-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-group label { font-size: 12px; font-weight: bold; color: #555; }
+.filter-group select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; font-family: inherit; }
+.checkbox-filters { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-top: 10px; width: 100%; border-top: 1px solid #eee; padding-top: 15px; }
+.checkbox-filters label { font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+.cars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.car-card { background: #fdfdfd; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; display: flex; flex-direction: column; position: relative; }
+.car-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+.booked-badge { position: absolute; top: 12px; right: 12px; background: #e53935; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; z-index: 2; }
+.car-img-wrap { width: 100%; height: 200px; background: #f4f4f4; position: relative; }
+.car-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.car-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+.car-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.car-specs { font-size: 12px; color: #777; margin-bottom: 15px; font-weight: 500; }
+.car-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.car-price { font-size: 18px; font-weight: 800; color: #e53935; }
+.details-btn { background: #5938df; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
+
+.footer { background: #1a1a1a; color: #fff; padding: 50px 20px; margin-top: 60px; }
+.footer-main { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+.footer-company p { color: #aaa; font-size: 13px; line-height: 1.5; margin-top: 10px; }
+.contact h4 { margin: 0 0 10px; font-size: 15px; color: #fff; }
+.contact a { color: #aaa; text-decoration: none; display: block; font-size: 13px; margin-bottom: 5px; }
+.copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
 </style>
 </head>
 <body>
 
-<div class="site">
 <header class="header">
     <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <nav><a href="index.html">Головна</a><a class="active" href="cars.html">Автомобілі</a></nav>
-    <div class="help"><div class="phone-round">📞</div><div><small>Потрібна допомога?</small><b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b></div></div>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="cars.html">Автомобілі</a>
+        <a href="about.html">Про нас</a>
+    </nav>
+    <div class="help">
+        <div class="phone-round">📞</div>
+        <div>
+            <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
+            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
+        </div>
+    </div>
 </header>
 
-<main>
-    <section class="choose" style="margin-top: 10px;">
-        <div class="section-title">
-            <h2>Наш автопарк</h2>
+<div class="catalog-container">
+    <h1 style="margin-bottom: 25px; font-weight: 800;">Наш автопарк у Львові</h1>
+    
+    <div class="filters-panel">
+        <div class="filter-group">
+            <label>Тип кузова</label>
+            <select id="filterType" onchange="filterAndRenderCars()">
+                <option value="all">Усі кузови</option>
+                <option value="Седан">Седан</option>
+                <option value="Універсал">Універсал</option>
+                <option value="Хетчбек">Хетчбек</option>
+                <option value="Кросовер">Кросовер</option>
+                <option value="Джип">Джип</option>
+            </select>
         </div>
+        
+        <div class="checkbox-filters">
+            <label><input type="checkbox" id="fElectric" onchange="filterAndRenderCars()"> Тільки електро</label>
+            <label><input type="checkbox" id="fPetrol" onchange="filterAndRenderCars()"> Тільки бензин</label>
+            <label><input type="checkbox" id="fGas" onchange="filterAndRenderCars()"> Тільки Газ/бензин, газ</label>
+            <label><input type="checkbox" id="fDiesel" onchange="filterAndRenderCars()"> Тільки Дизель</label>
+            <label><input type="checkbox" id="fAuto" onchange="filterAndRenderCars()"> Тільки автомат</label>
+            <label><input type="checkbox" id="fManual" onchange="filterAndRenderCars()"> Тільки механіка</label>
+        </div>
+    </div>
 
-        <!-- Кнопки фільтрації -->
-        <div class="filter-tabs" id="filterTabs">
-            <button class="filter-btn active" onclick="filterCars('Усі', this)">Всі</button>
-            <button class="filter-btn" onclick="filterCars('Седан', this)">Седан</button>
-            <button class="filter-btn" onclick="filterCars('Універсал', this)">Універсал</button>
-            <button class="filter-btn" onclick="filterCars('Хетчбек', this)">Хетчбек</button>
-            <button class="filter-btn" onclick="filterCars('Кросовер', this)">Кросовер</button>
-            <button class="filter-btn" onclick="filterCars('Джип', this)">Джип</button>
-        </div>
-
-        <div class="home-cars" id="catalogContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; overflow: visible;">
-            <div class="loading-catalog">Завантаження каталогу авто...</div>
-        </div>
-    </section>
-</main>
+    <div id="catalogGrid" class="cars-grid">
+        <p style="text-align: center; grid-column: 1/-1;">Завантаження каталогу...</p>
+    </div>
+</div>
 
 <footer class="footer">
-    <div class="footer-main">
-        <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і не дорогі авто<br>у Львові і Львівській області.</p></div>
-        <div class="contact"><h4><i>●</i> Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
-        <div class="contact"><h4><i>●</i> Пошта</h4><a>demyanchik@gmail.com</a></div>
-        <div class="contact"><h4><i>●</i> Телефон</h4><a href="tel:+380667221089">+380 66 722 10 89</a></div>
+  <div class="footer-main">
+    <div class="footer-company">
+        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo">🚖</span><span>Оренда авто</span></a>
+        <p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p>
     </div>
-    <div class="footer-links">
-        <div><b>Наші соціальні мережі</b><a href="https://www.instagram.com/demyan_drr" target="_blank">Instagram</a><a href="https://www.facebook.com/demyan_drr" target="_blank">Facebook</a><a href="https://www.youtube.com/@top3dstryi" target="_blank">Youtube</a></div>
-        <div><b>Автомобілі</b><a href="cars.html">Седан</a><a href="cars.html">Універсал</a><a href="cars.html">Хетчбек</a><a href="cars.html">Джип</a></div>
+    <div class="contact">
+        <h4>Адреса</h4>
+        <a>Львів, вул. Городоцька, 26</a>
     </div>
-    <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
+    <div class="contact">
+        <h4>Пошта</h4>
+        <a>demyanchik@gmail.com</a>
+    </div>
+    <div class="contact">
+        <h4>Телефон</h4>
+        <a href="tel:+380667221089">+380 66 722 10 89</a>
+    </div>
+  </div>
+  <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
 </footer>
-</div>
 
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-
 let allCarsData = [];
 
-async function loadCatalogCars() {
+async function loadCatalog() {
     try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
-        const data = await response.json();
+        const data = await res.json();
         allCarsData = data.record.cars || [];
-        
-        renderCarsList(allCarsData);
-    } catch (e) {
-        document.getElementById('catalogContainer').innerHTML = '<div class="loading-catalog">Не вдалося завантажити каталог.</div>';
+        filterAndRenderCars();
+    } catch(e) {
+        document.getElementById('catalogGrid').innerHTML = '<p style="text-align:center; color:#e53935;">Помилка завантаження каталогу.</p>';
     }
 }
 
-function renderCarsList(carsArray) {
-    const availableCars = carsArray.filter(c => c.available !== false);
-    const container = document.getElementById('catalogContainer');
-    
-    if (availableCars.length === 0) {
-        container.innerHTML = '<div class="loading-catalog">У цьому розділі наразі немає автомобілів.</div>';
+function filterAndRenderCars() {
+    const typeVal = document.getElementById('filterType').value;
+    const elChecked = document.getElementById('fElectric').checked;
+    const petChecked = document.getElementById('fPetrol').checked;
+    const gasChecked = document.getElementById('fGas').checked;
+    const disChecked = document.getElementById('fDiesel').checked;
+    const autoChecked = document.getElementById('fAuto').checked;
+    const manualChecked = document.getElementById('fManual').checked;
+
+    let filtered = allCarsData.filter(car => {
+        if(car.available === false) return false;
+        if(typeVal !== 'all' && car.type !== typeVal) return false;
+
+        if(elChecked && car.fuel !== 'Електро') return false;
+        if(petChecked && car.fuel !== 'Бензин') return false;
+        if(gasChecked && car.fuel !== 'Газ/Бензин' && car.fuel !== 'Газ') return false;
+        if(disChecked && car.fuel !== 'Дизель') return false;
+        if(autoChecked && car.gearbox !== 'Автомат' && car.gearbox !== 'Робот' && car.gearbox !== 'Типтронік') return false;
+        if(manualChecked && car.gearbox !== 'Механіка') return false;
+
+        return true;
+    });
+
+    // Сортування: заброньовані автоматично йдуть в самий низ, далі за sortOrder
+    filtered.sort((a, b) => {
+        if (a.isBooked && !b.isBooked) return 1;
+        if (!a.isBooked && b.isBooked) return -1;
+        return (a.sortOrder || 0) - (b.sortOrder || 0);
+    });
+
+    const grid = document.getElementById('catalogGrid');
+    if(!filtered.length) {
+        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#777;">Автомобілів за такими критеріями не знайдено.</p>';
         return;
     }
 
-    container.innerHTML = availableCars.map(car => {
-        const carId = car.id || ('car_' + Math.random().toString(36).substr(2, 9));
-        const carUrl = `car.html?id=${carId}`;
-        
-        let priceDisplay = `<b>${car.price}</b>`;
-        if (car.hasDiscount && car.oldPrice) {
-            priceDisplay = `
-                <div style="display: flex; align-items: baseline; gap: 6px;">
-                    <span style="text-decoration: line-through; color: #999; font-size: 11px;">${car.oldPrice}</span>
-                    <b style="color: #e53935; font-size: 14px;">${car.price}</b>
+    grid.innerHTML = filtered.map(car => `
+        <div class="car-card">
+            ${car.isBooked ? '<div class="booked-badge">ЗАБРОНЬОВАНО</div>' : ''}
+            <div class="car-img-wrap">
+                <img src="${car.image || 'https://i.ibb.co/3m3z6v9/car.webp'}" alt="${car.name}">
+            </div>
+            <div class="car-info">
+                <div class="car-title">${car.name}</div>
+                <div class="car-specs">${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}</div>
+                <div class="car-footer">
+                    <div class="car-price">${car.price || '800 Грн'} <small style="font-size:11px; font-weight:normal; color:#777;">/доба</small></div>
+                    <a href="car.html?id=${car.id}" class="details-btn">Детальніше</a>
                 </div>
-            `;
-        }
-
-        const yearText = car.year ? `${car.year}р.` : '';
-        const bookedBadge = car.isBooked ? '<div style="color: #e53935; font-size: 11px; font-weight: bold; margin-bottom: 5px;">📌 ЗАБРОНЬОВАНО</div>' : '';
-
-        return `
-            <article class="car-card">
-                <img src="${car.image || 'assets/car.webp'}" alt="${car.name}">
-                ${bookedBadge}
-                <div class="car-row"><strong>${car.name}</strong>${priceDisplay}</div>
-                <div class="sub"><span>${car.type}</span><span>доба</span></div>
-                <div class="specs"><span>📅 ${yearText}</span><span>♙ ${car.gearbox || 'Автомат'}</span><span>⛽ ${car.fuel || 'Бензин'}</span></div>
-                <a class="rent" href="${carUrl}">Взяти в оренду</a>
-            </article>
-        `;
-    }).join('');
+            </div>
+        </div>
+    `).join('');
 }
 
-// Функція фільтрації за типом кузова
-function filterCars(category, btnElement) {
-    // Зміна активної кнопки
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    btnElement.classList.add('active');
-
-    if (category === 'Усі') {
-        renderCarsList(allCarsData);
-    } else {
-        const filtered = allCarsData.filter(c => c.type === category);
-        renderCarsList(filtered);
-    }
-}
-
-loadCatalogCars();
+loadCatalog();
 </script>
 </body>
 </html>
