@@ -62,7 +62,7 @@ textarea { resize: vertical; height: 80px; }
             <button type="button" class="toggle-pass" onclick="togglePass()">👁</button>
             <span id="langBadge" class="lang-badge">ENG</span>
         </div>
-        <button class="btn" onclick="checkLogin()">Увійти</button>
+        <button class="btn" id="loginBtn" onclick="checkLogin()">Увійти</button>
         <div id="loginError" class="msg" style="color: #e53935;"></div>
     </div>
 
@@ -77,4 +77,184 @@ textarea { resize: vertical; height: 80px; }
             <div class="stats-box" id="statsBox">Завантаження статистики...</div>
             <div class="top-actions">
                 <h2>Керування каталогом автомобілів</h2>
-                <div style="display: flex; gap: 1
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-success" onclick="addNewCar()">+ Додати авто</button>
+                    <button class="btn btn-danger" onclick="logout()">Вийти</button>
+                </div>
+            </div>
+            <div id="carsListContainer">Завантаження...</div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button class="btn" style="padding: 14px 28px; font-size: 15px;" onclick="saveAllChanges()">Зберегти всі зміни в хмару</button>
+            </div>
+            <div id="statusMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
+        </div>
+
+        <div id="requestsTab" class="tab-content">
+            <h2>Отримані заявки на оренду</h2>
+            <div id="requestsContainer">Немає нових заявок.</div>
+        </div>
+
+        <div id="settingsTab" class="tab-content">
+            <h2>Налаштування головного банера та сайту</h2>
+            
+            <div class="car-card-admin">
+                <h3>Редагування головного банера (Hero)</h3>
+                <label>Головний заголовок:</label>
+                <input type="text" id="settingHeroTitle" placeholder="Прокат автомобілів у Львові без зайвого клопоту">
+                
+                <label style="margin-top:10px;">Текст опису:</label>
+                <textarea id="settingHeroText" placeholder="Великий автопарк..."></textarea>
+
+                <label style="margin-top:10px;">Колір шрифту заголовка та опису (напр. #ffffff або white):</label>
+                <input type="text" id="settingHeroTextColor" placeholder="#ffffff">
+            </div>
+
+            <div class="car-card-admin">
+                <h3>Зміна Hero Logo (Зображення банера)</h3>
+                <label>Пряме посилання на зображення (ImgBB URL):</label>
+                <input type="text" id="settingHeroLogo" placeholder="https://i.ibb.co/...">
+                <label style="margin-top:10px;">Або завантажити нове фото:</label>
+                <input type="file" accept="image/*" onchange="uploadHeroLogo(event)">
+                <div style="margin-top: 10px;"><img id="heroLogoPreview" src="" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;"></div>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>Редагування сторінки «Про нас» (about.html)</h3>
+                <label>Заголовок:</label>
+                <input type="text" id="settingAboutTitle" placeholder="Про нашу компанію">
+                <label>Текст опису:</label>
+                <textarea id="settingAboutText" placeholder="Введіть текст про компанію..."></textarea>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>Зміна пароля адміністратора</h3>
+                <label>Новий пароль:</label>
+                <input type="password" id="newAdminPass" placeholder="Введіть новий пароль">
+                <button class="btn" style="margin-top: 10px;" onclick="changePassword()">Змінити пароль</button>
+            </div>
+
+            <div style="margin-top: 30px; text-align: right;">
+                <button class="btn" style="padding: 14px 28px;" onclick="saveSettings()">Зберегти налаштування в хмару</button>
+            </div>
+            <div id="settingsMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
+
+let globalData = { cars: [], requests: [], settings: {} };
+let isDataLoaded = false;
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+function detectLayout(e) {
+    const val = e.target.value;
+    const badge = document.getElementById('langBadge');
+    if (!val) { badge.innerText = 'ENG'; return; }
+    const lastChar = val.slice(-1);
+    if (/[іїєґІЇЄҐ]/.test(lastChar)) { badge.innerText = 'UA'; } 
+    else if (/[ыэъёЫЭЪЁ]/.test(lastChar)) { badge.innerText = 'RUS'; } 
+    else if (/[а-яА-ЯёЁ]/.test(lastChar)) { badge.innerText = 'UA/RU'; } 
+    else if (/[a-zA-Z]/.test(lastChar)) { badge.innerText = 'ENG'; }
+}
+
+function togglePass() {
+    const inp = document.getElementById('passwordInput');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function checkLogin() {
+    const errDiv = document.getElementById('loginError');
+    const pass = document.getElementById('passwordInput').value.trim();
+
+    if (!isDataLoaded) {
+        errDiv.style.color = '#5938df';
+        errDiv.innerText = 'Підключення до хмари, зачекайте...';
+        await fetchAllData();
+    }
+
+    const currentPass = globalData.settings?.adminPassword || 'rentcar';
+    if (pass === currentPass) {
+        errDiv.innerText = '';
+        document.getElementById('loginBox').classList.remove('active');
+        document.getElementById('panelBox').classList.add('active');
+    } else {
+        errDiv.style.color = '#e53935';
+        errDiv.innerText = 'Невірний пароль!';
+    }
+}
+
+function logout() {
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('panelBox').classList.remove('active');
+    document.getElementById('loginBox').classList.add('active');
+}
+
+async function fetchAllData() {
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        const data = await res.json();
+        globalData.cars = data.record.cars || [];
+        globalData.requests = data.record.requests || [];
+        globalData.settings = data.record.settings || { adminPassword: 'rentcar' };
+        isDataLoaded = true;
+        
+        renderAdminCars();
+        renderRequests();
+        renderSettings();
+        updateStats();
+    } catch(e) {
+        document.getElementById('loginError').style.color = '#e53935';
+        document.getElementById('loginError').innerText = 'Помилка підключення до сервера.';
+    }
+}
+
+fetchAllData();
+
+function updateStats() {
+    const total = globalData.cars.length;
+    const booked = globalData.cars.filter(c => c.isBooked).length;
+    const available = total - booked;
+    
+    document.getElementById('statsBox').innerHTML = `
+        <div>📊 Всього авто: <b>${total}</b></div>
+        <div>✅ В наявності: <b>${available}</b></div>
+        <div>📌 Заброньовано: <b>${booked}</b></div>
+    `;
+    document.getElementById('reqCount').innerText = globalData.requests.length;
+}
+
+function getYearOptions(selYear) {
+    let opts = '';
+    for(let y = 2030; y >= 2000; y--) {
+        opts += `<option value="${y}" ${selYear == y ? 'selected' : ''}>${y}</option>`;
+    }
+    return opts;
+}
+
+function renderAdminCars() {
+    const container = document.getElementById('carsListContainer');
+    if(!globalData.cars.length) {
+        container.innerHTML = '<p>Немає доданих автомобілів.</p>';
+        return;
+    }
+
+    container.innerHTML = globalData.cars.map((car, index) => {
+        const rawPrice = (car.price || '').replace(/[^0-9]/g, '');
+        const rawDiscountPrice = (car.discountPrice || '').replace(/[^0-9]/g, '');
+
+        return `
+        <div class="car-card-admin">
+            <div class="car-header" onclick="toggleCollapse(${index})">
+                <span><b>#${index+1}
