@@ -39,4 +39,184 @@ nav a:hover { color: #5938df; }
 .car-specs { font-size: 12px; color: #777; margin-bottom: 15px; font-weight: 500; }
 .car-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 
-.car-price { font-size: 18px; font-weight: 800; color: #59
+/* Звичайний колір ціни */
+.car-price { font-size: 18px; font-weight: 800; color: #5938df; }
+/* Червоний колір для цін зі знижкою */
+.car-price.discount { color: #e53935; }
+
+.details-btn { background: #5938df; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
+
+.footer { background: #1a1a1a; color: #fff; padding: 50px 20px; margin-top: 60px; }
+.footer-main { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+.footer-company p { color: #aaa; font-size: 13px; line-height: 1.5; margin-top: 10px; }
+.contact h4 { margin: 0 0 10px; font-size: 15px; color: #fff; }
+.contact a { color: #aaa; text-decoration: none; display: block; font-size: 13px; margin-bottom: 5px; }
+.copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
+
+@media(max-width: 850px) {
+    .header { flex-wrap: wrap; padding: 12px 15px; gap: 8px; }
+    .logo { font-size: 16px; }
+    .car-logo { font-size: 20px; }
+    .help { margin-left: auto; }
+    .help small { display: none !important; }
+    .phone-round { width: 30px; height: 30px; font-size: 13px; }
+    .phone-link { font-size: 12px; }
+    nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+    nav a { margin: 0; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
+    <div class="help">
+        <div class="phone-round">📞</div>
+        <div>
+            <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
+            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
+        </div>
+    </div>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="cars.html">Автомобілі</a>
+        <a href="about.html">Про нас</a>
+    </nav>
+</header>
+
+<div class="catalog-container">
+    <h1 style="margin-bottom: 25px; font-weight: 800;">Наш автопарк у Львові</h1>
+    
+    <div class="filters-panel">
+        <div class="filter-group">
+            <label>Тип кузова</label>
+            <select id="filterType" onchange="filterAndRenderCars()">
+                <option value="all">Усі кузови</option>
+                <option value="Седан">Седан</option>
+                <option value="Універсал">Універсал</option>
+                <option value="Хетчбек">Хетчбек</option>
+                <option value="Кросовер">Кросовер</option>
+                <option value="Джип">Джип</option>
+            </select>
+        </div>
+        
+        <div class="checkbox-filters">
+            <label><input type="checkbox" id="fElectric" onchange="filterAndRenderCars()"> Електро</label>
+            <label><input type="checkbox" id="fPetrol" onchange="filterAndRenderCars()"> Бензин</label>
+            <label><input type="checkbox" id="fGas" onchange="filterAndRenderCars()"> Газ/бензин, газ</label>
+            <label><input type="checkbox" id="fDiesel" onchange="filterAndRenderCars()"> Дизель</label>
+            <label><input type="checkbox" id="fHybrid" onchange="filterAndRenderCars()"> Гібрид</label>
+            <label><input type="checkbox" id="fAuto" onchange="filterAndRenderCars()"> Автомат</label>
+            <label><input type="checkbox" id="fManual" onchange="filterAndRenderCars()"> Механіка</label>
+        </div>
+    </div>
+
+    <div id="catalogGrid" class="cars-grid">
+        <p style="text-align: center; grid-column: 1/-1;">Завантаження каталогу...</p>
+    </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-company">
+        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo">🚖</span><span>Оренда авто</span></a>
+        <p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p>
+    </div>
+    <div class="contact">
+        <h4>Адреса</h4>
+        <a>Львів, вул. Городоцька, 26</a>
+    </div>
+    <div class="contact">
+        <h4>Пошта</h4>
+        <a>demyanchik@gmail.com</a>
+    </div>
+    <div class="contact">
+        <h4>Телефон</h4>
+        <a href="tel:+380667221089">+380 66 722 10 89</a>
+    </div>
+  </div>
+  <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
+</footer>
+
+<script>
+const BIN_ID = '6acf8389ffd5d160536a775c';
+const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+let allCarsData = [];
+
+async function loadCatalog() {
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        const data = await res.json();
+        allCarsData = data.record.cars || [];
+        filterAndRenderCars();
+    } catch(e) {
+        document.getElementById('catalogGrid').innerHTML = '<p style="text-align:center; color:#e53935;">Помилка завантаження каталогу.</p>';
+    }
+}
+
+function filterAndRenderCars() {
+    const typeVal = document.getElementById('filterType').value;
+    const elChecked = document.getElementById('fElectric').checked;
+    const petChecked = document.getElementById('fPetrol').checked;
+    const gasChecked = document.getElementById('fGas').checked;
+    const disChecked = document.getElementById('fDiesel').checked;
+    const hybChecked = document.getElementById('fHybrid').checked;
+    const autoChecked = document.getElementById('fAuto').checked;
+    const manualChecked = document.getElementById('fManual').checked;
+
+    let filtered = allCarsData.filter(car => {
+        if(car.available === false) return false;
+        if(typeVal !== 'all' && car.type !== typeVal) return false;
+
+        if(elChecked && car.fuel !== 'Електро') return false;
+        if(petChecked && car.fuel !== 'Бензин') return false;
+        if(gasChecked && car.fuel !== 'Газ/Бензин' && car.fuel !== 'Газ') return false;
+        if(disChecked && car.fuel !== 'Дизель') return false;
+        if(hybChecked && car.fuel !== 'Гібрид') return false;
+        if(autoChecked && car.gearbox !== 'Автомат' && car.gearbox !== 'Робот' && car.gearbox !== 'Типтронік') return false;
+        if(manualChecked && car.gearbox !== 'Механіка') return false;
+
+        return true;
+    });
+
+    filtered.sort((a, b) => {
+        if (a.isBooked && !b.isBooked) return 1;
+        if (!a.isBooked && b.isBooked) return -1;
+        return (a.sortOrder || 0) - (b.sortOrder || 0);
+    });
+
+    const grid = document.getElementById('catalogGrid');
+    if(!filtered.length) {
+        grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#777;">Автомобілів за такими критеріями не знайдено.</p>';
+        return;
+    }
+
+    grid.innerHTML = filtered.map(car => {
+        const hasDiscount = Boolean(car.hasDiscount || (car.price15_plus && car.price15_plus.trim() !== '') || (car.oldPrice && car.oldPrice.trim() !== ''));
+        const priceClass = hasDiscount ? 'car-price discount' : 'car-price';
+
+        return `
+            <div class="car-card">
+                ${car.isBooked ? '<div class="booked-badge">ЗАБРОНЬОВАНО</div>' : ''}
+                <div class="car-img-wrap">
+                    <img src="${car.image || 'https://i.ibb.co/3m3z6v9/car.webp'}" alt="${car.name}">
+                </div>
+                <div class="car-info">
+                    <div class="car-title">${car.name}</div>
+                    <div class="car-specs">${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}</div>
+                    <div class="car-footer">
+                        <div class="${priceClass}">${car.price || '800 Грн'} <small style="font-size:11px; font-weight:normal; color:#777;">/доба</small></div>
+                        <a href="car.html?id=${car.id}" class="details-btn">Детальніше</a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+loadCatalog();
+</script>
+</body>
+</html>
