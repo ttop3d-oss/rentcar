@@ -14,7 +14,7 @@ body { background: #f4f4f4; color: #333; font-family: 'Montserrat', sans-serif; 
 .login-box, .panel-box { display: none; }
 .login-box.active, .panel-box.active { display: block; }
 .input-group { position: relative; margin: 10px 0 20px; }
-.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; background: #fff; color: #333; border: 1px solid #ddd; }
+.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; background: #fff; color: #333; border: 1px solid #ddd; border-radius: 7px; }
 .toggle-pass { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 16px; z-index: 5; }
 .lang-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; background: #e0e0e0; padding: 3px 6px; border-radius: 4px; color: #333; }
 input, select, textarea { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid #ddd; background: #fff; color: #333; border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
@@ -146,8 +146,7 @@ const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
 
-let globalData = { cars: [], requests: [], settings: {} };
-let isDataLoaded = false;
+let globalData = { cars: [], requests: [], settings: { adminPassword: 'rentcar' } };
 
 function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -172,24 +171,17 @@ function togglePass() {
     inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
-async function checkLogin() {
-    const errDiv = document.getElementById('loginError');
+function checkLogin() {
     const pass = document.getElementById('passwordInput').value.trim();
-
-    if (!isDataLoaded) {
-        errDiv.style.color = '#5938df';
-        errDiv.innerText = 'Підключення до хмари, зачекайте...';
-        await fetchAllData();
-    }
-
     const currentPass = globalData.settings?.adminPassword || 'rentcar';
+
     if (pass === currentPass) {
-        errDiv.innerText = '';
+        document.getElementById('loginError').innerText = '';
         document.getElementById('loginBox').classList.remove('active');
         document.getElementById('panelBox').classList.add('active');
     } else {
-        errDiv.style.color = '#e53935';
-        errDiv.innerText = 'Невірний пароль!';
+        document.getElementById('loginError').style.color = '#e53935';
+        document.getElementById('loginError').innerText = 'Невірний пароль!';
     }
 }
 
@@ -208,14 +200,13 @@ async function fetchAllData() {
         globalData.cars = data.record.cars || [];
         globalData.requests = data.record.requests || [];
         globalData.settings = data.record.settings || { adminPassword: 'rentcar' };
-        isDataLoaded = true;
         
         renderAdminCars();
         renderRequests();
         renderSettings();
         updateStats();
     } catch(e) {
-        isDataLoaded = true; // Дозволяємо вхід навіть при збої мережі за стандартним паролем
+        console.warn('Помилка завантаження хмари, використовуються стандартні налаштування.');
     }
 }
 
@@ -303,6 +294,18 @@ function renderAdminCars() {
                             <option value="Типтронік" ${car.gearbox === 'Типтронік' ? 'selected' : ''}>Типтронік</option>
                             <option value="Редуктор" ${car.gearbox === 'Редуктор' ? 'selected' : ''}>Редуктор</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:12px;">
+                    <div>
+                        <label style="color:#e65100; font-weight:bold;">🔥 Знижка діє до (Дата та час):</label>
+                        <input type="datetime-local" value="${car.discountUntil || ''}" oninput="updateField(${index}, 'discountUntil', this.value)">
+                    </div>
+                    <div style="display:flex; align-items:center; margin-top:15px;">
+                        <label style="cursor:pointer; font-weight:bold; color:#e65100;">
+                            <input type="checkbox" ${car.showTimer ? 'checked' : ''} onchange="updateField(${index}, 'showTimer', this.checked)"> ⏳ Показувати відлік таймера на сторінці авто
+                        </label>
                     </div>
                 </div>
 
@@ -458,6 +461,8 @@ function addNewCar() {
         year: '2023',
         price: '900 Грн',
         discountPrice: '',
+        discountUntil: '',
+        showTimer: false,
         gearbox: 'Автомат',
         fuel: 'Бензин',
         image: 'https://i.ibb.co/3m3z6v9/car.webp',
@@ -495,79 +500,3 @@ function removeRequest(idx) {
     globalData.requests.splice(idx, 1);
     renderRequests();
     updateStats();
-}
-
-function renderSettings() {
-    document.getElementById('settingHeroTitle').value = globalData.settings?.heroTitle || '';
-    document.getElementById('settingHeroText').value = globalData.settings?.heroText || '';
-    document.getElementById('settingHeroTextColor').value = globalData.settings?.heroTextColor || '';
-    
-    document.getElementById('settingHeroLogo').value = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
-    document.getElementById('heroLogoPreview').src = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
-    document.getElementById('settingAboutTitle').value = globalData.settings?.aboutTitle || 'Про нашу компанію';
-    document.getElementById('settingAboutText').value = globalData.settings?.aboutText || '';
-}
-
-async function uploadHeroLogo(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-    const url = await uploadToImgBB(file);
-    if(url) {
-        document.getElementById('settingHeroLogo').value = url;
-        document.getElementById('heroLogoPreview').src = url;
-    }
-}
-
-async function saveSettings() {
-    if(!globalData.settings) globalData.settings = {};
-    globalData.settings.heroTitle = document.getElementById('settingHeroTitle').value;
-    globalData.settings.heroText = document.getElementById('settingHeroText').value;
-    globalData.settings.heroTextColor = document.getElementById('settingHeroTextColor').value;
-    
-    globalData.settings.heroLogo = document.getElementById('settingHeroLogo').value;
-    globalData.settings.aboutTitle = document.getElementById('settingAboutTitle').value;
-    globalData.settings.aboutText = document.getElementById('settingAboutText').value;
-    
-    await saveAllChangesToCloud('Налаштування успішно збережено!');
-}
-
-async function changePassword() {
-    const newPass = document.getElementById('newAdminPass').value.trim();
-    if(!newPass) { alert('Введіть новий пароль!'); return; }
-    
-    if(!globalData.settings) globalData.settings = {};
-    globalData.settings.adminPassword = newPass;
-    
-    await saveAllChangesToCloud('✅ Пароль адміністратора успішно змінено та збережено в хмару!');
-    document.getElementById('newAdminPass').value = '';
-}
-
-async function saveAllChanges() {
-    await saveAllChangesToCloud('✅ Успішно збережено в хмару!');
-}
-
-async function saveAllChangesToCloud(msgText) {
-    const statusMsg = document.getElementById('statusMsg');
-    const settingsMsg = document.getElementById('settingsMsg');
-    if(statusMsg) statusMsg.innerText = 'Зберігаємо в хмару...';
-    if(settingsMsg) settingsMsg.innerText = 'Зберігаємо в хмару...';
-    
-    try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-            body: JSON.stringify(globalData)
-        });
-        if(res.ok) {
-            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 4000); }
-            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 4000); }
-        } else {
-            alert('Помилка збереження.');
-        }
-    } catch(e) {
-        alert('Помилка мережі.');
-    }
-}
-</script>
-</body>
-</html>
