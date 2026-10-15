@@ -24,10 +24,10 @@ textarea { resize: vertical; height: 80px; }
 .btn-danger { background: #e53935; }
 .btn-success { background: #2e7d32; }
 .btn-secondary { background: #607d8b; }
-.car-card-admin { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-.car-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-.car-body { margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; display: block; }
-.car-body.collapsed { display: none; }
+.car-card-admin { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 15px 20px; margin-bottom: 15px; }
+.car-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+.car-body { margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; display: none; }
+.car-body.expanded { display: block; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
@@ -49,7 +49,7 @@ textarea { resize: vertical; height: 80px; }
 <body>
 
 <header class="header">
-    <a href="index.html" style="font-weight: 800; text-decoration:none; color:#333;"><span class="car-logo">🚖</span> Адмін-панель Львів</a>
+    <a href="index.html" style="font-weight: 800; text-decoration:none; color:#333;"><span id="adminNavLogo">🚖</span> <span id="adminNavTitle">Адмін-панель</span></a>
     <a href="index.html" class="btn">На сайт</a>
 </header>
 
@@ -70,7 +70,7 @@ textarea { resize: vertical; height: 80px; }
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('carsTab')">🚗 Автопарк</button>
             <button class="tab-btn" onclick="switchTab('requestsTab')">📥 Заявки (<span id="reqCount">0</span>)</button>
-            <button class="tab-btn" onclick="switchTab('settingsTab')">⚙️ Налаштування & Про нас</button>
+            <button class="tab-btn" onclick="switchTab('settingsTab')">⚙️ Налаштування сайту</button>
         </div>
 
         <div id="carsTab" class="tab-content active">
@@ -95,39 +95,61 @@ textarea { resize: vertical; height: 80px; }
         </div>
 
         <div id="settingsTab" class="tab-content">
-            <h2>Налаштування головного банера та сайту</h2>
+            <h2>Налаштування брендингу, шапки та контактів</h2>
             
             <div class="car-card-admin">
-                <h3>Редагування головного банера (Hero)</h3>
+                <h3>🏷️ Назва фірми, логотип та контактний телефон</h3>
+                <div class="grid-3">
+                    <div>
+                        <label>Назва фірми (зверху зліва):</label>
+                        <input type="text" id="settingCompanyName" placeholder="Оренда авто Львів">
+                    </div>
+                    <div>
+                        <label>Емодзі / Логотип (значок):</label>
+                        <input type="text" id="settingCompanyLogo" placeholder="🚖">
+                    </div>
+                    <div>
+                        <label>Номер телефону (шапка / футер):</label>
+                        <input type="text" id="settingCompanyPhone" placeholder="+380 66 722 10 89">
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>📌 Інформація шапки та футера (знизу)</h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Короткий опис у футері:</label>
+                        <textarea id="settingFooterDesc" placeholder="Комфортні і недорогі авто у Львові і Львівській області."></textarea>
+                    </div>
+                    <div>
+                        <label>Адреса:</label>
+                        <input type="text" id="settingFooterAddress" placeholder="Львів, вул. Городоцька, 26">
+                        <label>Контактна пошта (Email):</label>
+                        <input type="text" id="settingFooterEmail" placeholder="demyanchik@gmail.com">
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>🖼️ Редагування головного банера (Hero)</h3>
                 <label>Головний заголовок:</label>
                 <input type="text" id="settingHeroTitle" placeholder="Прокат автомобілів у Львові без зайвого клопоту">
                 
                 <label style="margin-top:10px;">Текст опису:</label>
                 <textarea id="settingHeroText" placeholder="Великий автопарк..."></textarea>
 
-                <label style="margin-top:10px;">Колір шрифту заголовка та опису (напр. #ffffff або white):</label>
+                <label style="margin-top:10px;">Колір шрифту заголовка та опису:</label>
                 <input type="text" id="settingHeroTextColor" placeholder="#ffffff">
-            </div>
 
-            <div class="car-card-admin">
-                <h3>Зміна Hero Logo (Зображення банера)</h3>
-                <label>Пряме посилання на зображення (ImgBB URL):</label>
+                <label style="margin-top:10px;">Картинка банера (ImgBB URL):</label>
                 <input type="text" id="settingHeroLogo" placeholder="https://i.ibb.co/...">
-                <label style="margin-top:10px;">Або завантажити нове фото:</label>
-                <input type="file" accept="image/*" onchange="uploadHeroLogo(event)">
+                <input type="file" accept="image/*" onchange="uploadHeroLogo(event)" style="margin-top:5px;">
                 <div style="margin-top: 10px;"><img id="heroLogoPreview" src="" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;"></div>
             </div>
 
             <div class="car-card-admin">
-                <h3>Редагування сторінки «Про нас» (about.html)</h3>
-                <label>Заголовок:</label>
-                <input type="text" id="settingAboutTitle" placeholder="Про нашу компанію">
-                <label>Текст опису:</label>
-                <textarea id="settingAboutText" placeholder="Введіть текст про компанію..."></textarea>
-            </div>
-
-            <div class="car-card-admin">
-                <h3>Зміна пароля адміністратора</h3>
+                <h3>🔑 Зміна пароля адміністратора</h3>
                 <label>Новий пароль:</label>
                 <input type="password" id="newAdminPass" placeholder="Введіть новий пароль">
                 <button class="btn" style="margin-top: 10px;" onclick="changePassword()">Змінити пароль</button>
@@ -206,7 +228,7 @@ async function fetchAllData() {
         renderSettings();
         updateStats();
     } catch(e) {
-        console.warn('Автоматична завантаження з хмари.');
+        console.warn('Автоматичне завантаження з хмари.');
     }
 }
 
@@ -243,18 +265,19 @@ function renderAdminCars() {
     container.innerHTML = globalData.cars.map((car, index) => {
         const rawPrice = (car.price || '').replace(/[^0-9]/g, '');
         const rawDiscountPrice = (car.discountPrice || '').replace(/[^0-9]/g, '');
+        const isExpanded = car._isExpanded === true;
 
         return `
         <div class="car-card-admin">
             <div class="car-header" onclick="toggleCollapse(${index})">
                 <span><b>#${index+1}</b> — ${car.name || 'Новий автомобіль'} (${car.type || 'Седан'}, ${car.year || '2023'})</span>
                 <div>
-                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" type="button">Згорнути/Розгорнути ↕</button>
+                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" type="button">${isExpanded ? 'Згорнути ▲' : 'Розгорнути ▼'}</button>
                     <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="event.stopPropagation(); removeCar(${index})">Видалити</button>
                 </div>
             </div>
             
-            <div class="car-body" id="carBody_${index}">
+            <div class="car-body ${isExpanded ? 'expanded' : ''}" id="carBody_${index}">
                 <div class="grid-2">
                     <div>
                         <label>Назва автомобіля</label>
@@ -402,8 +425,8 @@ function renderAdminCars() {
 }
 
 function toggleCollapse(index) {
-    const body = document.getElementById(`carBody_${index}`);
-    body.classList.toggle('collapsed');
+    globalData.cars[index]._isExpanded = !globalData.cars[index]._isExpanded;
+    renderAdminCars();
 }
 
 function updateField(index, field, val) { globalData.cars[index][field] = val; }
@@ -454,125 +477,5 @@ function removeCar(index) {
 
 function addNewCar() {
     const newId = 'car_' + Date.now();
-    globalData.cars.push({
-        id: newId,
-        name: '',
-        type: 'Седан',
-        year: '2023',
-        price: '900 Грн',
-        discountPrice: '',
-        discountUntil: '',
-        showTimer: false,
-        gearbox: 'Автомат',
-        fuel: 'Бензин',
-        image: 'https://i.ibb.co/3m3z6v9/car.webp',
-        extraImages: [],
-        available: true,
-        isBooked: false,
-        isPopular: true,
-        hasDiscount: false,
-        sortOrder: 0,
-        popularOrder: 0
-    });
-    renderAdminCars();
-    updateStats();
-}
-
-function renderRequests() {
-    const cont = document.getElementById('requestsContainer');
-    if(!globalData.requests.length) {
-        cont.innerHTML = '<p>Немає нових заявок.</p>';
-        return;
-    }
-    cont.innerHTML = globalData.requests.map((req, idx) => `
-        <div class="request-item">
-            <div>
-                <b>🚗 ${req.car}</b><br>
-                👤 ${req.name} | 📞 <a href="tel:${req.phone}">${req.phone}</a><br>
-                📅 Термін: ${req.days} днів | Час: ${req.date || 'Щойно'}
-            </div>
-            <button class="btn btn-danger" style="padding:6px 12px; font-size:11px;" onclick="removeRequest(${idx})">Видалити</button>
-        </div>
-    `).join('');
-}
-
-function removeRequest(idx) {
-    globalData.requests.splice(idx, 1);
-    renderRequests();
-    updateStats();
-}
-
-function renderSettings() {
-    document.getElementById('settingHeroTitle').value = globalData.settings?.heroTitle || '';
-    document.getElementById('settingHeroText').value = globalData.settings?.heroText || '';
-    document.getElementById('settingHeroTextColor').value = globalData.settings?.heroTextColor || '';
-    
-    document.getElementById('settingHeroLogo').value = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
-    document.getElementById('heroLogoPreview').src = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
-    document.getElementById('settingAboutTitle').value = globalData.settings?.aboutTitle || 'Про нашу компанію';
-    document.getElementById('settingAboutText').value = globalData.settings?.aboutText || '';
-}
-
-async function uploadHeroLogo(e) {
-    const file = e.target.files[0];
-    if(!file) return;
-    const url = await uploadToImgBB(file);
-    if(url) {
-        document.getElementById('settingHeroLogo').value = url;
-        document.getElementById('heroLogoPreview').src = url;
-    }
-}
-
-async function saveSettings() {
-    if(!globalData.settings) globalData.settings = {};
-    globalData.settings.heroTitle = document.getElementById('settingHeroTitle').value;
-    globalData.settings.heroText = document.getElementById('settingHeroText').value;
-    globalData.settings.heroTextColor = document.getElementById('settingHeroTextColor').value;
-    
-    globalData.settings.heroLogo = document.getElementById('settingHeroLogo').value;
-    globalData.settings.aboutTitle = document.getElementById('settingAboutTitle').value;
-    globalData.settings.aboutText = document.getElementById('settingAboutText').value;
-    
-    await saveAllChangesToCloud('Налаштування успішно збережено!');
-}
-
-async function changePassword() {
-    const newPass = document.getElementById('newAdminPass').value.trim();
-    if(!newPass) { alert('Введіть новий пароль!'); return; }
-    
-    if(!globalData.settings) globalData.settings = {};
-    globalData.settings.adminPassword = newPass;
-    
-    await saveAllChangesToCloud('✅ Пароль адміністратора успішно змінено та збережено в хмару!');
-    document.getElementById('newAdminPass').value = '';
-}
-
-async function saveAllChanges() {
-    await saveAllChangesToCloud('✅ Успішно збережено в хмару!');
-}
-
-async function saveAllChangesToCloud(msgText) {
-    const statusMsg = document.getElementById('statusMsg');
-    const settingsMsg = document.getElementById('settingsMsg');
-    if(statusMsg) statusMsg.innerText = 'Зберігаємо в хмару...';
-    if(settingsMsg) settingsMsg.innerText = 'Зберігаємо в хмару...';
-    
-    try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-            body: JSON.stringify(globalData)
-        });
-        if(res.ok) {
-            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 4000); }
-            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 4000); }
-        } else {
-            alert('Помилка збереження.');
-        }
-    } catch(e) {
-        alert('Помилка мережі.');
-    }
-}
-</script>
-</body>
-</html>
+    // Нове авто додається на початок списку (зверху) та розгорнутим
+    globalData.cars
