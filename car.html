@@ -12,12 +12,15 @@ body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color
 .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 .logo { font-weight: 800; font-size: 20px; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
 .car-logo { font-size: 24px; }
-nav { display: flex; align-items: center; }
-nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
-nav a:hover { color: #5938df; }
+
+.header-center { display: flex; align-items: center; gap: 30px; }
 .help { display: flex; align-items: center; gap: 10px; }
 .phone-round { background: #f0edff; color: #5938df; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .phone-link { color: #5938df; text-decoration: none; font-weight: bold; }
+
+nav { display: flex; align-items: center; }
+nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
+nav a:hover { color: #5938df; }
 
 .car-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .gallery-wrap { display: flex; flex-direction: column; gap: 15px; }
@@ -39,6 +42,7 @@ nav a:hover { color: #5938df; }
 .specs-item span { color: #777; }
 .book-btn { background: #ff9800; color: #fff; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
 .book-btn:hover { filter: brightness(0.9); }
+.book-btn:disabled { background: #ccc; cursor: not-allowed; filter: none; }
 
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
 .modal-overlay.active { display: flex; }
@@ -64,14 +68,14 @@ nav a:hover { color: #5938df; }
 .copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
 
 @media(max-width: 850px) {
-    .header { flex-wrap: wrap; padding: 12px 15px; gap: 8px; }
+    .header { flex-wrap: wrap; padding: 12px 15px; gap: 10px; }
     .logo { font-size: 16px; }
     .car-logo { font-size: 20px; }
-    .help { margin-left: auto; }
+    .header-center { width: 100%; justify-content: space-between; order: 2; border-top: 1px solid #eee; padding-top: 10px; }
     .help small { display: none !important; }
     .phone-round { width: 30px; height: 30px; font-size: 13px; }
     .phone-link { font-size: 12px; }
-    nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+    nav { width: 100%; justify-content: space-around; order: 3; }
     nav a { margin: 0; font-size: 13px; }
     .car-container { grid-template-columns: 1fr; }
     .main-img { height: 260px; }
@@ -81,19 +85,22 @@ nav a:hover { color: #5938df; }
 <body>
 
 <header class="header">
-    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <div class="help">
-        <div class="phone-round">📞</div>
-        <div>
-            <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
-            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
+    <a href="index.html" class="logo"><span class="car-logo" id="headerLogo">🚖</span> <span id="headerTitle">Оренда авто Львів</span></a>
+    
+    <div class="header-center">
+        <div class="help">
+            <div class="phone-round">📞</div>
+            <div>
+                <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
+                <b><a href="tel:+380667221089" class="phone-link" id="headerPhone">+380 66 722 10 89</a></b>
+            </div>
         </div>
+        <nav>
+            <a href="index.html">Головна</a>
+            <a href="cars.html">Автомобілі</a>
+            <a href="about.html">Про нас</a>
+        </nav>
     </div>
-    <nav>
-        <a href="index.html">Головна</a>
-        <a href="cars.html">Автомобілі</a>
-        <a href="about.html">Про нас</a>
-    </nav>
 </header>
 
 <div class="car-container" id="carContent">
@@ -132,20 +139,20 @@ nav a:hover { color: #5938df; }
 <footer class="footer">
   <div class="footer-main">
     <div class="footer-company">
-        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo">🚖</span><span>Оренда авто</span></a>
-        <p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p>
+        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo" id="footerLogo">🚖</span><span id="footerTitle">Оренда авто</span></a>
+        <p id="footerDesc">Комфортні і недорогі авто<br>у Львові і Львівській області.</p>
     </div>
     <div class="contact">
         <h4>Адреса</h4>
-        <a>Львів, вул. Городоцька, 26</a>
+        <a id="footerAddress">Львів, вул. Городоцька, 26</a>
     </div>
     <div class="contact">
         <h4>Пошта</h4>
-        <a>demyanchik@gmail.com</a>
+        <a id="footerEmail">demyanchik@gmail.com</a>
     </div>
     <div class="contact">
         <h4>Телефон</h4>
-        <a href="tel:+380667221089">+380 66 722 10 89</a>
+        <a href="tel:+380667221089" id="footerPhone">+380 66 722 10 89</a>
     </div>
   </div>
   <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
@@ -154,8 +161,6 @@ nav a:hover { color: #5938df; }
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-
-// Ваші актуальні токен та Chat ID для Telegram-бота
 const TG_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4'; 
 const TG_CHAT_ID = '1215279290';
 
@@ -197,6 +202,10 @@ async function loadCarDetails() {
         });
         const data = await res.json();
         const cars = data.record.cars || [];
+        const settings = data.record.settings || {};
+        
+        applySettings(settings);
+
         currentCar = cars.find(c => c.id === carId);
 
         if(!currentCar) {
@@ -208,6 +217,25 @@ async function loadCarDetails() {
     } catch(e) {
         document.getElementById('carContent').innerHTML = '<p style="text-align:center; grid-column:1/-1;">Помилка завантаження даних.</p>';
     }
+}
+
+function applySettings(s) {
+    if(!s) return;
+    const phone = s.companyPhone || '+380 66 722 10 89';
+    const cleanPhone = phone.replace(/\s+/g, '');
+
+    document.getElementById('headerTitle').innerText = s.companyName || 'Оренда авто Львів';
+    document.getElementById('headerLogo').innerText = s.companyLogo || '🚖';
+    document.getElementById('headerPhone').innerText = phone;
+    document.getElementById('headerPhone').href = 'tel:' + cleanPhone;
+
+    document.getElementById('footerTitle').innerText = s.companyName || 'Оренда авто';
+    document.getElementById('footerLogo').innerText = s.companyLogo || '🚖';
+    document.getElementById('footerDesc').innerText = s.footerDesc || 'Комфортні і недорогі авто у Львові і Львівській області.';
+    document.getElementById('footerAddress').innerText = s.footerAddress || 'Львів, вул. Городоцька, 26';
+    document.getElementById('footerEmail').innerText = s.footerEmail || 'demyanchik@gmail.com';
+    document.getElementById('footerPhone').innerText = phone;
+    document.getElementById('footerPhone').href = 'tel:' + cleanPhone;
 }
 
 function renderCarPage(car) {
@@ -224,6 +252,8 @@ function renderCarPage(car) {
     }
 
     activeImagesList = [car.image, ...(car.extraImages || [])].filter(Boolean);
+
+    const isBooked = car.isBooked === true;
 
     document.getElementById('carContent').innerHTML = `
         <div class="gallery-wrap">
@@ -257,7 +287,7 @@ function renderCarPage(car) {
 
             <p style="line-height:1.6; color:#555; margin-bottom:25px;">${car.description || 'Комфортний та доглянутий автомобіль для поїздок по Львову та області.'}</p>
 
-            <button class="book-btn" onclick="openModal()">${car.isBooked ? 'ЗАБРОНЬОВАНО (Залишити заявку)' : 'Забронювати авто'}</button>
+            <button class="book-btn" onclick="openModal()" ${isBooked ? 'disabled' : ''}>${isBooked ? 'АВТО ЗАБРОНЬОВАНО' : 'Забронювати авто'}</button>
         </div>
     `;
 
@@ -324,6 +354,7 @@ function startTimer(targetDateStr) {
 }
 
 function openModal() {
+    if (currentCar && currentCar.isBooked) return;
     document.getElementById('modalCarTitle').innerText = currentCar.name;
     document.getElementById('bPhone').value = '+380';
     document.getElementById('bookModal').classList.add('active');
@@ -335,6 +366,8 @@ function closeModal() {
 
 async function submitBooking(e) {
     e.preventDefault();
+    if (currentCar && currentCar.isBooked) return;
+
     const subBtn = document.getElementById('subBtn');
     subBtn.disabled = true;
     subBtn.innerText = 'Відправка...';
@@ -353,7 +386,6 @@ async function submitBooking(e) {
     const dateStr = new Date().toLocaleString('uk-UA');
     const newReq = { car: currentCar.name, name, phone, days, date: dateStr };
 
-    // 1. Збереження заявки у хмару (JSONBin)
     try {
         const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
@@ -372,7 +404,6 @@ async function submitBooking(e) {
         console.warn('Помилка збереження в базу.');
     }
 
-    // 2. Відправка повідомлення в Telegram-бот
     try {
         const text = `🚗 *НОВА ЗАЯВКА НА ОРЕНДУ!*\n\n🚘 *Авто:* ${currentCar.name}\n👤 *Ім'я:* ${name}\n📞 *Тел:* ${phone}\n📅 *Днів:* ${days}\n⏱ *Час:* ${dateStr}`;
         await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
