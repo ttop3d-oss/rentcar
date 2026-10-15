@@ -488,7 +488,7 @@ function renderRequests() {
         <div class="request-item">
             <div>
                 <b>🚗 ${req.car}</b><br>
-                👤 ${req.name} ${req.surname || ''} | 📞 <a href="tel:${req.phone}">${req.phone}</a><br>
+                👤 ${req.name} | 📞 <a href="tel:${req.phone}">${req.phone}</a><br>
                 📅 Термін: ${req.days} днів | Час: ${req.date || 'Щойно'}
             </div>
             <button class="btn btn-danger" style="padding:6px 12px; font-size:11px;" onclick="removeRequest(${idx})">Видалити</button>
