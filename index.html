@@ -21,8 +21,8 @@ nav a:hover { color: #5938df; }
 .phone-link { color: #5938df; text-decoration: none; font-weight: bold; }
 
 .hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 50px; max-width: 1300px; margin: 0 auto; gap: 40px; }
-.hero-content h1 { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
-.hero-content p { color: #666; font-size: 16px; margin-bottom: 30px; line-height: 1.5; }
+.hero-content h1 { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; color: #ffffff; }
+.hero-content p { font-size: 16px; margin-bottom: 30px; line-height: 1.5; color: #ffffff; }
 .hero-btn { background: #ff9800; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
 .hero-btn:hover { filter: brightness(0.9); }
 .hero-img img { width: 100%; border-radius: 12px; object-fit: cover; }
@@ -53,12 +53,17 @@ nav a:hover { color: #5938df; }
 .copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
 
 @media(max-width: 850px) {
-    .header { flex-wrap: wrap; padding: 15px 20px; gap: 15px; }
-    .logo { order: 1; }
-    .help { order: 2; margin-left: auto; }
-    nav { order: 3; width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 12px; margin-top: 5px; }
-    nav a { margin: 0; }
+    .header { flex-wrap: wrap; padding: 12px 15px; gap: 8px; }
+    .logo { font-size: 16px; }
+    .car-logo { font-size: 20px; }
+    .help { margin-left: auto; }
+    .help small { display: none !important; } /* Ховаємо «Потрібна допомога?» на мобілках для економії місця біля логотипу */
+    .phone-round { width: 30px; height: 30px; font-size: 13px; }
+    .phone-link { font-size: 12px; }
+    nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+    nav a { margin: 0; font-size: 13px; }
     .hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
+    .hero-content h1 { font-size: 32px; }
 }
 </style>
 </head>
@@ -66,11 +71,6 @@ nav a:hover { color: #5938df; }
 
 <header class="header">
     <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <nav>
-        <a href="index.html">Головна</a>
-        <a href="cars.html">Автомобілі</a>
-        <a href="about.html">Про нас</a>
-    </nav>
     <div class="help">
         <div class="phone-round">📞</div>
         <div>
@@ -78,12 +78,17 @@ nav a:hover { color: #5938df; }
             <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
         </div>
     </div>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="cars.html">Автомобілі</a>
+        <a href="about.html">Про нас</a>
+    </nav>
 </header>
 
-<section class="hero">
+<section class="hero" id="heroSectionBg" style="background: #5938df;">
     <div class="hero-content">
-        <h1>Прокат автомобілів у Львові без зайвого клопоту</h1>
-        <p>Великий автопарк нових та комфортних машин на будь-який смак. Швидке оформлення, доступні ціни в гривнях та повна підтримка 24/7.</p>
+        <h1 id="heroTitle">Прокат автомобілів у Львові без зайвого клопоту</h1>
+        <p id="heroText">Великий автопарк нових та комфортних машин на будь-який смак. Швидке оформлення, доступні ціни в гривнях та повна підтримка 24/7.</p>
         <a href="cars.html" class="hero-btn">Обрати автомобіль</a>
     </div>
     <div class="hero-img">
@@ -137,6 +142,18 @@ async function loadIndexData() {
 
         if(settings.heroLogo) {
             document.getElementById('heroLogoImg').src = settings.heroLogo;
+        }
+
+        // Динамічне заповнення заголовків та кольорів з адмінки
+        if(settings.heroTitle) {
+            document.getElementById('heroTitle').innerText = settings.heroTitle;
+        }
+        if(settings.heroText) {
+            document.getElementById('heroText').innerText = settings.heroText;
+        }
+        if(settings.heroTextColor) {
+            document.getElementById('heroTitle').style.color = settings.heroTextColor;
+            document.getElementById('heroText').style.color = settings.heroTextColor;
         }
 
         let popularCars = cars.filter(car => car.available !== false && car.isPopular === true);
