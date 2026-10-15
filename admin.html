@@ -377,6 +377,7 @@ function renderAdminCars() {
                     <label><input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)"> Опубліковано</label>
                     <label style="color:#e53935;"><input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked', this.checked)"> 📌 Заброньовано</label>
                     <label><input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)"> Популярне ⭐</label>
+                    <label style="color:#e53935; font-weight:bold;"><input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="updateField(${index}, 'hasDiscount', this.checked)"> 🔥 Знижка / Червона ціна</label>
                 </div>
             </div>
         </div>
@@ -449,6 +450,7 @@ function addNewCar() {
         available: true,
         isBooked: false,
         isPopular: true,
+        hasDiscount: false,
         sortOrder: 0,
         popularOrder: 0
     });
