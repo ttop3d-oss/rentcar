@@ -7,51 +7,60 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
 <style>
-body { background: #f4f4f4; font-family: 'Montserrat', sans-serif; margin: 0; }
-.header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-.admin-wrapper { max-width: 1000px; margin: 0 auto 40px; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; }
+:root { --bg: #f4f4f4; --card-bg: #fff; --text: #333; --border: #ddd; }
+body.dark { --bg: #121212; --card-bg: #1e1e1e; --text: #f0f0f0; --border: #333; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; transition: 0.3s; }
+.header { background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; }
+.admin-wrapper { max-width: 1100px; margin: 0 auto 40px; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
 .login-box, .panel-box { display: none; }
 .login-box.active, .panel-box.active { display: block; }
 .input-group { position: relative; margin: 10px 0 20px; }
-.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; }
-.toggle-pass { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 16px; z-index: 5; padding: 5px; }
-.lang-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; background: #e0e0e0; padding: 3px 6px; border-radius: 4px; color: #333; z-index: 5; }
-input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+.toggle-pass { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 16px; z-index: 5; }
+.lang-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; background: #e0e0e0; padding: 3px 6px; border-radius: 4px; color: #333; }
+input, select, textarea { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+textarea { resize: vertical; height: 80px; }
 .btn { background: #5938df; color: #fff; border: none; padding: 10px 18px; border-radius: 7px; font-weight: bold; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 13px; }
 .btn:hover { filter: brightness(0.9); }
 .btn-danger { background: #e53935; }
 .btn-success { background: #2e7d32; }
-.car-card-admin { background: #fafafa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-.car-card-admin h3 { margin-top: 0; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+.btn-secondary { background: #607d8b; }
+.car-card-admin { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.car-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.car-body { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; display: block; }
+.car-body.collapsed { display: none; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
-.checkbox-label { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 12px; cursor: pointer; margin: 10px 0; }
-.checkbox-label input { width: auto; margin: 0; }
+.stats-box { background: rgba(89, 56, 223, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; display: flex; gap: 20px; flex-wrap: wrap; }
+.nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+.tab-btn { background: none; border: none; font-size: 15px; font-weight: bold; color: var(--text); cursor: pointer; padding: 8px 15px; border-radius: 6px; }
+.tab-btn.active { background: #5938df; color: #fff; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 .preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
 .preview-wrap { position: relative; display: inline-block; }
-.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; }
-.del-photo-btn { position: absolute; top: -5px; right: -5px; background: #e53935; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+.del-photo-btn { position: absolute; top: -5px; right: -5px; background: #e53935; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
 .msg { margin-top: 15px; font-weight: bold; font-size: 13px; }
-.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-.uploading-text { font-size: 11px; color: #5938df; font-weight: bold; margin-top: 4px; display: none; }
-.alert-toast { display: none; position: fixed; top: 20px; right: 20px; background: #2e7d32; color: #fff; padding: 15px 25px; border-radius: 8px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; }
+.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+.request-item { background: rgba(0,0,0,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 </style>
 </head>
-<body>
-
-<div id="toast" class="alert-toast">✅ Створено новий слот для авто!</div>
+<body id="adminBody">
 
 <header class="header">
-    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <nav><a href="index.html">Головна</a><a href="cars.html">Автомобілі</a></nav>
+    <a href="index.html" style="font-weight: 800; text-decoration:none; color:var(--text);"><span class="car-logo">🚖</span> Адмін-панель Львів</a>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button class="btn btn-secondary" onclick="toggleTheme()">🌙 / ☀️ Тема</button>
+        <a href="index.html" class="btn">На сайт</a>
+    </div>
 </header>
 
 <div class="admin-wrapper">
     <div id="loginBox" class="login-box active">
-        <div class="top-actions"><h2>Вхід в Адмін-панель</h2></div>
+        <h2>Вхід в Адмін-панель</h2>
         <p>Введіть пароль адміністратора:</p>
         <div class="input-group">
             <input type="password" id="passwordInput" placeholder="Пароль" oninput="detectLayout(event)" onkeydown="if(event.key === 'Enter') checkLogin()">
@@ -63,30 +72,90 @@ input, select { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px
     </div>
 
     <div id="panelBox" class="panel-box">
-        <div class="top-actions">
-            <h2>Керування каталогом та фото</h2>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-success" onclick="addNewCar()">+ Додати авто</button>
-                <button class="btn btn-danger" onclick="logout()">Вийти</button>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('carsTab')">🚗 Автопарк</button>
+            <button class="tab-btn" onclick="switchTab('requestsTab')">📥 Заявки (<span id="reqCount">0</span>)</button>
+            <button class="tab-btn" onclick="switchTab('settingsTab')">⚙️ Налаштування & Про нас</button>
+        </div>
+
+        <div id="carsTab" class="tab-content active">
+            <div class="stats-box" id="statsBox">Завантаження статистики...</div>
+            <div class="top-actions">
+                <h2>Керування каталогом автомобілів</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-success" onclick="addNewCar()">+ Додати авто</button>
+                    <button class="btn btn-danger" onclick="logout()">Вийти</button>
+                </div>
             </div>
+            <div id="carsListContainer">Завантаження...</div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button class="btn" style="padding: 14px 28px; font-size: 15px;" onclick="saveAllChanges()">Зберегти всі зміни в хмару</button>
+            </div>
+            <div id="statusMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
         </div>
-        
-        <div id="carsListContainer" style="margin-top: 20px;">Завантаження...</div>
-        
-        <div style="margin-top: 30px; text-align: right;">
-            <button class="btn" style="padding: 14px 28px; font-size: 15px;" onclick="saveAllChanges()">Зберегти зміни в хмару</button>
+
+        <div id="requestsTab" class="tab-content">
+            <h2>Отримані заявки на оренду</h2>
+            <div id="requestsContainer">Немає нових заявок.</div>
         </div>
-        <div id="statusMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
+
+        <div id="settingsTab" class="tab-content">
+            <h2>Налаштування сайту та сайдбарів</h2>
+            <div class="car-card-admin">
+                <h3>Зміна Hero Logo (Головне зображення)</h3>
+                <label>Пряме посилання на зображення (ImgBB URL):</label>
+                <input type="text" id="settingHeroLogo" placeholder="https://i.ibb.co/...">
+                <label style="margin-top:10px;">Або завантажити нове фото:</label>
+                <input type="file" accept="image/*" onchange="uploadHeroLogo(event)">
+                <div style="margin-top: 10px;"><img id="heroLogoPreview" src="" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;"></div>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>Редагування сторінки «Про нас» (about.html)</h3>
+                <label>Заголовок:</label>
+                <input type="text" id="settingAboutTitle" placeholder="Про нашу компанію">
+                <label>Текст опису:</label>
+                <textarea id="settingAboutText" placeholder="Введіть текст про компанію..."></textarea>
+            </div>
+
+            <div class="car-card-admin">
+                <h3>Зміна пароля адміністратора</h3>
+                <label>Новий пароль:</label>
+                <input type="password" id="newAdminPass" placeholder="Введіть новий пароль">
+                <button class="btn" style="margin-top: 10px;" onclick="changePassword()">Змінити пароль</button>
+            </div>
+
+            <div style="margin-top: 30px; text-align: right;">
+                <button class="btn" style="padding: 14px 28px;" onclick="saveSettings()">Зберегти налаштування в хмару</button>
+            </div>
+            <div id="settingsMsg" class="msg" style="color: #2e7d32; text-align: right;"></div>
+        </div>
     </div>
 </div>
 
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const ADMIN_PASSWORD = 'rentcar';
 const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
 
-let currentCarsData = [];
+let globalData = { cars: [], requests: [], settings: {} };
+
+function toggleTheme() {
+    const body = document.getElementById('adminBody');
+    body.classList.toggle('dark');
+    localStorage.setItem('admin_theme', body.classList.contains('dark') ? 'dark' : 'light');
+}
+
+if(localStorage.getItem('admin_theme') === 'dark') {
+    document.getElementById('adminBody').classList.add('dark');
+}
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
 
 function detectLayout(e) {
     const val = e.target.value;
@@ -106,11 +175,12 @@ function togglePass() {
 
 function checkLogin() {
     const pass = document.getElementById('passwordInput').value.trim();
-    if (pass === ADMIN_PASSWORD) {
+    const currentPass = globalData.settings?.adminPassword || 'rentcar';
+    if (pass === currentPass) {
         document.getElementById('loginError').innerText = '';
         document.getElementById('loginBox').classList.remove('active');
         document.getElementById('panelBox').classList.add('active');
-        fetchAdminCars();
+        fetchAllData();
     } else {
         document.getElementById('loginError').innerText = 'Невірний пароль!';
     }
@@ -122,294 +192,351 @@ function logout() {
     document.getElementById('loginBox').classList.add('active');
 }
 
-async function fetchAdminCars() {
+async function fetchAllData() {
     try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
-        const data = await response.json();
-        currentCarsData = data.record.cars || [];
+        const data = await res.json();
+        globalData.cars = data.record.cars || [];
+        globalData.requests = data.record.requests || [];
+        globalData.settings = data.record.settings || { adminPassword: 'rentcar' };
+        
         renderAdminCars();
-    } catch (e) {
-        document.getElementById('carsListContainer').innerText = 'Помилка завантаження даних з хмари.';
+        renderRequests();
+        renderSettings();
+        updateStats();
+    } catch(e) {
+        alert('Помилка завантаження даних з хмари.');
     }
 }
 
-function getYearOptions(selectedYear) {
-    let options = '';
-    for (let y = 2030; y >= 2000; y--) {
-        const sel = (selectedYear == y) ? 'selected' : '';
-        options += `<option value="${y}" ${sel}>${y}</option>`;
+function updateStats() {
+    const total = globalData.cars.length;
+    const booked = globalData.cars.filter(c => c.isBooked).length;
+    const available = total - booked;
+    
+    document.getElementById('statsBox').innerHTML = `
+        <div>📊 Всього авто: <b>${total}</b></div>
+        <div>✅ В наявності: <b>${available}</b></div>
+        <div>📌 Заброньовано: <b>${booked}</b></div>
+    `;
+    document.getElementById('reqCount').innerText = globalData.requests.length;
+}
+
+function getYearOptions(selYear) {
+    let opts = '';
+    for(let y = 2030; y >= 2000; y--) {
+        opts += `<option value="${y}" ${selYear == y ? 'selected' : ''}>${y}</option>`;
     }
-    return options;
+    return opts;
 }
 
 function renderAdminCars() {
     const container = document.getElementById('carsListContainer');
-    if (!currentCarsData.length) {
-        container.innerHTML = '<p>Немає доданих автомобілів. Натисніть "+ Додати авто".</p>';
+    if(!globalData.cars.length) {
+        container.innerHTML = '<p>Немає доданих автомобілів.</p>';
         return;
     }
 
-    container.innerHTML = currentCarsData.map((car, index) => {
+    container.innerHTML = globalData.cars.map((car, index) => {
         const rawPrice = (car.price || '').replace(/[^0-9]/g, '');
-        const rawOldPrice = (car.oldPrice || '').replace(/[^0-9]/g, '');
-
         return `
         <div class="car-card-admin">
-            <h3>
-                <span>Авто #${index + 1}: ${car.name || 'Без назви'}</span>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 11px;" onclick="removeCar(${index})">Видалити</button>
-            </h3>
+            <div class="car-header" onclick="toggleCollapse(${index})">
+                <span><b>#${index+1}</b> — ${car.name || 'Новий автомобіль'} (${car.type || 'Седан'}, ${car.year || '2023'})</span>
+                <div>
+                    <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" type="button">Згорнути/Розгорнути ↕</button>
+                    <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="event.stopPropagation(); removeCar(${index})">Видалити</button>
+                </div>
+            </div>
             
-            <div class="grid-2">
-                <div>
-                    <label>Назва автомобіля</label>
-                    <input type="text" value="${car.name || ''}" oninput="updateField(${index}, 'name', this.value)">
+            <div class="car-body" id="carBody_${index}">
+                <div class="grid-2">
+                    <div>
+                        <label>Назва автомобіля</label>
+                        <input type="text" value="${car.name || ''}" placeholder="Новий автомобіль" oninput="updateField(${index}, 'name', this.value)">
+                    </div>
+                    <div>
+                        <label>Тип кузова</label>
+                        <select onchange="updateField(${index}, 'type', this.value)">
+                            <option value="Седан" ${car.type === 'Седан' ? 'selected' : ''}>Седан</option>
+                            <option value="Універсал" ${car.type === 'Універсал' ? 'selected' : ''}>Універсал</option>
+                            <option value="Хетчбек" ${car.type === 'Хетчбек' ? 'selected' : ''}>Хетчбек</option>
+                            <option value="Кросовер" ${car.type === 'Кросовер' ? 'selected' : ''}>Кросовер</option>
+                            <option value="Джип" ${car.type === 'Джип' ? 'selected' : ''}>Джип</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label>Тип кузова</label>
-                    <select onchange="updateField(${index}, 'type', this.value)">
-                        <option value="Седан" ${car.type === 'Седан' ? 'selected' : ''}>Седан</option>
-                        <option value="Універсал" ${car.type === 'Універсал' ? 'selected' : ''}>Універсал</option>
-                        <option value="Хетчбек" ${car.type === 'Хетчбек' ? 'selected' : ''}>Хетчбек</option>
-                        <option value="Кросовер" ${car.type === 'Кросовер' ? 'selected' : ''}>Кросовер</option>
-                        <option value="Джип" ${car.type === 'Джип' ? 'selected' : ''}>Джип</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="grid-4">
-                <div>
-                    <label>Ціна (тільки цифри, Грн)</label>
-                    <input type="number" value="${rawPrice}" oninput="updatePrice(${index}, this.value)">
+                <div class="grid-4">
+                    <div>
+                        <label>Базова ціна (Грн/доба)</label>
+                        <input type="number" value="${rawPrice}" placeholder="900" oninput="updatePrice(${index}, this.value)">
+                    </div>
+                    <div>
+                        <label>Рік випуску</label>
+                        <select onchange="updateField(${index}, 'year', this.value)">${getYearOptions(car.year)}</select>
+                    </div>
+                    <div>
+                        <label>Коробка передач</label>
+                        <select onchange="updateField(${index}, 'gearbox', this.value)">
+                            <option value="Автомат" ${car.gearbox === 'Автомат' ? 'selected' : ''}>Автомат</option>
+                            <option value="Механіка" ${car.gearbox === 'Механіка' ? 'selected' : ''}>Механіка</option>
+                            <option value="Робот" ${car.gearbox === 'Робот' ? 'selected' : ''}>Робот</option>
+                            <option value="Типтронік" ${car.gearbox === 'Типтронік' ? 'selected' : ''}>Типтронік</option>
+                            <option value="Редуктор" ${car.gearbox === 'Редуктор' ? 'selected' : ''}>Редуктор</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Тип палива</label>
+                        <select onchange="updateField(${index}, 'fuel', this.value)">
+                            <option value="Бензин" ${car.fuel === 'Бензин' ? 'selected' : ''}>Бензин</option>
+                            <option value="Дизель" ${car.fuel === 'Дизель' ? 'selected' : ''}>Дизель</option>
+                            <option value="Газ/Бензин" ${car.fuel === 'Газ/Бензин' ? 'selected' : ''}>Газ/Бензин</option>
+                            <option value="Газ" ${car.fuel === 'Газ' ? 'selected' : ''}>Газ</option>
+                            <option value="Електро" ${car.fuel === 'Електро' ? 'selected' : ''}>Електро</option>
+                            <option value="Гібрид" ${car.fuel === 'Гібрид' ? 'selected' : ''}>Гібрид</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label>Рік випуску</label>
-                    <select onchange="updateField(${index}, 'year', this.value)">
-                        ${getYearOptions(car.year || 2023)}
-                    </select>
-                </div>
-                <div>
-                    <label>Коробка передач</label>
-                    <select onchange="updateField(${index}, 'gearbox', this.value)">
-                        <option value="Автомат" ${car.gearbox === 'Автомат' ? 'selected' : ''}>Автомат</option>
-                        <option value="Механіка" ${car.gearbox === 'Механіка' ? 'selected' : ''}>Механіка</option>
-                        <option value="Робот" ${car.gearbox === 'Робот' ? 'selected' : ''}>Робот</option>
-                        <option value="Типтронік" ${car.gearbox === 'Типтронік' ? 'selected' : ''}>Типтронік</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Тип палива</label>
-                    <select onchange="updateField(${index}, 'fuel', this.value)">
-                        <option value="Бензин" ${car.fuel === 'Бензин' ? 'selected' : ''}>Бензин</option>
-                        <option value="Дизель" ${car.fuel === 'Дизель' ? 'selected' : ''}>Дизель</option>
-                        <option value="Газ/Бензин" ${car.fuel === 'Газ/Бензин' ? 'selected' : ''}>Газ/Бензин</option>
-                        <option value="Газ" ${car.fuel === 'Газ' ? 'selected' : ''}>Газ</option>
-                        <option value="Електро" ${car.fuel === 'Електро' ? 'selected' : ''}>Електро</option>
-                        <option value="Гібрид" ${car.fuel === 'Гібрид' ? 'selected' : ''}>Гібрид</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="grid-2" style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
-                <div>
-                    <label><b>Головне фото</b></label>
-                    <input type="file" accept="image/*" onchange="uploadMain(event, ${index})">
-                    <div id="main_load_${index}" class="uploading-text">⏳ Завантаження фото на хостинг...</div>
+                <div class="grid-3">
+                    <div>
+                        <label>Об'єм двигуна (л) / Потужність (kW)</label>
+                        <input type="text" value="${car.engine || ''}" placeholder="2.0 л або 150 kW" oninput="updateField(${index}, 'engine', this.value)">
+                    </div>
+                    <div>
+                        <label>Розхід (л/100км або кВт·год)</label>
+                        <input type="text" value="${car.consumption || ''}" placeholder="7.5 л / 100км" oninput="updateField(${index}, 'consumption', this.value)">
+                    </div>
+                    <div>
+                        <label>Залог (Грн)</label>
+                        <input type="text" value="${car.deposit || ''}" placeholder="5000 Грн" oninput="updateField(${index}, 'deposit', this.value)">
+                    </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <img src="${car.image || 'assets/car.webp'}" class="preview-img">
-                    <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="removeMainImage(${index})">Видалити</button>
-                </div>
-            </div>
 
-            <div style="background:#f9f9f9; padding:10px; border-radius:6px; margin:10px 0;">
-                <label><b>Додаткові фото (до 3 штук)</b></label>
-                <input type="file" accept="image/*" multiple onchange="uploadExtra(event, ${index})">
-                <div id="extra_load_${index}" class="uploading-text">⏳ Завантаження фоток на хостинг...</div>
-                <div class="preview-container">
-                    ${(car.extraImages || []).map((img, imgIdx) => `
-                        <div class="preview-wrap">
-                            <img src="${img}" class="preview-img">
-                            <button class="del-photo-btn" onclick="removeExtraImage(${index},${imgIdx})" title="Видалити фото">✕</button>
-                        </div>
-                    `).join('')}
+                <div class="grid-4">
+                    <div>
+                        <label>Ціна 1-3 дні</label>
+                        <input type="text" value="${car.price1_3 || ''}" placeholder="1000 Грн" oninput="updateField(${index}, 'price1_3', this.value)">
+                    </div>
+                    <div>
+                        <label>Ціна 4-6 днів</label>
+                        <input type="text" value="${car.price4_6 || ''}" placeholder="950 Грн" oninput="updateField(${index}, 'price4_6', this.value)">
+                    </div>
+                    <div>
+                        <label>Ціна 7-15 днів</label>
+                        <input type="text" value="${car.price7_15 || ''}" placeholder="900 Грн" oninput="updateField(${index}, 'price7_15', this.value)">
+                    </div>
+                    <div>
+                        <label>Ціна 15+ днів</label>
+                        <input type="text" value="${car.price15_plus || ''}" placeholder="800 Грн" oninput="updateField(${index}, 'price15_plus', this.value)">
+                    </div>
                 </div>
-            </div>
 
-            <div class="grid-3">
                 <div>
-                    <label class="checkbox-label">
-                        <input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)">
-                        Опубліковано (видно в каталозі)
-                    </label>
+                    <label>Детальний опис транспорту</label>
+                    <textarea placeholder="Опис автомобіля, комплектації тощо..." oninput="updateField(${index}, 'description', this.value)">${car.description || ''}</textarea>
                 </div>
-                <div>
-                    <label class="checkbox-label" style="color: #e53935;">
-                        <input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked', this.checked)">
-                        📌 Заброньовано
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox-label">
-                        <input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)">
-                        Популярне на головній ⭐
-                    </label>
-                </div>
-            </div>
 
-            <div class="grid-3" style="margin-top: 10px;">
-                <div>
-                    <label class="checkbox-label">
-                        <input type="checkbox" ${car.hasDiscount ? 'checked' : ''} onchange="toggleDiscount(${index}, this.checked)">
-                        Увімкнути знижку 🔥
-                    </label>
+                <div class="grid-2" style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0;">
+                    <div>
+                        <label><b>Головне фото</b></label>
+                        <input type="file" accept="image/*" onchange="uploadMain(event, ${index})">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${car.image || 'https://i.ibb.co/3m3z6v9/car.webp'}" class="preview-img">
+                    </div>
                 </div>
-                <div>
-                    <label>Стара ціна (тільки цифри)</label>
-                    <input type="number" value="${rawOldPrice}" ${!car.hasDiscount ? 'disabled' : ''} id="old_${index}" oninput="updateOldPrice(${index}, this.value)">
+
+                <div style="background:rgba(0,0,0,0.02); padding:10px; border-radius:6px; margin:10px 0;">
+                    <label><b>Додаткові фото (до 3 штук)</b></label>
+                    <input type="file" accept="image/*" multiple onchange="uploadExtra(event, ${index})">
+                    <div class="preview-container">
+                        ${(car.extraImages || []).map((img, imgIdx) => `
+                            <div class="preview-wrap">
+                                <img src="${img}" class="preview-img">
+                                <button class="del-photo-btn" onclick="removeExtraImage(${index},${imgIdx})">✕</button>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                <div>
-                    <label>Кінець знижки (таймер)</label>
-                    <input type="datetime-local" value="${car.discountEnd || ''}" ${!car.hasDiscount ? 'disabled' : ''} id="end_${index}" onchange="updateField(${index}, 'discountEnd', this.value)">
+
+                <div class="grid-3">
+                    <div>
+                        <label>Позиція в каталозі (сортування)</label>
+                        <input type="number" value="${car.sortOrder || 0}" oninput="updateField(${index}, 'sortOrder', parseInt(this.value) || 0)">
+                    </div>
+                    <div>
+                        <label>Позиція в популярних</label>
+                        <input type="number" value="${car.popularOrder || 0}" oninput="updateField(${index}, 'popularOrder', parseInt(this.value) || 0)">
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <label><input type="checkbox" ${car.available !== false ? 'checked' : ''} onchange="updateField(${index}, 'available', this.checked)"> Опубліковано</label>
+                    <label style="color:#e53935;"><input type="checkbox" ${car.isBooked ? 'checked' : ''} onchange="updateField(${index}, 'isBooked', this.checked)"> 📌 Заброньовано</label>
+                    <label><input type="checkbox" ${car.isPopular ? 'checked' : ''} onchange="updateField(${index}, 'isPopular', this.checked)"> Популярне ⭐</label>
                 </div>
             </div>
         </div>
-    `;}).join('');
+        `;
+    }).join('');
 }
 
-function updateField(index, field, val) {
-    currentCarsData[index][field] = val;
+function toggleCollapse(index) {
+    const body = document.getElementById(`carBody_${index}`);
+    body.classList.toggle('collapsed');
 }
 
-function updatePrice(index, val) {
-    currentCarsData[index].price = val ? val + ' Грн' : '';
-}
-
-function updateOldPrice(index, val) {
-    currentCarsData[index].oldPrice = val ? val + ' Грн' : '';
-}
-
-function removeMainImage(index) {
-    currentCarsData[index].image = 'assets/car.webp';
-    renderAdminCars();
-}
-
-function removeExtraImage(carIndex, imgIndex) {
-    currentCarsData[carIndex].extraImages.splice(imgIndex, 1);
-    renderAdminCars();
-}
+function updateField(index, field, val) { globalData.cars[index][field] = val; }
+function updatePrice(index, val) { globalData.cars[index].price = val ? val + ' Грн' : ''; }
 
 async function uploadToImgBB(file) {
-    const formData = new FormData();
-    formData.append('image', file);
+    const fd = new FormData();
+    fd.append('image', file);
     try {
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
-            method: 'POST',
-            body: formData
-        });
-        const data = await response.json();
-        if (data.success) { return data.data.url; }
-    } catch (e) { alert('Помилка завантаження фото на хостинг.'); }
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
+        const data = await res.json();
+        if(data.success) return data.data.url;
+    } catch(e) { alert('Помилка завантаження фото'); }
     return null;
 }
 
 async function uploadMain(e, index) {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const loader = document.getElementById(`main_load_${index}`);
-    if(loader) loader.style.display = 'block';
-
-    const imageUrl = await uploadToImgBB(file);
-    if(loader) loader.style.display = 'none';
-
-    if (imageUrl) {
-        currentCarsData[index].image = imageUrl;
-        renderAdminCars();
-    }
+    if(!file) return;
+    const url = await uploadToImgBB(file);
+    if(url) { globalData.cars[index].image = url; renderAdminCars(); }
 }
 
 async function uploadExtra(e, index) {
-    const files = Array.from(e.target.files).slice(0, 3);
-    if (files.length === 0) return;
-
-    const loader = document.getElementById(`extra_load_${index}`);
-    if(loader) loader.style.display = 'block';
-
-    if (!currentCarsData[index].extraImages) currentCarsData[index].extraImages = [];
-
-    for (let file of files) {
-        const imageUrl = await uploadToImgBB(file);
-        if (imageUrl) { currentCarsData[index].extraImages.push(imageUrl); }
+    const files = Array.from(e.target.files).slice(0,3);
+    if(!files.length) return;
+    if(!globalData.cars[index].extraImages) globalData.cars[index].extraImages = [];
+    for(let f of files) {
+        const url = await uploadToImgBB(f);
+        if(url) globalData.cars[index].extraImages.push(url);
     }
-
-    if(loader) loader.style.display = 'none';
     renderAdminCars();
 }
 
-function toggleDiscount(index, isChecked) {
-    currentCarsData[index].hasDiscount = isChecked;
-    const oldInput = document.getElementById(`old_${index}`);
-    const endInput = document.getElementById(`end_${index}`);
-    if(oldInput) oldInput.disabled = !isChecked;
-    if(endInput) endInput.disabled = !isChecked;
+function removeExtraImage(cIdx, imgIdx) {
+    globalData.cars[cIdx].extraImages.splice(imgIdx, 1);
+    renderAdminCars();
+}
+
+function removeCar(index) {
+    if(confirm('Видалити авто?')) {
+        globalData.cars.splice(index, 1);
+        renderAdminCars();
+        updateStats();
+    }
 }
 
 function addNewCar() {
     const newId = 'car_' + Date.now();
-    currentCarsData.push({
+    globalData.cars.push({
         id: newId,
-        name: 'Новий автомобіль',
+        name: '', // Назва порожня, щоб спрацьовував підказчик (placeholder)
         type: 'Седан',
         year: '2023',
         price: '900 Грн',
         gearbox: 'Автомат',
         fuel: 'Бензин',
-        image: 'assets/car.webp',
+        image: 'https://i.ibb.co/3m3z6v9/car.webp',
         extraImages: [],
-        page: `car.html?id=${newId}`,
         available: true,
         isBooked: false,
         isPopular: true,
-        hasDiscount: false,
-        oldPrice: '',
-        discountEnd: ''
+        sortOrder: 0,
+        popularOrder: 0
     });
     renderAdminCars();
-    
-    const toast = document.getElementById('toast');
-    if(toast) {
-        toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    updateStats();
+}
+
+function renderRequests() {
+    const cont = document.getElementById('requestsContainer');
+    if(!globalData.requests.length) {
+        cont.innerHTML = '<p>Немає нових заявок.</p>';
+        return;
+    }
+    cont.innerHTML = globalData.requests.map((req, idx) => `
+        <div class="request-item">
+            <div>
+                <b>🚗 ${req.car}</b><br>
+                👤 ${req.name} ${req.surname || ''} | 📞 <a href="tel:${req.phone}">${req.phone}</a><br>
+                📅 Термін: ${req.days} днів | Час: ${req.date || 'Щойно'}
+            </div>
+            <button class="btn btn-danger" style="padding:6px 12px; font-size:11px;" onclick="removeRequest(${idx})">Видалити</button>
+        </div>
+    `).join('');
+}
+
+function removeRequest(idx) {
+    globalData.requests.splice(idx, 1);
+    renderRequests();
+    updateStats();
+}
+
+function renderSettings() {
+    document.getElementById('settingHeroLogo').value = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
+    document.getElementById('heroLogoPreview').src = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
+    document.getElementById('settingAboutTitle').value = globalData.settings?.aboutTitle || 'Про нашу компанію';
+    document.getElementById('settingAboutText').value = globalData.settings?.aboutText || '';
+}
+
+async function uploadHeroLogo(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+    const url = await uploadToImgBB(file);
+    if(url) {
+        document.getElementById('settingHeroLogo').value = url;
+        document.getElementById('heroLogoPreview').src = url;
     }
 }
 
-function removeCar(index) {
-    if (confirm('Видалити авто?')) {
-        currentCarsData.splice(index, 1);
-        renderAdminCars();
-    }
+async function saveSettings() {
+    globalData.settings.heroLogo = document.getElementById('settingHeroLogo').value;
+    globalData.settings.aboutTitle = document.getElementById('settingAboutTitle').value;
+    globalData.settings.aboutText = document.getElementById('settingAboutText').value;
+    await saveAllChangesToCloud('Налаштування успішно збережено!');
+}
+
+async function changePassword() {
+    const newPass = document.getElementById('newAdminPass').value.trim();
+    if(!newPass) { alert('Введіть новий пароль!'); return; }
+    globalData.settings.adminPassword = newPass;
+    await saveAllChangesToCloud('Пароль адміністратора змінено!');
+    document.getElementById('newAdminPass').value = '';
 }
 
 async function saveAllChanges() {
+    await saveAllChangesToCloud('✅ Успішно збережено в хмару!');
+}
+
+async function saveAllChangesToCloud(msgText) {
     const statusMsg = document.getElementById('statusMsg');
-    statusMsg.innerText = 'Зберігаємо в хмару...';
+    const settingsMsg = document.getElementById('settingsMsg');
+    if(statusMsg) statusMsg.innerText = 'Зберігаємо в хмару...';
+    if(settingsMsg) settingsMsg.innerText = 'Зберігаємо в хмару...';
+    
     try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-            body: JSON.stringify({ cars: currentCarsData })
+            body: JSON.stringify(globalData)
         });
-        if (response.ok) {
-            statusMsg.innerText = '✅ Успішно збережено в хмару!';
-            setTimeout(() => { statusMsg.innerText = ''; }, 3000);
+        if(res.ok) {
+            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 3000); }
+            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 3000); }
         } else {
-            statusMsg.innerText = 'Помилка збереження.';
+            alert('Помилка збереження.');
         }
-    } catch (e) {
-        statusMsg.innerText = 'Помилка мережі.';
+    } catch(e) {
+        alert('Помилка мережі.');
     }
 }
 </script>
