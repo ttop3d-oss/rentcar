@@ -1,54 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title id="pageTitle">Оренда авто Львів</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деталі авто — Оренда авто Львів</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-.page { max-width: 1366px; margin: auto; background: #fff; min-height: 100vh; }
-main { padding: 45px 64px 55px; }
-.detail { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; max-width: 1100px; margin: auto; }
-.left h1 { font-size: 25px; margin: 15px 0 5px; font-weight: 800; }
-.price-box { display: flex; align-items: baseline; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
-.standard-price { color: #5938df; font-size: 20px; font-weight: 800; }
-.meta { font-size: 13px; color: #555; margin-top: 6px; line-height: 1.6; }
-.car-photo { width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; margin-top: 20px; background: #f4f4f4; border-radius: 12px; cursor: pointer; overflow: hidden; }
-.car-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.3s ease; }
-.car-photo:hover img { transform: scale(1.03); }
-.thumbs { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-.thumb { width: 75px; height: 55px; border-radius: 8px; background: #fafafa; border: 1px solid #ddd; overflow: hidden; cursor: pointer; }
-.thumb img { width: 100%; height: 100%; object-fit: cover; }
-.form-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; }
-label { font-size: 11px; display: block; margin: 10px 0 4px; font-weight: 600; }
-input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7px; font-family: inherit; box-sizing: border-box; }
-.btn { width: 100%; border: 0; border-radius: 7px; background: #5938df; color: #fff; padding: 12px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.25s; }
-.btn:hover { filter: brightness(0.9); }
-.notice { font-size: 9px; color: #777; line-height: 1.4; margin-top: 10px; }
-.success { text-align: center; display: none; margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 7px; color: #2e7d32; }
-.success.show { display: block; }
-.unavailable { text-align: center; padding-top: 20px; max-width: 600px; margin: 0 auto; display: none; }
-.unavailable h1 { font-size: 24px; color: #e53935; margin-bottom: 20px; font-weight: 800; }
-.booked-banner { background: #fff3e0; border: 2px dashed #ff9800; padding: 25px; border-radius: 10px; text-align: center; }
-.booked-banner h2 { color: #e65100; margin-top: 0; font-size: 20px; }
-.tariffs-table { margin-top: 15px; background: #f9f9f9; border: 1px solid #eee; padding: 12px; border-radius: 8px; font-size: 12px; }
-.tariffs-table div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }
-.tariffs-table div:last-child { border-bottom: none; }
-.image-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-.image-modal.show { display: flex; }
-.image-modal img { max-width: 85%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
-.close-modal { position: absolute; top: 20px; right: 30px; background: none; border: none; color: #fff; font-size: 35px; cursor: pointer; }
-.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 30px; padding: 12px 18px; cursor: pointer; border-radius: 50%; }
-.modal-prev { left: 20px; }
-.modal-next { right: 20px; }
-@media(max-width: 750px) { main { padding: 20px 16px; } .detail { grid-template-columns: 1fr; gap: 30px; } }
+body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color: #333; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.logo { font-weight: 800; font-size: 20px; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
+.car-logo { font-size: 24px; }
+nav { display: flex; align-items: center; }
+nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
+nav a:hover { color: #5938df; }
+
+.car-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.gallery-wrap { display: flex; flex-direction: column; gap: 15px; }
+.main-img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; background: #f4f4f4; border: 1px solid #eee; }
+.thumbs { display: flex; gap: 10px; }
+.thumb-img { width: 90px; height: 65px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+.thumb-img.active { border-color: #5938df; }
+
+.car-details h1 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
+.price-tag { font-size: 28px; font-weight: 800; color: #5938df; margin-bottom: 20px; }
+.price-tag.discount { color: #e53935; }
+.old-price { text-decoration: line-through; color: #888; font-size: 18px; margin-right: 10px; font-weight: normal; }
+
+.timer-box { background: #fff3e0; border: 1px solid #ffe0b2; padding: 15px; border-radius: 10px; margin-bottom: 25px; color: #e65100; font-weight: bold; }
+.timer-clock { font-size: 22px; font-weight: 800; margin-top: 5px; color: #d84315; }
+
+.specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px; font-size: 14px; }
+.specs-item span { color: #777; }
+.book-btn { background: #ff9800; color: #fff; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
+.book-btn:hover { filter: brightness(0.9); }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal-overlay.active { display: flex; }
+.modal-content { background: #fff; padding: 30px; border-radius: 12px; max-width: 450px; width: 100%; position: relative; }
+.close-modal { position: absolute; top: 15px; right: 15px; font-size: 20px; cursor: pointer; border: none; background: none; }
+.modal-content input, .modal-content select { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+
+@media(max-width: 850px) {
+    .car-container { grid-template-columns: 1fr; }
+    .main-img { height: 260px; }
+}
 </style>
 </head>
 <body>
-<div class="page site">
+
 <header class="header">
     <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
     <nav>
@@ -56,241 +58,198 @@ input { width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 7p
         <a href="cars.html">Автомобілі</a>
         <a href="about.html">Про нас</a>
     </nav>
-    <div class="help"><div class="phone-round">📞</div><div><small>Потрібна допомога?</small><b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b></div></div>
 </header>
 
-<main>
-<div id="bookingSection" class="detail" style="display: none;">
-<section class="left">
-    <h1 id="carName">Завантаження...</h1>
-    <div id="carPriceContainer"></div>
-    <div class="meta" id="carType"></div>
-    <div class="meta" id="carSpecs" style="font-weight: 600; color: #333;"></div>
-    <div class="meta" id="carExtraMeta"></div>
-    <div class="meta" id="carDescription" style="margin-top: 15px; color: #555; background:#fcfcfc; padding:10px; border-radius:6px; border:1px solid #f0f0f0;"></div>
-    
-    <div id="tariffsBox" class="tariffs-table" style="display:none;"></div>
+<div class="car-container" id="carContent">
+    <p style="grid-column: 1/-1; text-align: center;">Завантаження детальної інформації...</p>
+</div>
 
-    <div class="car-photo" onclick="openModal(0)">
-        <img id="mainImage" src="" alt="Авто">
+<!-- Модальне вікно бронювання -->
+<div class="modal-overlay" id="bookModal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">✕</button>
+        <h3 style="margin-top:0;">Забронювати автомобіль</h3>
+        <p id="modalCarTitle" style="font-weight:bold; color:#5938df;"></p>
+        <form onsubmit="submitBooking(event)">
+            <label>Ім'я:</label>
+            <input type="text" id="bName" required placeholder="Ваше ім'я">
+            <label>Телефон:</label>
+            <input type="tel" id="bPhone" required placeholder="+380...">
+            <label>Термін оренди (днів):</label>
+            <input type="number" id="bDays" value="1" min="1" required>
+            <button type="submit" class="book-btn">Підтвердити бронювання</button>
+        </form>
     </div>
-
-    <div class="thumbs" id="thumbsContainer"></div>
-</section>
-
-<section id="rightSection">
-</section>
-</div>
-
-<div id="unavailableSection" class="unavailable">
-    <h1 id="unavailTitle">АВТОМОБІЛЬ НЕ ЗНАЙДЕНО</h1>
-    <p>Будь ласка, оберіть автомобіль із каталогу.</p>
-    <a href="cars.html" class="btn" style="display:inline-block; width:auto; padding: 10px 24px; margin-top:20px;">Перейти до каталогу</a>
-</div>
-</main>
-
-<footer class="footer">
-  <div class="footer-main">
-    <div class="footer-company"><a class="logo" href="index.html"><span class="car-logo">🚖</span><span>Оренда авто</span></a><p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p></div>
-    <div class="contact"><h4>Адреса</h4><a>Львів, вул. Городоцька, 26</a></div>
-    <div class="contact"><h4>Пошта</h4><a>demyanchik@gmail.com</a></div>
-    <div class="contact"><h4>Телефон</h4><a href="tel:+380667221089">+380 66 722 10 89</a></div>
-  </div>
-  <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
-</footer>
-</div>
-
-<div id="imageModal" class="image-modal">
-    <button class="close-modal" onclick="closeModal()">&times;</button>
-    <button class="modal-nav modal-prev" onclick="changeImage(-1)">❮</button>
-    <img id="modalImage" src="" alt="Фото">
-    <button class="modal-nav modal-next" onclick="changeImage(1)">❯</button>
 </div>
 
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const TELEGRAM_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4';
-const TELEGRAM_CHAT_ID = '1215279290';
-
-const urlParams = new URLSearchParams(window.location.search);
-const carId = urlParams.get('id');
-if (!carId) window.location.href = 'cars.html';
-
-let galleryImages = [];
-let currentIndex = 0;
+let currentCar = null;
+let timerInterval = null;
 
 async function loadCarDetails() {
+    const params = new URLSearchParams(window.location.search);
+    const carId = params.get('id');
+
+    if(!carId) {
+        document.getElementById('carContent').innerHTML = '<p>Автомобіль не знайдено.</p>';
+        return;
+    }
+
     try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await res.json();
         const cars = data.record.cars || [];
-        const car = cars.find(c => c.id === carId);
+        currentCar = cars.find(c => c.id === carId);
 
-        if (!car) {
-            document.getElementById('unavailableSection').style.display = 'block';
+        if(!currentCar) {
+            document.getElementById('carContent').innerHTML = '<p>Автомобіль не знайдено.</p>';
             return;
         }
 
-        // Відображаємо реальні дані з адмін-панелі
-        const displayName = car.name || 'Новий автомобіль';
-        document.getElementById('pageTitle').innerText = `${displayName} — Оренда авто Львів`;
-        document.getElementById('carName').innerText = displayName;
-        document.getElementById('carType').innerText = `Тип кузова: ${car.type || 'Седан'}`;
-        
-        document.getElementById('carSpecs').innerHTML = `📅 ${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}`;
-
-        let extraMetaHtml = '';
-        if(car.engine) extraMetaHtml += `🔹 Об'єм / Потужність: <b>${car.engine}</b><br>`;
-        if(car.consumption) extraMetaHtml += `⚡ Розхід: <b>${car.consumption}</b><br>`;
-        if(car.deposit) extraMetaHtml += `🛡 Залог: <b>${car.deposit}</b>`;
-        document.getElementById('carExtraMeta').innerHTML = extraMetaHtml;
-
-        const descElem = document.getElementById('carDescription');
-        if(car.description) {
-            descElem.innerText = car.description;
-            descElem.style.display = 'block';
-        } else {
-            descElem.style.display = 'none';
-        }
-
-        // Тарифи
-        if(car.price1_3 || car.price4_6 || car.price7_15 || car.price15_plus) {
-            let tariffsBox = document.getElementById('tariffsBox');
-            tariffsBox.style.display = 'block';
-            tariffsBox.innerHTML = `
-                <b style="display:block; margin-bottom:6px;">Тарифи оренди:</b>
-                ${car.price1_3 ? `<div><span>1–3 дні:</span> <b>${car.price1_3}</b></div>` : ''}
-                ${car.price4_6 ? `<div><span>4–6 днів:</span> <b>${car.price4_6}</b></div>` : ''}
-                ${car.price7_15 ? `<div><span>7–15 днів:</span> <b>${car.price7_15}</b></div>` : ''}
-                ${car.price15_plus ? `<div><span>15+ днів:</span> <b>${car.price15_plus}</b></div>` : ''}
-            `;
-        }
-
-        document.getElementById('carPriceContainer').innerHTML = `
-            <div class="price-box">
-                <span class="standard-price">${car.price || '800 Грн'}</span>
-                <span style="font-size:11px; color:#777;">/доба</span>
-            </div>
-        `;
-
-        const rightSection = document.getElementById('rightSection');
-        if (car.available === false) {
-            document.getElementById('unavailableSection').style.display = 'block';
-            return;
-        } else if (car.isBooked) {
-            rightSection.innerHTML = `
-                <div class="booked-banner">
-                    <h2>📌 АВТОМОБІЛЬ ЗАБРОНЬОВАНО</h2>
-                    <p>Наразі цей автомобіль заброньований і тимчасово недоступний.</p>
-                    <a href="cars.html" class="btn" style="display:inline-block; width:auto; padding:10px 20px; margin-top:10px; text-decoration:none;">Обрати інше авто</a>
-                </div>
-            `;
-        } else {
-            rightSection.innerHTML = `
-                <div class="form-title">Ваші Контактні Дані</div>
-                <label>Ім'я</label><input id="name" placeholder="Ваше ім'я">
-                <label>Прізвище</label><input id="surname" placeholder="Прізвище">
-                <label>Номер Телефону</label>
-                <input id="phone" value="+380" maxlength="13" oninput="formatPhone(event)" placeholder="+380...">
-                <label>Термін Оренди (днів, макс. 30)</label><input id="days" type="number" min="1" max="30" value="1">
-                <button class="btn" onclick="sendRequest()">Надіслати заявку</button>
-                <div class="notice">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</div>
-                <div id="ok" class="success"><h3>Заявку прийнято!</h3><p>Ми зв'яжемося з вами найближчим часом.</p></div>
-            `;
-        }
-
-        document.getElementById('bookingSection').style.display = 'grid';
-
-        // Формування галереї: головне фото першим, далі унікальні додаткові
-        galleryImages = [];
-        if(car.image) galleryImages.push(car.image);
-        if(car.extraImages && Array.isArray(car.extraImages)) {
-            car.extraImages.forEach(img => {
-                if(img && img !== car.image && !galleryImages.includes(img)) {
-                    galleryImages.push(img);
-                }
-            });
-        }
-        if(!galleryImages.length) galleryImages.push('https://i.ibb.co/3m3z6v9/car.webp');
-
-        document.getElementById('mainImage').src = galleryImages[0];
-        document.getElementById('thumbsContainer').innerHTML = galleryImages.map((src, idx) => `
-            <div class="thumb" onclick="openModal(${idx})"><img src="${src}"></div>
-        `).join('');
-
+        renderCarPage(currentCar);
     } catch(e) {
-        document.getElementById('unavailableSection').style.display = 'block';
+        document.getElementById('carContent').innerHTML = '<p>Помилка завантаження даних.</p>';
     }
 }
 
-function formatPhone(e) {
-    let input = e.target;
-    let val = input.value;
-    if (!val.startsWith("+380")) val = "+380";
-    let numbers = val.replace(/[^\d]/g, "").slice(3);
-    if (numbers.length > 9) numbers = numbers.slice(0, 9);
-    input.value = "+380" + numbers;
-}
-
-function openModal(idx) {
-    currentIndex = idx;
-    document.getElementById('modalImage').src = galleryImages[currentIndex];
-    document.getElementById('imageModal').classList.add('show');
-}
-function closeModal() { document.getElementById('imageModal').classList.remove('show'); }
-function changeImage(dir) {
-    currentIndex = (currentIndex + dir + galleryImages.length) % galleryImages.length;
-    document.getElementById('modalImage').src = galleryImages[currentIndex];
-}
-
-async function sendRequest() {
-    const name = document.getElementById('name').value.trim();
-    const surname = document.getElementById('surname').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const days = parseInt(document.getElementById('days').value);
-    const carName = document.getElementById('carName').innerText;
-
-    if (!name || phone.length < 13) {
-        alert("Заповніть ім'я та повний номер телефону.");
-        return;
+function renderCarPage(car) {
+    const isDiscount = car.hasDiscount === true;
+    const priceClass = isDiscount ? 'price-tag discount' : 'price-tag';
+    
+    let priceText = '';
+    if (isDiscount) {
+        const curr = car.discountPrice || car.price || '800 Грн';
+        const oldP = car.discountPrice ? car.price : '';
+        priceText = `${oldP ? `<span class="old-price">${oldP}</span>` : ''}${curr} <small style="font-size:14px; font-weight:normal; color:#777;">/доба</small>`;
+    } else {
+        priceText = `${car.price || '800 Грн'} <small style="font-size:14px; font-weight:normal; color:#777;">/доба</small>`;
     }
 
-    const reqData = {
-        car: carName,
+    const allImages = [car.image, ...(car.extraImages || [])].filter(Boolean);
+
+    document.getElementById('carContent').innerHTML = `
+        <div class="gallery-wrap">
+            <img src="${allImages[0] || 'https://i.ibb.co/3m3z6v9/car.webp'}" id="mainImg" class="main-img">
+            <div class="thumbs">
+                ${allImages.map((img, idx) => `
+                    <img src="${img}" class="thumb-img ${idx === 0 ? 'active' : ''}" onclick="changeMainImg('${img}', this)">
+                `).join('')}
+            </div>
+        </div>
+
+        <div class="car-details">
+            <h1>${car.name}</h1>
+            <div class="${priceClass}">${priceText}</div>
+
+            ${(car.hasDiscount && car.showTimer && car.discountUntil) ? `
+                <div class="timer-box">
+                    🔥 Акція закінчується через:
+                    <div class="timer-clock" id="countdownTimer">Завантаження...</div>
+                </div>
+            ` : ''}
+
+            <div class="specs-grid">
+                <div class="specs-item"><span>Рік:</span> <b>${car.year || '2023'}</b></div>
+                <div class="specs-item"><span>Кузов:</span> <b>${car.type || 'Седан'}</b></div>
+                <div class="specs-item"><span>Коробка:</span> <b>${car.gearbox || 'Автомат'}</b></div>
+                <div class="specs-item"><span>Паливо:</span> <b>${car.fuel || 'Бензин'}</b></div>
+                <div class="specs-item"><span>Двигун:</span> <b>${car.engine || '2.0 л'}</b></div>
+                <div class="specs-item"><span>Залог:</span> <b>${car.deposit || '5000 Грн'}</b></div>
+            </div>
+
+            <p style="line-height:1.6; color:#555; margin-bottom:25px;">${car.description || 'Комфортний та доглянутий автомобіль для поїздок по Львову та області.'}</p>
+
+            <button class="book-btn" onclick="openModal()">${car.isBooked ? 'ЗАБРОНЬОВАНО (Залишити заявку)' : 'Забронювати авто'}</button>
+        </div>
+    `;
+
+    if (car.hasDiscount && car.showTimer && car.discountUntil) {
+        startTimer(car.discountUntil);
+    }
+}
+
+function changeMainImg(src, el) {
+    document.getElementById('mainImg').src = src;
+    document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function startTimer(targetDateStr) {
+    const targetDate = new Date(targetDateStr).getTime();
+    if (isNaN(targetDate)) return;
+
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            clearInterval(timerInterval);
+            const clock = document.getElementById('countdownTimer');
+            if(clock) clock.innerText = 'Акцію завершено!';
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const clock = document.getElementById('countdownTimer');
+        if (clock) {
+            clock.innerText = `${days}д ${hours}г ${minutes}хв ${seconds}с`;
+        }
+    }, 1000);
+}
+
+function openModal() {
+    document.getElementById('modalCarTitle').innerText = currentCar.name;
+    document.getElementById('bookModal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('bookModal').classList.remove('active');
+}
+
+async function submitBooking(e) {
+    e.preventDefault();
+    const name = document.getElementById('bName').value;
+    const phone = document.getElementById('bPhone').value;
+    const days = document.getElementById('bDays').value;
+
+    const newReq = {
+        car: currentCar.name,
         name: name,
-        surname: surname,
         phone: phone,
         days: days,
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString('uk-UA')
     };
 
-    const text = `🚖 НОВА ЗАЯВКА НА ОРЕНДУ!\n\n🚗 Авто: ${carName}\n👤 Клієнт: ${name} ${surname}\n📞 Телефон: ${phone}\n📅 Термін: ${days} днів`;
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ chat_id: TELEGRAM_CHAT_ID, text: text })
-    });
-
     try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
-        const cloudData = await res.json();
-        let currentRecord = cloudData.record;
-        if(!currentRecord.requests) currentRecord.requests = [];
-        currentRecord.requests.unshift(reqData);
+        const cloudData = await getRes.json();
+        const rec = cloudData.record;
+        if(!rec.requests) rec.requests = [];
+        rec.requests.unshift(newReq);
 
         await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-            body: JSON.stringify(currentRecord)
+            body: JSON.stringify(rec)
         });
-    } catch(e) {}
 
-    document.getElementById('ok').classList.add('show');
+        alert('Дякуємо! Заявку успішно відправлено. Ми зателефонуємо вам найближчим часом.');
+        closeModal();
+    } catch(err) {
+        alert('Помилка відправки заявки.');
+    }
 }
 
 loadCarDetails();
