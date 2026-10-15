@@ -7,20 +7,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
 <style>
 body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color: #333; }
 .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 .logo { font-weight: 800; font-size: 20px; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
 .car-logo { font-size: 24px; }
-nav { display: flex; align-items: center; }
-nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
-nav a:hover { color: #5938df; }
+
+.header-center { display: flex; align-items: center; gap: 30px; }
 .help { display: flex; align-items: center; gap: 10px; }
 .phone-round { background: #f0edff; color: #5938df; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .phone-link { color: #5938df; text-decoration: none; font-weight: bold; }
 
-.hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 50px; max-width: 1300px; margin: 0 auto; gap: 40px; }
+nav { display: flex; align-items: center; }
+nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
+nav a:hover { color: #5938df; }
+
+.hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 50px; max-width: 1300px; margin: 0 auto; gap: 40px; opacity: 0; transition: opacity 0.3s ease; }
+.hero.loaded { opacity: 1; }
 .hero-content h1 { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; color: #ffffff; }
 .hero-content p { font-size: 16px; margin-bottom: 30px; line-height: 1.5; color: #ffffff; }
 .hero-btn { background: #ff9800; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
@@ -57,14 +60,14 @@ nav a:hover { color: #5938df; }
 .copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
 
 @media(max-width: 850px) {
-    .header { flex-wrap: wrap; padding: 12px 15px; gap: 8px; }
+    .header { flex-wrap: wrap; padding: 12px 15px; gap: 10px; }
     .logo { font-size: 16px; }
     .car-logo { font-size: 20px; }
-    .help { margin-left: auto; }
+    .header-center { width: 100%; justify-content: space-between; order: 2; border-top: 1px solid #eee; padding-top: 10px; }
     .help small { display: none !important; }
     .phone-round { width: 30px; height: 30px; font-size: 13px; }
     .phone-link { font-size: 12px; }
-    nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+    nav { width: 100%; justify-content: space-around; order: 3; }
     nav a { margin: 0; font-size: 13px; }
     .hero { grid-template-columns: 1fr; text-align: center; padding: 20px; }
     .hero-content h1 { font-size: 32px; }
@@ -74,29 +77,32 @@ nav a:hover { color: #5938df; }
 <body>
 
 <header class="header">
-    <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <div class="help">
-        <div class="phone-round">📞</div>
-        <div>
-            <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
-            <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
+    <a href="index.html" class="logo"><span class="car-logo" id="headerLogo">🚖</span> <span id="headerTitle">Оренда авто Львів</span></a>
+    
+    <div class="header-center">
+        <div class="help">
+            <div class="phone-round">📞</div>
+            <div>
+                <small style="display:block; color:#777; font-size:10px;">Потрібна допомога?</small>
+                <b><a href="tel:+380667221089" class="phone-link" id="headerPhone">+380 66 722 10 89</a></b>
+            </div>
         </div>
+        <nav>
+            <a href="index.html">Головна</a>
+            <a href="cars.html">Автомобілі</a>
+            <a href="about.html">Про нас</a>
+        </nav>
     </div>
-    <nav>
-        <a href="index.html">Головна</a>
-        <a href="cars.html">Автомобілі</a>
-        <a href="about.html">Про нас</a>
-    </nav>
 </header>
 
-<section class="hero" id="heroSectionBg" style="background: #5938df;">
+<section class="hero" id="heroSection" style="background: #5938df;">
     <div class="hero-content">
-        <h1 id="heroTitle">Прокат автомобілів у Львові без зайвого клопоту</h1>
-        <p id="heroText">Великий автопарк нових та комфортних машин на будь-який смак. Швидке оформлення, доступні ціни в гривнях та повна підтримка 24/7.</p>
+        <h1 id="heroTitle">Завантаження...</h1>
+        <p id="heroText">Зачекайте секунду...</p>
         <a href="cars.html" class="hero-btn">Обрати автомобіль</a>
     </div>
     <div class="hero-img">
-        <img id="heroLogoImg" src="https://i.ibb.co/3m3z6v9/car.webp" alt="Оренда авто Львів">
+        <img id="heroLogoImg" src="" alt="Оренда авто Львів">
     </div>
 </section>
 
@@ -112,20 +118,20 @@ nav a:hover { color: #5938df; }
 <footer class="footer">
   <div class="footer-main">
     <div class="footer-company">
-        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo">🚖</span><span>Оренда авто</span></a>
-        <p>Комфортні і недорогі авто<br>у Львові і Львівській області.</p>
+        <a class="logo" href="index.html" style="color:#fff;"><span class="car-logo" id="footerLogo">🚖</span><span id="footerTitle">Оренда авто</span></a>
+        <p id="footerDesc">Комфортні і недорогі авто у Львові і Львівській області.</p>
     </div>
     <div class="contact">
         <h4>Адреса</h4>
-        <a>Львів, вул. Городоцька, 26</a>
+        <a id="footerAddress">Львів, вул. Городоцька, 26</a>
     </div>
     <div class="contact">
         <h4>Пошта</h4>
-        <a>demyanchik@gmail.com</a>
+        <a id="footerEmail">demyanchik@gmail.com</a>
     </div>
     <div class="contact">
         <h4>Телефон</h4>
-        <a href="tel:+380667221089">+380 66 722 10 89</a>
+        <a href="tel:+380667221089" id="footerPhone">+380 66 722 10 89</a>
     </div>
   </div>
   <div class="copyright">© Дрочак Дем’ян 2026. Львів | <a href="admin.html" style="color: inherit; text-decoration: none; opacity: 0.3;" title="Адмін-панель">⚙️</a></div>
@@ -144,20 +150,21 @@ async function loadIndexData() {
         const cars = data.record.cars || [];
         const settings = data.record.settings || {};
 
-        if(settings.heroLogo) {
-            document.getElementById('heroLogoImg').src = settings.heroLogo;
-        }
+        applySettings(settings);
 
-        if(settings.heroTitle) {
-            document.getElementById('heroTitle').innerText = settings.heroTitle;
-        }
-        if(settings.heroText) {
-            document.getElementById('heroText').innerText = settings.heroText;
-        }
+        // Налаштування Hero банера з хмари
+        document.getElementById('heroTitle').innerText = settings.heroTitle || 'Прокат автомобілів у Львові без зайвого клопоту';
+        document.getElementById('heroText').innerText = settings.heroText || 'Великий автопарк нових та комфортних машин на будь-який смак.';
+        
         if(settings.heroTextColor) {
             document.getElementById('heroTitle').style.color = settings.heroTextColor;
             document.getElementById('heroText').style.color = settings.heroTextColor;
         }
+
+        document.getElementById('heroLogoImg').src = settings.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
+
+        // Робимо банер видимим тільки після завантаження даних
+        document.getElementById('heroSection').classList.add('loaded');
 
         let popularCars = cars.filter(car => car.available !== false && car.isPopular === true);
         popularCars.sort((a, b) => (a.popularOrder || 0) - (b.popularOrder || 0));
@@ -169,7 +176,7 @@ async function loadIndexData() {
         }
 
         grid.innerHTML = popularCars.map(car => {
-            const isDiscount = car.hasDiscount === true || Boolean(car.discountPrice && car.discountPrice.trim() !== '');
+            const isDiscount = car.hasDiscount === true;
             
             let priceHtml = '';
             if (isDiscount) {
@@ -208,8 +215,28 @@ async function loadIndexData() {
         }).join('');
 
     } catch (e) {
+        document.getElementById('heroSection').classList.add('loaded');
         document.getElementById('popularCarsGrid').innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #e53935;">Помилка завантаження даних.</p>';
     }
+}
+
+function applySettings(s) {
+    if(!s) return;
+    const phone = s.companyPhone || '+380 66 722 10 89';
+    const cleanPhone = phone.replace(/\s+/g, '');
+
+    document.getElementById('headerTitle').innerText = s.companyName || 'Оренда авто Львів';
+    document.getElementById('headerLogo').innerText = s.companyLogo || '🚖';
+    document.getElementById('headerPhone').innerText = phone;
+    document.getElementById('headerPhone').href = 'tel:' + cleanPhone;
+
+    document.getElementById('footerTitle').innerText = s.companyName || 'Оренда авто';
+    document.getElementById('footerLogo').innerText = s.companyLogo || '🚖';
+    document.getElementById('footerDesc').innerText = s.footerDesc || 'Комфортні і недорогі авто у Львові і Львівській області.';
+    document.getElementById('footerAddress').innerText = s.footerAddress || 'Львів, вул. Городоцька, 26';
+    document.getElementById('footerEmail').innerText = s.footerEmail || 'demyanchik@gmail.com';
+    document.getElementById('footerPhone').innerText = phone;
+    document.getElementById('footerPhone').href = 'tel:' + cleanPhone;
 }
 
 loadIndexData();
