@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Про нас — Оренда авто Львів</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +13,16 @@ body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color
 .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 .logo { font-weight: 800; font-size: 20px; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
 .car-logo { font-size: 24px; }
+nav { display: flex; align-items: center; }
 nav a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 600; font-size: 14px; }
 nav a:hover { color: #5938df; }
 .help { display: flex; align-items: center; gap: 10px; }
-.phone-round { background: #f0edff; color: #5938df; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.phone-round { background: #f0edff; color: #5938df; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .phone-link { color: #5938df; text-decoration: none; font-weight: bold; }
 
-.about-container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
-.about-container h1 { font-size: 36px; font-weight: 800; margin-bottom: 20px; color: #1a1a1a; }
-.about-content { font-size: 16px; line-height: 1.8; color: #555; white-space: pre-line; }
+.about-container { max-width: 900px; margin: 50px auto; padding: 0 20px; line-height: 1.7; }
+.about-container h1 { font-size: 32px; font-weight: 800; margin-bottom: 20px; color: #1a1a1a; }
+.about-text { font-size: 16px; color: #555; white-space: pre-line; }
 
 .footer { background: #1a1a1a; color: #fff; padding: 50px 20px; margin-top: 60px; }
 .footer-main { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
@@ -29,17 +30,24 @@ nav a:hover { color: #5938df; }
 .contact h4 { margin: 0 0 10px; font-size: 15px; color: #fff; }
 .contact a { color: #aaa; text-decoration: none; display: block; font-size: 13px; margin-bottom: 5px; }
 .copyright { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
+
+@media(max-width: 850px) {
+    .header { flex-wrap: wrap; padding: 12px 15px; gap: 8px; }
+    .logo { font-size: 16px; }
+    .car-logo { font-size: 20px; }
+    .help { margin-left: auto; }
+    .help small { display: none !important; }
+    .phone-round { width: 30px; height: 30px; font-size: 13px; }
+    .phone-link { font-size: 12px; }
+    nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+    nav a { margin: 0; font-size: 13px; }
+}
 </style>
 </head>
 <body>
 
 <header class="header">
     <a href="index.html" class="logo"><span class="car-logo">🚖</span> Оренда авто Львів</a>
-    <nav>
-        <a href="index.html">Головна</a>
-        <a href="cars.html">Автомобілі</a>
-        <a href="about.html" style="color:#5938df;">Про нас</a>
-    </nav>
     <div class="help">
         <div class="phone-round">📞</div>
         <div>
@@ -47,11 +55,20 @@ nav a:hover { color: #5938df; }
             <b><a href="tel:+380667221089" class="phone-link">+380 66 722 10 89</a></b>
         </div>
     </div>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="cars.html">Автомобілі</a>
+        <a href="about.html">Про нас</a>
+    </nav>
 </header>
 
 <div class="about-container">
     <h1 id="aboutTitle">Про нашу компанію</h1>
-    <div id="aboutText" class="about-content">Завантаження інформації...</div>
+    <div class="about-text" id="aboutText">
+        Ми пропонуємо якісний та доступний сервіс оренди автомобілів у місті Львів та області. 
+        Наш автопарк постійно оновлюється та проходить регулярний технічний огляд. 
+        Ми гарантуємо прозорі умови оренди, відсутність прихованих платежів та повну підтримку клієнтів 24/7.
+    </div>
 </div>
 
 <footer class="footer">
@@ -80,23 +97,24 @@ nav a:hover { color: #5938df; }
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 
-async function loadAbout() {
+async function loadAboutData() {
     try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const data = await res.json();
         const settings = data.record.settings || {};
-        
-        if(settings.aboutTitle) document.getElementById('aboutTitle').innerText = settings.aboutTitle;
-        if(settings.aboutText) document.getElementById('aboutText').innerText = settings.aboutText;
-        else document.getElementById('aboutText').innerText = 'Тут поки немає інформації. Ви можете додати її через адмін-панель.';
-    } catch(e) {
-        document.getElementById('aboutText').innerText = 'Помилка завантаження даних.';
-    }
+
+        if(settings.aboutTitle) {
+            document.getElementById('aboutTitle').innerText = settings.aboutTitle;
+        }
+        if(settings.aboutText) {
+            document.getElementById('aboutText').innerText = settings.aboutText;
+        }
+    } catch (e) {}
 }
 
-loadAbout();
+loadAboutData();
 </script>
 </body>
 </html>
