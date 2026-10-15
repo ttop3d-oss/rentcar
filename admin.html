@@ -8,54 +8,49 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root { --bg: #f4f4f4; --card-bg: #fff; --text: #333; --border: #ddd; }
-body.dark { --bg: #121212; --card-bg: #1e1e1e; --text: #f0f0f0; --border: #333; }
-body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; transition: 0.3s; }
-.header { background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; }
-.admin-wrapper { max-width: 1100px; margin: 0 auto 40px; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+body { background: #f4f4f4; color: #333; font-family: 'Montserrat', sans-serif; margin: 0; }
+.header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; }
+.admin-wrapper { max-width: 1100px; margin: 0 auto 40px; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
 .login-box, .panel-box { display: none; }
 .login-box.active, .panel-box.active { display: block; }
 .input-group { position: relative; margin: 10px 0 20px; }
-.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+.input-group input { width: 100%; padding: 10px 85px 10px 12px; box-sizing: border-box; background: #fff; color: #333; border: 1px solid #ddd; }
 .toggle-pass { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; font-size: 16px; z-index: 5; }
 .lang-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; background: #e0e0e0; padding: 3px 6px; border-radius: 4px; color: #333; }
-input, select, textarea { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
+input, select, textarea { width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid #ddd; background: #fff; color: #333; border-radius: 7px; font-size: 13px; font-family: inherit; box-sizing: border-box; }
 textarea { resize: vertical; height: 80px; }
 .btn { background: #5938df; color: #fff; border: none; padding: 10px 18px; border-radius: 7px; font-weight: bold; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 13px; }
 .btn:hover { filter: brightness(0.9); }
 .btn-danger { background: #e53935; }
 .btn-success { background: #2e7d32; }
 .btn-secondary { background: #607d8b; }
-.car-card-admin { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.car-card-admin { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
 .car-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-.car-body { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; display: block; }
+.car-body { margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; display: block; }
 .car-body.collapsed { display: none; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 .stats-box { background: rgba(89, 56, 223, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; display: flex; gap: 20px; flex-wrap: wrap; }
-.nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-.tab-btn { background: none; border: none; font-size: 15px; font-weight: bold; color: var(--text); cursor: pointer; padding: 8px 15px; border-radius: 6px; }
+.nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+.tab-btn { background: none; border: none; font-size: 15px; font-weight: bold; color: #333; cursor: pointer; padding: 8px 15px; border-radius: 6px; }
 .tab-btn.active { background: #5938df; color: #fff; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 .preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
 .preview-wrap { position: relative; display: inline-block; }
-.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+.preview-img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
 .del-photo-btn { position: absolute; top: -5px; right: -5px; background: #e53935; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; cursor: pointer; }
 .msg { margin-top: 15px; font-weight: bold; font-size: 13px; }
-.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-.request-item { background: rgba(0,0,0,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+.request-item { background: rgba(0,0,0,0.02); border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 </style>
 </head>
-<body id="adminBody">
+<body>
 
 <header class="header">
-    <a href="index.html" style="font-weight: 800; text-decoration:none; color:var(--text);"><span class="car-logo">🚖</span> Адмін-панель Львів</a>
-    <div style="display: flex; gap: 15px; align-items: center;">
-        <button class="btn btn-secondary" onclick="toggleTheme()">🌙 / ☀️ Тема</button>
-        <a href="index.html" class="btn">На сайт</a>
-    </div>
+    <a href="index.html" style="font-weight: 800; text-decoration:none; color:#333;"><span class="car-logo">🚖</span> Адмін-панель Львів</a>
+    <a href="index.html" class="btn">На сайт</a>
 </header>
 
 <div class="admin-wrapper">
@@ -139,16 +134,6 @@ const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO
 const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
 
 let globalData = { cars: [], requests: [], settings: {} };
-
-function toggleTheme() {
-    const body = document.getElementById('adminBody');
-    body.classList.toggle('dark');
-    localStorage.setItem('admin_theme', body.classList.contains('dark') ? 'dark' : 'light');
-}
-
-if(localStorage.getItem('admin_theme') === 'dark') {
-    document.getElementById('adminBody').classList.add('dark');
-}
 
 function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -439,7 +424,7 @@ function addNewCar() {
     const newId = 'car_' + Date.now();
     globalData.cars.push({
         id: newId,
-        name: '', // Назва порожня, щоб спрацьовував підказчик (placeholder)
+        name: '',
         type: 'Седан',
         year: '2023',
         price: '900 Грн',
