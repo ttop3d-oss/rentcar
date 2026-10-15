@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
 <style>
 body { font-family: 'Montserrat', sans-serif; margin: 0; background: #fff; color: #333; }
 .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -47,7 +46,7 @@ nav a:hover { color: #5938df; }
 .close-modal { position: absolute; top: 15px; right: 15px; font-size: 20px; cursor: pointer; border: none; background: none; }
 .modal-content input, .modal-content select { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
 
-/* Lightbox Повноекранний перегляд фото */
+/* Lightbox */
 .lightbox-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; }
 .lightbox-overlay.active { display: flex; }
 .lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 8px; object-fit: contain; }
@@ -110,16 +109,19 @@ nav a:hover { color: #5938df; }
         <form onsubmit="submitBooking(event)">
             <label>Ім'я:</label>
             <input type="text" id="bName" required placeholder="Ваше ім'я">
+            
             <label>Телефон:</label>
-            <input type="tel" id="bPhone" value="+380" required placeholder="+380...">
-            <label>Термін оренди (днів):</label>
-            <input type="number" id="bDays" value="1" min="1" required>
-            <button type="submit" class="book-btn">Підтвердити бронювання</button>
+            <input type="tel" id="bPhone" value="+380" required maxlength="13" oninput="formatPhoneInput(this)">
+            
+            <label>Термін оренди (днів, макс. 30):</label>
+            <input type="number" id="bDays" value="1" min="1" max="30" required oninput="limitDays(this)">
+            
+            <button type="submit" class="book-btn" id="subBtn">Підтвердити бронювання</button>
         </form>
     </div>
 </div>
 
-<!-- Lightbox Модалка перегляду фотографій -->
+<!-- Lightbox -->
 <div class="lightbox-overlay" id="lightboxModal">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <button class="lightbox-nav lightbox-prev" onclick="prevLightboxImg()">‹</button>
@@ -152,10 +154,33 @@ nav a:hover { color: #5938df; }
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
+
+// Telegram Bot настройки (замініть на власні значення, якщо використовуєте свій бот)
+const TG_BOT_TOKEN = '7629584711:AAE4fM54-Xf17M2G1E3dI54x8d2g3Hk4L9m'; 
+const TG_CHAT_ID = '567812349';
+
 let currentCar = null;
 let timerInterval = null;
 let activeImagesList = [];
 let currentImgIndex = 0;
+
+function formatPhoneInput(inp) {
+    let val = inp.value;
+    if (!val.startsWith('+380')) {
+        val = '+380';
+    }
+    let digits = val.slice(4).replace(/\D/g, '');
+    if (digits.length > 9) {
+        digits = digits.slice(0, 9);
+    }
+    inp.value = '+380' + digits;
+}
+
+function limitDays(inp) {
+    let val = parseInt(inp.value);
+    if (val > 30) inp.value = 30;
+    if (val < 1 || isNaN(val)) inp.value = 1;
+}
 
 async function loadCarDetails() {
     const params = new URLSearchParams(window.location.search);
@@ -202,7 +227,7 @@ function renderCarPage(car) {
 
     document.getElementById('carContent').innerHTML = `
         <div class="gallery-wrap">
-            <img src="${activeImagesList[0] || 'https://i.ibb.co/3m3z6v9/car.webp'}" id="mainImg" class="main-img" onclick="openLightbox(currentImgIndex)" title="Натисніть для збільшення">
+            <img src="${activeImagesList[0] || 'https://i.ibb.co/3m3z6v9/car.webp'}" id="mainImg" class="main-img" onclick="openLightbox(currentImgIndex)" title="Клікніть для розгортання">
             <div class="thumbs">
                 ${activeImagesList.map((img, idx) => `
                     <img src="${img}" class="thumb-img ${idx === 0 ? 'active' : ''}" onclick="changeMainImg('${img}', this,${idx})">
@@ -248,7 +273,6 @@ function changeMainImg(src, el, idx) {
     el.classList.add('active');
 }
 
-/* Перегляд зображень во весь екран */
 function openLightbox(index) {
     if(!activeImagesList.length) return;
     currentImgIndex = index;
@@ -301,6 +325,7 @@ function startTimer(targetDateStr) {
 
 function openModal() {
     document.getElementById('modalCarTitle').innerText = currentCar.name;
+    document.getElementById('bPhone').value = '+380';
     document.getElementById('bookModal').classList.add('active');
 }
 
@@ -310,24 +335,31 @@ function closeModal() {
 
 async function submitBooking(e) {
     e.preventDefault();
-    const name = document.getElementById('bName').value;
-    const phone = document.getElementById('bPhone').value;
+    const subBtn = document.getElementById('subBtn');
+    subBtn.disabled = true;
+    subBtn.innerText = 'Відправка...';
+
+    const name = document.getElementById('bName').value.trim();
+    const phone = document.getElementById('bPhone').value.trim();
     const days = document.getElementById('bDays').value;
 
-    const newReq = {
-        car: currentCar.name,
-        name: name,
-        phone: phone,
-        days: days,
-        date: new Date().toLocaleString('uk-UA')
-    };
+    if (phone.length !== 13) {
+        alert('Введіть повний номер телефону у форматі +380XXXXXXXXX (9 цифр після +380)');
+        subBtn.disabled = false;
+        subBtn.innerText = 'Підтвердити бронювання';
+        return;
+    }
 
+    const dateStr = new Date().toLocaleString('uk-UA');
+    const newReq = { car: currentCar.name, name, phone, days, date: dateStr };
+
+    // 1. Збереження в JSONBin
     try {
         const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const cloudData = await getRes.json();
-        const rec = cloudData.record;
+        const rec = cloudData.record || {};
         if(!rec.requests) rec.requests = [];
         rec.requests.unshift(newReq);
 
@@ -336,12 +368,26 @@ async function submitBooking(e) {
             headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
             body: JSON.stringify(rec)
         });
-
-        alert('Дякуємо! Заявку успішно відправлено. Ми зателефонуємо вам найближчим часом.');
-        closeModal();
     } catch(err) {
-        alert('Помилка відправки заявки.');
+        console.warn('Помилка збереження бази.');
     }
+
+    // 2. Відправка в Telegram
+    try {
+        const text = `🚗 *НОВА ЗАЯВКА НА ОРЕНДУ!*\n\n🚘 *Авто:* ${currentCar.name}\n👤 *Ім'я:* ${name}\n📞 *Тел:* ${phone}\n📅 *Днів:* ${days}\n⏱ *Час:* ${dateStr}`;
+        await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'Markdown' })
+        });
+    } catch(err) {
+        console.warn('Помилка відправки TG.');
+    }
+
+    alert('Дякуємо! Заявку успішно відправлено. Ми зателефонуємо вам найближчим часом.');
+    subBtn.disabled = false;
+    subBtn.innerText = 'Підтвердити бронювання';
+    closeModal();
 }
 
 loadCarDetails();
