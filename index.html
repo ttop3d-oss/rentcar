@@ -22,11 +22,16 @@ nav a:hover { color: #5938df; }
 .hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 50px; max-width: 1300px; margin: 0 auto; gap: 40px; }
 .hero-content h1 { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
 .hero-content p { color: #666; font-size: 16px; margin-bottom: 30px; line-height: 1.5; }
-.hero-btn { background: #5938df; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
+/* Повернута оранжева кнопка */
+.hero-btn { background: #ff9800; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
 .hero-btn:hover { filter: brightness(0.9); }
 .hero-img img { width: 100%; border-radius: 12px; object-fit: cover; }
 
-.section-title { text-align: center; font-size: 30px; font-weight: 800; margin: 50px 0 30px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin: 50px auto 30px; padding: 0 20px; }
+.section-title { font-size: 30px; font-weight: 800; margin: 0; }
+.all-cars-link { color: #5938df; text-decoration: none; font-weight: bold; font-size: 14px; }
+.all-cars-link:hover { text-decoration: underline; }
+
 .cars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1300px; margin: 0 auto 60px; padding: 0 20px; }
 .car-card { background: #fdfdfd; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; display: flex; flex-direction: column; position: relative; }
 .car-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
@@ -82,7 +87,11 @@ nav a:hover { color: #5938df; }
     </div>
 </section>
 
-<h2 class="section-title">Популярні автомобілі</h2>
+<div class="section-header">
+    <h2 class="section-title">Популярні автомобілі</h2>
+    <a href="cars.html" class="all-cars-link">Дивитися всі автомобілі →</a>
+</div>
+
 <div id="popularCarsGrid" class="cars-grid">
     <p style="text-align: center; grid-column: 1/-1; color: #777;">Завантаження каталогу...</p>
 </div>
