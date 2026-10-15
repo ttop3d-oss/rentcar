@@ -42,7 +42,11 @@ nav a:hover { color: #5938df; }
 .car-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
 .car-specs { font-size: 12px; color: #777; margin-bottom: 15px; font-weight: 500; }
 .car-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-.car-price { font-size: 18px; font-weight: 800; color: #e53935; }
+
+.car-price { font-size: 18px; font-weight: 800; color: #5938df; }
+.car-price.discount { color: #e53935; }
+.old-price { font-size: 13px; color: #888; text-decoration: line-through; margin-right: 6px; font-weight: normal; }
+
 .details-btn { background: #5938df; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
 
 .footer { background: #1a1a1a; color: #fff; padding: 50px 20px; margin-top: 60px; }
@@ -57,7 +61,7 @@ nav a:hover { color: #5938df; }
     .logo { font-size: 16px; }
     .car-logo { font-size: 20px; }
     .help { margin-left: auto; }
-    .help small { display: none !important; } /* Ховаємо «Потрібна допомога?» на мобілках для економії місця біля логотипу */
+    .help small { display: none !important; }
     .phone-round { width: 30px; height: 30px; font-size: 13px; }
     .phone-link { font-size: 12px; }
     nav { width: 100%; justify-content: space-around; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
@@ -144,7 +148,6 @@ async function loadIndexData() {
             document.getElementById('heroLogoImg').src = settings.heroLogo;
         }
 
-        // Динамічне заповнення заголовків та кольорів з адмінки
         if(settings.heroTitle) {
             document.getElementById('heroTitle').innerText = settings.heroTitle;
         }
@@ -165,22 +168,44 @@ async function loadIndexData() {
             return;
         }
 
-        grid.innerHTML = popularCars.map(car => `
-            <div class="car-card">
-                ${car.isBooked ? '<div class="booked-badge">ЗАБРОНЬОВАНО</div>' : ''}
-                <div class="car-img-wrap">
-                    <img src="${car.image || 'https://i.ibb.co/3m3z6v9/car.webp'}" alt="${car.name}">
-                </div>
-                <div class="car-info">
-                    <div class="car-title">${car.name}</div>
-                    <div class="car-specs">${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}</div>
-                    <div class="car-footer">
-                        <div class="car-price">${car.price || '800 Грн'} <small style="font-size:11px; font-weight:normal; color:#777;">/доба</small></div>
-                        <a href="car.html?id=${car.id}" class="details-btn">Детальніше</a>
+        grid.innerHTML = popularCars.map(car => {
+            const isDiscount = car.hasDiscount === true || Boolean(car.discountPrice && car.discountPrice.trim() !== '');
+            
+            let priceHtml = '';
+            if (isDiscount) {
+                const currentPrice = car.discountPrice || car.price || '800 Грн';
+                const oldPrice = car.discountPrice ? car.price : '';
+                priceHtml = `
+                    <div class="car-price discount">
+                        ${oldPrice ? `<span class="old-price">${oldPrice}</span>` : ''}
+                        ${currentPrice} <small style="font-size:11px; font-weight:normal; color:#777;">/доба</small>
+                    </div>
+                `;
+            } else {
+                priceHtml = `
+                    <div class="car-price">
+                        ${car.price || '800 Грн'} <small style="font-size:11px; font-weight:normal; color:#777;">/доба</small>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="car-card">
+                    ${car.isBooked ? '<div class="booked-badge">ЗАБРОНЬОВАНО</div>' : ''}
+                    <div class="car-img-wrap">
+                        <img src="${car.image || 'https://i.ibb.co/3m3z6v9/car.webp'}" alt="${car.name}">
+                    </div>
+                    <div class="car-info">
+                        <div class="car-title">${car.name}</div>
+                        <div class="car-specs">${car.year || '2023'} р. &nbsp;|&nbsp; ⚙️ ${car.gearbox || 'Автомат'} &nbsp;|&nbsp; ⛽ ${car.fuel || 'Бензин'}</div>
+                        <div class="car-footer">
+                            ${priceHtml}
+                            <a href="car.html?id=${car.id}" class="details-btn">Детальніше</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
     } catch (e) {
         document.getElementById('popularCarsGrid').innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #e53935;">Помилка завантаження даних.</p>';
