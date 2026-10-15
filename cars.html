@@ -83,12 +83,13 @@ nav a:hover { color: #5938df; }
         </div>
         
         <div class="checkbox-filters">
-            <label><input type="checkbox" id="fElectric" onchange="filterAndRenderCars()"> Тільки електро</label>
-            <label><input type="checkbox" id="fPetrol" onchange="filterAndRenderCars()"> Тільки бензин</label>
-            <label><input type="checkbox" id="fGas" onchange="filterAndRenderCars()"> Тільки Газ/бензин, газ</label>
-            <label><input type="checkbox" id="fDiesel" onchange="filterAndRenderCars()"> Тільки Дизель</label>
-            <label><input type="checkbox" id="fAuto" onchange="filterAndRenderCars()"> Тільки автомат</label>
-            <label><input type="checkbox" id="fManual" onchange="filterAndRenderCars()"> Тільки механіка</label>
+            <label><input type="checkbox" id="fElectric" onchange="filterAndRenderCars()"> Електро</label>
+            <label><input type="checkbox" id="fPetrol" onchange="filterAndRenderCars()"> Бензин</label>
+            <label><input type="checkbox" id="fGas" onchange="filterAndRenderCars()"> Газ/бензин, газ</label>
+            <label><input type="checkbox" id="fDiesel" onchange="filterAndRenderCars()"> Дизель</label>
+            <label><input type="checkbox" id="fHybrid" onchange="filterAndRenderCars()"> Гібрид</label>
+            <label><input type="checkbox" id="fAuto" onchange="filterAndRenderCars()"> Автомат</label>
+            <label><input type="checkbox" id="fManual" onchange="filterAndRenderCars()"> Механіка</label>
         </div>
     </div>
 
@@ -143,6 +144,7 @@ function filterAndRenderCars() {
     const petChecked = document.getElementById('fPetrol').checked;
     const gasChecked = document.getElementById('fGas').checked;
     const disChecked = document.getElementById('fDiesel').checked;
+    const hybChecked = document.getElementById('fHybrid').checked;
     const autoChecked = document.getElementById('fAuto').checked;
     const manualChecked = document.getElementById('fManual').checked;
 
@@ -154,13 +156,13 @@ function filterAndRenderCars() {
         if(petChecked && car.fuel !== 'Бензин') return false;
         if(gasChecked && car.fuel !== 'Газ/Бензин' && car.fuel !== 'Газ') return false;
         if(disChecked && car.fuel !== 'Дизель') return false;
+        if(hybChecked && car.fuel !== 'Гібрид') return false;
         if(autoChecked && car.gearbox !== 'Автомат' && car.gearbox !== 'Робот' && car.gearbox !== 'Типтронік') return false;
         if(manualChecked && car.gearbox !== 'Механіка') return false;
 
         return true;
     });
 
-    // Сортування: заброньовані автоматично йдуть в самий низ, далі за sortOrder
     filtered.sort((a, b) => {
         if (a.isBooked && !b.isBooked) return 1;
         if (!a.isBooked && b.isBooked) return -1;
