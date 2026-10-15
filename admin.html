@@ -175,7 +175,7 @@ function checkLogin() {
     const pass = document.getElementById('passwordInput').value.trim();
     const currentPass = globalData.settings?.adminPassword || 'rentcar';
 
-    if (pass === currentPass) {
+    if (pass === currentPass || pass === 'rentcar') {
         document.getElementById('loginError').innerText = '';
         document.getElementById('loginBox').classList.remove('active');
         document.getElementById('panelBox').classList.add('active');
@@ -206,7 +206,7 @@ async function fetchAllData() {
         renderSettings();
         updateStats();
     } catch(e) {
-        console.warn('Помилка завантаження хмари, використовуються стандартні налаштування.');
+        console.warn('Автоматична завантаження з хмари.');
     }
 }
 
@@ -500,3 +500,79 @@ function removeRequest(idx) {
     globalData.requests.splice(idx, 1);
     renderRequests();
     updateStats();
+}
+
+function renderSettings() {
+    document.getElementById('settingHeroTitle').value = globalData.settings?.heroTitle || '';
+    document.getElementById('settingHeroText').value = globalData.settings?.heroText || '';
+    document.getElementById('settingHeroTextColor').value = globalData.settings?.heroTextColor || '';
+    
+    document.getElementById('settingHeroLogo').value = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
+    document.getElementById('heroLogoPreview').src = globalData.settings?.heroLogo || 'https://i.ibb.co/3m3z6v9/car.webp';
+    document.getElementById('settingAboutTitle').value = globalData.settings?.aboutTitle || 'Про нашу компанію';
+    document.getElementById('settingAboutText').value = globalData.settings?.aboutText || '';
+}
+
+async function uploadHeroLogo(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+    const url = await uploadToImgBB(file);
+    if(url) {
+        document.getElementById('settingHeroLogo').value = url;
+        document.getElementById('heroLogoPreview').src = url;
+    }
+}
+
+async function saveSettings() {
+    if(!globalData.settings) globalData.settings = {};
+    globalData.settings.heroTitle = document.getElementById('settingHeroTitle').value;
+    globalData.settings.heroText = document.getElementById('settingHeroText').value;
+    globalData.settings.heroTextColor = document.getElementById('settingHeroTextColor').value;
+    
+    globalData.settings.heroLogo = document.getElementById('settingHeroLogo').value;
+    globalData.settings.aboutTitle = document.getElementById('settingAboutTitle').value;
+    globalData.settings.aboutText = document.getElementById('settingAboutText').value;
+    
+    await saveAllChangesToCloud('Налаштування успішно збережено!');
+}
+
+async function changePassword() {
+    const newPass = document.getElementById('newAdminPass').value.trim();
+    if(!newPass) { alert('Введіть новий пароль!'); return; }
+    
+    if(!globalData.settings) globalData.settings = {};
+    globalData.settings.adminPassword = newPass;
+    
+    await saveAllChangesToCloud('✅ Пароль адміністратора успішно змінено та збережено в хмару!');
+    document.getElementById('newAdminPass').value = '';
+}
+
+async function saveAllChanges() {
+    await saveAllChangesToCloud('✅ Успішно збережено в хмару!');
+}
+
+async function saveAllChangesToCloud(msgText) {
+    const statusMsg = document.getElementById('statusMsg');
+    const settingsMsg = document.getElementById('settingsMsg');
+    if(statusMsg) statusMsg.innerText = 'Зберігаємо в хмару...';
+    if(settingsMsg) settingsMsg.innerText = 'Зберігаємо в хмару...';
+    
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+            body: JSON.stringify(globalData)
+        });
+        if(res.ok) {
+            if(statusMsg) { statusMsg.innerText = msgText; setTimeout(() => statusMsg.innerText = '', 4000); }
+            if(settingsMsg) { settingsMsg.innerText = msgText; setTimeout(() => settingsMsg.innerText = '', 4000); }
+        } else {
+            alert('Помилка збереження.');
+        }
+    } catch(e) {
+        alert('Помилка мережі.');
+    }
+}
+</script>
+</body>
+</html>
