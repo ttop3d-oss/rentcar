@@ -160,10 +160,11 @@ nav a:hover { color: #5938df; }
 <script>
 const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
-const TG_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4'; 
-const TG_CHAT_ID = '1215279290';
+const TG_BOT_TOKEN = '8626554050:AAHwYyqs28hKbzbS8g-GGxekR0sd-c_Qyf4';
+const DEFAULT_TG_CHAT_ID = '1215279290';
 
 let currentCar = null;
+let currentSettings = {};
 let timerInterval = null;
 let activeImagesList = [];
 let currentImgIndex = 0;
@@ -201,9 +202,9 @@ async function loadCarDetails() {
         });
         const data = await res.json();
         const cars = data.record.cars || [];
-        const settings = data.record.settings || {};
+        currentSettings = data.record.settings || {};
         
-        applySettings(settings);
+        applySettings(currentSettings);
 
         currentCar = cars.find(c => c.id === carId);
 
@@ -384,12 +385,18 @@ async function submitBooking(e) {
     const dateStr = new Date().toLocaleString('uk-UA');
     const newReq = { car: currentCar.name, name, phone, days, date: dateStr };
 
+    let latestSettings = currentSettings || {};
+
     try {
         const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
             headers: { 'X-Master-Key': MASTER_KEY }
         });
         const cloudData = await getRes.json();
         const rec = cloudData.record || {};
+        if (rec.settings) {
+            latestSettings = rec.settings;
+            currentSettings = rec.settings;
+        }
         if(!rec.requests) rec.requests = [];
         rec.requests.unshift(newReq);
 
@@ -402,13 +409,20 @@ async function submitBooking(e) {
         console.warn('Помилка збереження в базу.');
     }
 
+    const rawChatIds = (latestSettings.tgChatId || '').trim();
+    const chatIds = rawChatIds
+        ? rawChatIds.split(',').map(id => id.trim()).filter(id => id !== '')
+        : [DEFAULT_TG_CHAT_ID];
+
     try {
         const text = `🚗 *НОВА ЗАЯВКА НА ОРЕНДУ!*\n\n🚘 *Авто:* ${currentCar.name}\n👤 *Ім'я:* ${name}\n📞 *Тел:* ${phone}\n📅 *Днів:* ${days}\n⏱ *Час:* ${dateStr}`;
-        await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: 'Markdown' })
-        });
+        await Promise.all(chatIds.map(chatId =>
+            fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: 'Markdown' })
+            })
+        ));
     } catch(err) {
         console.warn('Помилка відправки Telegram.');
     }
