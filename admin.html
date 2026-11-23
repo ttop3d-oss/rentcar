@@ -69,9 +69,9 @@ textarea { resize: vertical; height: 80px; }
 
     <div id="panelBox" class="panel-box">
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('carsTab')">🚗 Автопарк</button>
-            <button class="tab-btn" onclick="switchTab('requestsTab')">📥 Заявки (<span id="reqCount">0</span>)</button>
-            <button class="tab-btn" onclick="switchTab('settingsTab')">⚙️ Налаштування сайту</button>
+            <button class="tab-btn active" onclick="switchTab(event, 'carsTab')">🚗 Автопарк</button>
+            <button class="tab-btn" onclick="switchTab(event, 'requestsTab')">📥 Заявки (<span id="reqCount">0</span>)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'settingsTab')">⚙️ Налаштування сайту</button>
         </div>
 
         <div id="carsTab" class="tab-content active">
@@ -133,6 +133,12 @@ textarea { resize: vertical; height: 80px; }
             </div>
 
             <div class="car-card-admin">
+                <h3>🤖 Telegram-сповіщення (акаунти / канали)</h3>
+                <label>Telegram Chat ID (можна вказати кілька через кому):</label>
+                <input type="text" id="settingTgChatId" placeholder="1215279290, 987654321, -1001234567890">
+            </div>
+
+            <div class="car-card-admin">
                 <h3>🖼️ Редагування головного банера (Hero)</h3>
                 <label>Головний заголовок:</label>
                 <input type="text" id="settingHeroTitle" placeholder="Прокат автомобілів у Львові без зайвого клопоту">
@@ -169,13 +175,13 @@ const BIN_ID = '6acf8389ffd5d160536a775c';
 const MASTER_KEY = '$2a$10$A/bRG6uE.peJKPqYcjWvXuaiVrGhPaM/Zl6wjdZc5wUacekLP8lvO';
 const IMGBB_KEY = '6bb5279dc18ea38f9cdc35122c37d763';
 
-let globalData = { cars: [], requests: [], settings: { adminPassword: 'rentcar' } };
+let globalData = { cars: [], requests: [], settings: { adminPassword: 'rentcar', tgChatId: '' } };
 
-function switchTab(tabId) {
+function switchTab(ev, tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    event.currentTarget.classList.add('active');
+    if (ev && ev.currentTarget) ev.currentTarget.classList.add('active');
 }
 
 function detectLayout(e) {
@@ -194,12 +200,16 @@ function togglePass() {
     inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
-function checkLogin() {
+async function checkLogin() {
     const pass = document.getElementById('passwordInput').value.trim();
+
+    if (!globalData.settings?.adminPassword) {
+        await fetchAllData();
+    }
+
     const currentPass = globalData.settings?.adminPassword || 'rentcar';
 
-    // Вхід дозволено за стандартним паролем, або за збереженим у хмарі, або якщо поле просто збігається
-    if (pass === currentPass || pass === 'rentcar' || pass === globalData.settings?.adminPassword) {
+    if (pass === currentPass || pass === 'rentcar') {
         document.getElementById('loginError').innerText = '';
         document.getElementById('loginBox').classList.remove('active');
         document.getElementById('panelBox').classList.add('active');
@@ -223,7 +233,7 @@ async function fetchAllData() {
         const data = await res.json();
         globalData.cars = data.record.cars || [];
         globalData.requests = data.record.requests || [];
-        globalData.settings = data.record.settings || { adminPassword: 'rentcar' };
+        globalData.settings = data.record.settings || { adminPassword: 'rentcar', tgChatId: '' };
         
         renderAdminCars();
         renderRequests();
@@ -536,6 +546,7 @@ function renderSettings() {
     document.getElementById('settingFooterDesc').value = s.footerDesc || 'Комфортні і недорогі авто у Львові і Львівській області.';
     document.getElementById('settingFooterAddress').value = s.footerAddress || 'Львів, вул. Городоцька, 26';
     document.getElementById('settingFooterEmail').value = s.footerEmail || 'demyanchik@gmail.com';
+    document.getElementById('settingTgChatId').value = s.tgChatId || '';
 
     document.getElementById('settingHeroTitle').value = s.heroTitle || '';
     document.getElementById('settingHeroText').value = s.heroText || '';
@@ -565,6 +576,7 @@ async function saveSettings() {
     globalData.settings.footerDesc = document.getElementById('settingFooterDesc').value;
     globalData.settings.footerAddress = document.getElementById('settingFooterAddress').value;
     globalData.settings.footerEmail = document.getElementById('settingFooterEmail').value;
+    globalData.settings.tgChatId = document.getElementById('settingTgChatId').value.trim();
 
     globalData.settings.heroTitle = document.getElementById('settingHeroTitle').value;
     globalData.settings.heroText = document.getElementById('settingHeroText').value;
